@@ -1,5 +1,11 @@
+import { BrowserRouter, Routes } from 'react-router-dom';
+
 function App() {
-  return <div>말랑오더</div>;
+  return (
+    <BrowserRouter>
+      <Routes></Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
