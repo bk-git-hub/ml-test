@@ -1,4 +1,4 @@
-import { mockItem } from '../types/mockItem';
+import { cartItem, mockItem } from '../types/mockItem';
 
 export const menuItems: mockItem[] = [
   {
@@ -24,5 +24,22 @@ export const menuItems: mockItem[] = [
     description: '달콤하고 부드러운 초콜릿 케이크',
     price: 5500,
     imageUrl: 'D.jpg',
+  },
+];
+
+export const cartItems: cartItem[] = [
+  {
+    title: '삼겹살',
+
+    price: 7500,
+
+    quantity: 2,
+  },
+  {
+    title: '차돌박이',
+
+    price: 5500,
+
+    quantity: 5,
   },
 ];

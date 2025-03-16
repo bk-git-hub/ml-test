@@ -9,7 +9,10 @@ export default function OrderPage() {
         <MenuDisplay />
         <ChatDisplay />
       </div>
-      <CartContainer />
+      <div className='w-[30%] h-full'>
+        {' '}
+        <CartContainer />
+      </div>
     </div>
   );
 }
