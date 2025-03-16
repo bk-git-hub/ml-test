@@ -1,9 +1,12 @@
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import OrderPage from './routes/OrderPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes></Routes>
+      <Routes>
+        <Route path='order' element={<OrderPage />} />
+      </Routes>
     </BrowserRouter>
   );
 }
