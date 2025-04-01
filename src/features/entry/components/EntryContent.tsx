@@ -18,10 +18,8 @@ const EntryContent: React.FC = () => {
         <LanguageSelector />
       </div>
       <div className='flex flex-col items-center justify-center text-center'>
-        <h1 className='text-4xl font-bold mb-4'>
-          말랑 키오스크에 오신 것을 환영합니다!
-        </h1>
-        <p className='text-lg mb-8 animate-pulse'>
+        <img src='/logo.png' width={300} height={300} />
+        <p className='text-5xl mb-8 animate-pulse'>
           {' '}
           {/* 깜빡이는 효과 적용 */}
           "화면을 터치하여 주문을 시작하세요."
