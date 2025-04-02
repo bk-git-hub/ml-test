@@ -1,45 +1,50 @@
-// src/components/layout/MainLayout.tsx (Create this file/directory if needed)
+// src/components/layout/MainLayout.tsx
 import React from 'react';
 import { Outlet } from 'react-router-dom'; // Import Outlet to render nested routes
 import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if needed
-// Adjust path if needed
-import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder';
-import CartPlaceholder from '@/features/cart/components/CartPlaceholder';
+import CartPlaceholder from '@/features/cart/components/CartPlaceholder'; // Adjust path if needed
+import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder'; // Adjust path if needed
 
 const MainLayout: React.FC = () => {
   return (
-    <div className='grid grid-cols-[auto_1fr_auto] grid-rows-[1fr_auto] h-screen overflow-hidden'>
-      {/* Navigation Bar (Left Column, Top Row) */}
-      <div className='row-start-1 col-start-1 bg-ml-gray overflow-y-auto'>
-        {' '}
-        {/* Added bg color and overflow */}
+    // Outer grid: 3 columns, full screen height
+    // Removed explicit grid-rows, height will be determined by h-screen
+    <div className='grid grid-cols-[auto_1fr_auto] h-screen overflow-hidden'>
+      {/* Navigation Bar (Left Column, Full Height) */}
+      {/* Takes full height of the grid row implicitly */}
+      <div className='bg-ml-gray overflow-y-auto'>
         <NavigationBar />
       </div>
-
-      {/* Main Content Area (Center Column, Top Row) */}
-      <main className='row-start-1 col-start-2 bg-white overflow-y-auto'>
+      {/* Center Area (Middle Column, contains nested grid for Content + Chat) */}
+      {/* This div itself takes full height of the grid row implicitly */}
+      <div className='grid grid-rows-[1fr_auto] overflow-hidden'>
         {' '}
-        {/* Added bg color and overflow */}
-        {/* Content from nested routes will be rendered here */}
-        <Outlet />
-      </main>
-
-      {/* Cart Area (Right Column, Top Row) */}
-      <div className='row-start-1 col-start-3 bg-gray-100 overflow-y-auto'>
-        {' '}
-        {/* Added bg color and overflow */}
+        {/* Nested Grid */}
+        {/* Main Content Area (Top Row of Nested Grid) */}
+        {/* Takes remaining space in the nested grid's column */}
+        <main className='bg-white overflow-y-auto'>
+          {' '}
+          {/* Scrolling happens here */}
+          {/* Content from nested routes will be rendered here */}
+          <Outlet />
+        </main>
+        {/* Chat History Area (Bottom Row of Nested Grid) */}
+        {/* Takes the height of its content */}
+        <div className='bg-gray-200'>
+          {' '}
+          {/* No col-span needed */}
+          {/* Replace with actual ChatHistory component later */}
+          <ChatHistoryPlaceholder />
+        </div>
+      </div>{' '}
+      {/* End of Nested Grid */}
+      {/* Cart Area (Right Column, Full Height) */}
+      {/* Takes full height of the grid row implicitly */}
+      <div className='bg-gray-100 overflow-y-auto'>
         {/* Replace with actual Cart component later */}
         <CartPlaceholder />
       </div>
-
-      {/* Chat History Area (Spans All Columns, Bottom Row) */}
-      <div className='row-start-2 col-start-1 col-span-3 bg-gray-200'>
-        {' '}
-        {/* Added bg color */}
-        {/* Replace with actual ChatHistory component later */}
-        <ChatHistoryPlaceholder />
-      </div>
-    </div>
+    </div> // End of Outer Grid
   );
 };
 
