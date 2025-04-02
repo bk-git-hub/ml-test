@@ -2,8 +2,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom'; // Import Outlet to render nested routes
 import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if needed
-import CartPlaceholder from '@/features/cart/components/CartPlaceholder'; // Adjust path if needed
+
 import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder'; // Adjust path if needed
+import Cart from '@/features/order/components/Cart';
 
 const MainLayout: React.FC = () => {
   return (
@@ -42,7 +43,8 @@ const MainLayout: React.FC = () => {
       {/* Takes full height of the grid row implicitly */}
       <div className='bg-gray-100 overflow-y-auto'>
         {/* Replace with actual Cart component later */}
-        <CartPlaceholder />
+
+        <Cart />
       </div>
     </div> // End of Outer Grid
   );
