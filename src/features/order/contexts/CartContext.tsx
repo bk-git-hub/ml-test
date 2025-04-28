@@ -1,5 +1,5 @@
 // src/features/order/contexts/CartContext.tsx
-import React, {
+import {
   createContext,
   useReducer,
   useContext,
@@ -34,37 +34,74 @@ const initialCartState: CartState = {
 // This function handles state transitions based on dispatched actions
 // IMPORTANT: This is just example logic, you will refine this later!
 const cartReducer = (state: CartState, action: CartAction): CartState => {
-  console.log('Reducer Action:', action); // Good for debugging
   switch (action.type) {
-    case 'ADD_ITEM':
-      // Placeholder logic: Check if item exists, update quantity or add new
-      console.log('Reducer: Add Item - Logic TBD');
-      // Find existing item... update or add...
-      // Example: return { ...state, cartItems: updatedItems };
-      return state; // Return current state for now
+    case 'ADD_ITEM': {
+      const newItem = action.payload; // payload는 Menu 객체
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) => item.menu.menu_id === newItem.menu_id
+      );
 
-    case 'REMOVE_ITEM':
-      // Placeholder logic: Filter out the item with the matching menu_id
-      console.log('Reducer: Remove Item - Logic TBD');
-      // Example: return { ...state, cartItems: state.cartItems.filter(...) };
-      return state; // Return current state for now
+      if (existingItemIndex > -1) {
+        // 이미 장바구니에 있는 경우: 수량만 증가
+        const updatedCartItems = state.cartItems.map((item, index) => {
+          if (index === existingItemIndex) {
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+            };
+          }
+          return item;
+        });
+        return { ...state, cartItems: updatedCartItems };
+      } else {
+        // 장바구니에 없는 경우: 새 아이템으로 추가 (quantity: 1)
+        // CartItemType 구조에 맞춰서 객체 생성 (types/index.ts 참고)
+        const newCartItem = {
+          menu: newItem, // 전달받은 Menu 객체 사용
+          quantity: 1,
+        };
+        return { ...state, cartItems: [...state.cartItems, newCartItem] };
+      }
+    }
 
-    case 'UPDATE_QUANTITY':
-      // Placeholder logic: Find item and update its quantity
-      // Handle quantity <= 0 (remove item?)
-      console.log('Reducer: Update Quantity - Logic TBD');
-      // Example: return { ...state, cartItems: state.cartItems.map(...) };
-      return state; // Return current state for now
+    case 'REMOVE_ITEM': {
+      const menuIdToRemove = action.payload; // payload는 제거할 menu_id
+      const filteredCartItems = state.cartItems.filter(
+        (item) => item.menu.menu_id !== menuIdToRemove
+      );
+      return { ...state, cartItems: filteredCartItems };
+    }
 
-    case 'CLEAR_CART':
-      // Placeholder logic: Reset cartItems to empty array
-      console.log('Reducer: Clear Cart - Logic TBD');
-      return { ...state, cartItems: [] }; // Example implementation
+    case 'UPDATE_QUANTITY': {
+      const { menu_id, quantity } = action.payload;
+
+      // 수량이 0 이하인 경우 해당 아이템 제거
+      if (quantity <= 0) {
+        const filteredCartItems = state.cartItems.filter(
+          (item) => item.menu.menu_id !== menu_id
+        );
+        return { ...state, cartItems: filteredCartItems };
+      }
+
+      // 수량이 1 이상인 경우 해당 아이템 수량 업데이트
+      const updatedCartItems = state.cartItems.map((item) => {
+        if (item.menu.menu_id === menu_id) {
+          return { ...item, quantity: quantity }; // 새 수량으로 업데이트
+        }
+        return item;
+      });
+      return { ...state, cartItems: updatedCartItems };
+    }
+
+    case 'CLEAR_CART': {
+      // 장바구니 비우기
+      return { ...state, cartItems: [] };
+    }
 
     default:
-      // Ensure all action types are handled, or throw error for unknown actions
-      // const exhaustiveCheck: never = action; // Uncomment for exhaustive check
-      // throw new Error(`Unhandled action type: ${action.type}`);
+      // 타입스크립트의 도움으로 이 default 케이스는 이론적으로 도달하지 않아야 합니다.
+      // 만약의 경우를 대비해 현재 상태를 반환하거나 에러를 발생시킬 수 있습니다.
+      // console.warn(`Unhandled action: ${action}`); // 개발 중 경고 표시
       return state;
   }
 };
