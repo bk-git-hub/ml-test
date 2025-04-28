@@ -1,24 +1,18 @@
 // src/features/order/contexts/CartContext.tsx
-import {
-  createContext,
-  useReducer,
-  useContext,
-  ReactNode,
-  Dispatch,
-} from 'react';
+import { createContext, useReducer, ReactNode, Dispatch } from 'react';
 // Import your types
 import { Cart, Menu } from '../types';
 
 // --- State Definition ---
 // The state managed by the context will conform to the Cart interface
-interface CartState extends Cart {
+export interface CartState extends Cart {
   id?: number;
 }
 
 // --- Action Definitions ---
 // Define the different actions that can modify the cart state
 // Using a discriminated union for type safety
-type CartAction =
+export type CartAction =
   | { type: 'ADD_ITEM'; payload: Menu } // Payload is the full menu item to add
   | { type: 'REMOVE_ITEM'; payload: number } // Payload is the menu_id to remove
   | { type: 'UPDATE_QUANTITY'; payload: { menu_id: number; quantity: number } } // Payload has id and new quantity
@@ -109,10 +103,11 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 // --- Context Creation ---
 // Create two contexts: one for the state, one for the dispatch function
 // Splitting them can prevent unnecessary re-renders in components that only need dispatch
-const CartStateContext = createContext<CartState | undefined>(undefined);
-const CartDispatchContext = createContext<Dispatch<CartAction> | undefined>(
-  undefined
-);
+
+export const CartStateContext = createContext<CartState | undefined>(undefined);
+export const CartDispatchContext = createContext<
+  Dispatch<CartAction> | undefined
+>(undefined);
 
 // --- Provider Component ---
 // This component will wrap parts of your app that need access to the cart
@@ -134,18 +129,3 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
 // --- Custom Hooks ---
 // Create custom hooks for easy access to state and dispatch, including error handling
-export const useCartState = (): CartState => {
-  const context = useContext(CartStateContext);
-  if (context === undefined) {
-    throw new Error('useCartState must be used within a CartProvider');
-  }
-  return context;
-};
-
-export const useCartDispatch = (): Dispatch<CartAction> => {
-  const context = useContext(CartDispatchContext);
-  if (context === undefined) {
-    throw new Error('useCartDispatch must be used within a CartProvider');
-  }
-  return context;
-};

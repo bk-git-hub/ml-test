@@ -1,6 +1,6 @@
 // src/features/order/components/CartComponent.tsx
 
-import { useCartState } from '../contexts/CartContext'; // Import state and dispatch hooks
+import { useCartState } from '../hooks/useCartState';
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
 

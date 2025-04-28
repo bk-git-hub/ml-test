@@ -1,6 +1,6 @@
 // src/features/order/components/MenuItemCard.tsx
 import { Menu } from '../types';
-import { useCartDispatch } from '../contexts/CartContext'; // To add item to cart
+import { useCartDispatch } from '../hooks/useCartDispatch'; // To add item to cart
 
 interface MenuItemCardProps {
   menu: Menu;

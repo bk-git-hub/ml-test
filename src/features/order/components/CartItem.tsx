@@ -1,6 +1,6 @@
 // src/features/order/components/CartItemComponent.tsx
 
-import { useCartDispatch } from '../contexts/CartContext';
+import { useCartDispatch } from '../hooks/useCartDispatch';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid'; // Example icons (install @heroicons/react)
 import { CartItemType } from '../types';
 
