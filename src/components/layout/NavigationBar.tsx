@@ -1,4 +1,3 @@
-import React from 'react';
 // react-router-dom에서 필요한 훅 import
 import { useNavigate, useParams } from 'react-router-dom';
 import { mockCategories } from '@/mocks/categories'; // 경로가 맞는지 확인해주세요
@@ -6,7 +5,7 @@ import { Category } from '@/types/order'; // 경로가 맞는지 확인해주세
 import clsx from 'clsx'; // 조건부 클래스를 쉽게 적용하기 위해 clsx 라이브러리 사용 (선택 사항)
 // clsx 설치: npm install clsx 또는 yarn add clsx
 
-const NavigationBar: React.FC = () => {
+const NavigationBar = () => {
   // 페이지 이동을 위한 navigate 함수
   const navigate = useNavigate();
   // URL 파라미터에서 categoryId를 가져오기 위함

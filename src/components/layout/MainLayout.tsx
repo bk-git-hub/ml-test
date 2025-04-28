@@ -1,12 +1,12 @@
 // src/components/layout/MainLayout.tsx
-import React from 'react';
+
 import { Outlet } from 'react-router-dom'; // Import Outlet to render nested routes
 import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if needed
 
 import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder'; // Adjust path if needed
 import Cart from '@/features/order/components/Cart';
 
-const MainLayout: React.FC = () => {
+const MainLayout = () => {
   return (
     // Outer grid: 3 columns, full screen height
     // Removed explicit grid-rows, height will be determined by h-screen

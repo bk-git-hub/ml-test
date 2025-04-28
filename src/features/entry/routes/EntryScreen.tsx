@@ -1,9 +1,8 @@
 // src/features/entry/routes/EntryScreen.tsx
 
-import React from 'react';
 import EntryContent from '../components/EntryContent';
 
-const EntryScreen: React.FC = () => {
+const EntryScreen = () => {
   return (
     <div className='h-screen'>
       <EntryContent />

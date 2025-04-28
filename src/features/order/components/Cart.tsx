@@ -1,10 +1,10 @@
 // src/features/order/components/CartComponent.tsx
-import React from 'react';
+
 import { useCartState } from '../contexts/CartContext'; // Import state and dispatch hooks
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
 
-const Cart: React.FC = () => {
+const Cart = () => {
   const { cartItems } = useCartState(); // Get cart items from context
   //const dispatch = useCartDispatch(); // Get dispatch function (optional here, maybe needed for place order)
 

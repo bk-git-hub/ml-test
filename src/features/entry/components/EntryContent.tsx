@@ -1,8 +1,7 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LanguageSelector from './LanguageSelector';
 
-const EntryContent: React.FC = () => {
+const EntryContent = () => {
   const navigate = useNavigate();
 
   const handleStartOrder = () => {

@@ -83,7 +83,7 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
+export const CartProvider = ({ children }: CartProviderProps) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
 
   return (

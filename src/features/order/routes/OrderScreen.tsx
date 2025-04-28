@@ -1,9 +1,8 @@
 // src/features/order/routes/OrderScreen.tsx
 
-import React from 'react';
 import { useParams } from 'react-router-dom'; // Import useParams
 
-const OrderScreen: React.FC = () => {
+const OrderScreen = () => {
   // Get the categoryId from the URL, if it exists
   const { categoryId } = useParams<{ categoryId?: string }>();
 

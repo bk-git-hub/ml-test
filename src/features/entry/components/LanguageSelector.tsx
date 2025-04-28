@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-const LanguageSelector: React.FC = () => {
+const LanguageSelector = () => {
   const [language, setLanguage] = useState('ko');
 
   const toggleLanguage = (e: React.MouseEvent) => {

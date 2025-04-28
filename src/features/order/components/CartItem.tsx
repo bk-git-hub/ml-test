@@ -1,5 +1,4 @@
 // src/features/order/components/CartItemComponent.tsx
-import React from 'react';
 
 import { useCartDispatch } from '../contexts/CartContext';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid'; // Example icons (install @heroicons/react)
@@ -9,7 +8,7 @@ interface CartItemProps {
   item: CartItemType;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item }) => {
+const CartItem = ({ item }: CartItemProps) => {
   const dispatch = useCartDispatch();
 
   const handleIncrease = () => {

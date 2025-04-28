@@ -1,6 +1,5 @@
 // src/router/index.tsx
 
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // --- Context Provider ---
@@ -13,8 +12,9 @@ import MainLayout from '@/components/layout/MainLayout'; // Adjust path if neede
 import { EntryScreen } from '../features/entry'; // Assuming correct export, adjust path if needed
 import OrderScreen from '@/features/order/routes/OrderScreen'; // Adjust path if needed
 // import OrderHistoryScreen from '@/features/order-history/routes/OrderHistoryScreen'; // Example for future
+import MenuContent from '@/features/order/components/MenuContent';
 
-const AppRouter: React.FC = () => {
+const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -33,7 +33,7 @@ const AppRouter: React.FC = () => {
           {/* These routes will render inside MainLayout's <Outlet /> */}
           {/* and will have access to the CartContext */}
           <Route path='/order' element={<OrderScreen />} />
-          <Route path='/order/:categoryId' element={<OrderScreen />} />
+          <Route path='/order/:categoryId' element={<MenuContent />} />
           {/* e.g., <Route path='/order-history' element={<OrderHistoryScreen />} /> */}
         </Route>
 
