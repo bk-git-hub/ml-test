@@ -1,12 +1,12 @@
 // src/features/order/components/CartComponent.tsx
 
-import { useCartState } from '../hooks/useCartState';
+import { useCartStore } from '@/store/cartStore';
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
 
 const Cart = () => {
-  const { cartItems } = useCartState(); // Get cart items from context
-  //const dispatch = useCartDispatch(); // Get dispatch function (optional here, maybe needed for place order)
+  const cartItems = useCartStore((state) => state.cartItems);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   // Calculate total price
   const totalPrice = cartItems.reduce(
@@ -23,7 +23,7 @@ const Cart = () => {
     // TODO: Implement order placement logic
     // - Send order details (cartItems, totalPrice) to the server
     // - Handle response (success/error)
-    // - Optionally clear the cart on success: dispatch({ type: 'CLEAR_CART' }); // Need to add CLEAR_CART action to reducer
+    // - Optionally clear the cart on success: clearCart();
   };
 
   return (

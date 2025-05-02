@@ -1,18 +1,17 @@
 // src/features/order/components/MenuItemCard.tsx
 import { Menu } from '../types';
-import { useCartDispatch } from '../hooks/useCartDispatch'; // To add item to cart
+import { useCartStore } from '@/store/cartStore';
 
 interface MenuItemCardProps {
   menu: Menu;
-  // Removed onAddToCart prop, we'll use dispatch directly here
 }
 
 const MenuItemCard = ({ menu }: MenuItemCardProps) => {
-  const dispatch = useCartDispatch();
+  const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = () => {
     console.log(`Adding ${menu.menu_name} to cart`);
-    dispatch({ type: 'ADD_ITEM', payload: menu });
+    addItem(menu);
   };
 
   return (

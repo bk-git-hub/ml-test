@@ -1,6 +1,6 @@
 // src/features/order/components/CartItemComponent.tsx
 
-import { useCartDispatch } from '../hooks/useCartDispatch';
+import { useCartStore } from '@/store/cartStore';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid'; // Example icons (install @heroicons/react)
 import { CartItemType } from '../types';
 
@@ -9,29 +9,24 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const dispatch = useCartDispatch();
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
 
   const handleIncrease = () => {
-    dispatch({
-      type: 'UPDATE_QUANTITY',
-      payload: { menu_id: item.menu.menu_id, quantity: item.quantity + 1 },
-    });
+    updateQuantity(item.menu.menu_id, item.quantity + 1);
   };
 
   const handleDecrease = () => {
-    // Dispatch remove if quantity becomes 0, otherwise update
+    // Remove if quantity becomes 0, otherwise update
     if (item.quantity - 1 <= 0) {
       handleRemove();
     } else {
-      dispatch({
-        type: 'UPDATE_QUANTITY',
-        payload: { menu_id: item.menu.menu_id, quantity: item.quantity - 1 },
-      });
+      updateQuantity(item.menu.menu_id, item.quantity - 1);
     }
   };
 
   const handleRemove = () => {
-    dispatch({ type: 'REMOVE_ITEM', payload: item.menu.menu_id });
+    removeItem(item.menu.menu_id);
   };
 
   return (
