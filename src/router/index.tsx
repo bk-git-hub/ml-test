@@ -2,9 +2,6 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// --- Context Provider ---
-import { CartProvider } from '@/features/order/contexts/CartContext'; // Adjust path if needed
-
 // --- Layouts ---
 import MainLayout from '@/components/layout/MainLayout'; // Adjust path if needed
 
@@ -22,16 +19,8 @@ const AppRouter = () => {
         <Route path='/' element={<EntryScreen />} />
 
         {/* Routes that WILL use MainLayout */}
-        {/* Wrap the MainLayout element with the CartProvider */}
-        <Route
-          element={
-            <CartProvider>
-              <MainLayout />
-            </CartProvider>
-          }
-        >
+        <Route element={<MainLayout />}>
           {/* These routes will render inside MainLayout's <Outlet /> */}
-          {/* and will have access to the CartContext */}
           <Route path='/order' element={<OrderScreen />} />
           <Route path='/order/:categoryId' element={<MenuContent />} />
           {/* e.g., <Route path='/order-history' element={<OrderHistoryScreen />} /> */}
