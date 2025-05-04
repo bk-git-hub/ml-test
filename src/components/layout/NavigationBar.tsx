@@ -29,39 +29,41 @@ const NavigationBar = () => {
   };
 
   return (
-    <aside className='w-64 bg-ml-gray p-4 flex flex-col'>
-      <nav className='flex-1 overflow-y-auto'>
-        <ul>
-          {mockCategories.map((category: Category) => {
-            // 현재 카테고리가 활성화된 카테고리인지 확인
-            const isActive =
-              !isNaN(activeCategoryId) &&
-              category.category_id === activeCategoryId;
+    <div className='flex flex-col h-full'>
+      <aside className='w-50 bg-ml-gray p-4 flex flex-col'>
+        <nav className='flex-1 overflow-y-auto'>
+          <ul>
+            {mockCategories.map((category: Category) => {
+              // 현재 카테고리가 활성화된 카테고리인지 확인
+              const isActive =
+                !isNaN(activeCategoryId) &&
+                category.category_id === activeCategoryId;
 
-            return (
-              <li key={category.category_id} className='mb-2'>
-                <button
-                  onClick={() => handleCategoryClick(category.category_id)}
-                  // clsx를 사용하여 조건부 클래스 적용
-                  className={clsx(
-                    'w-full text-left hover:bg-gray-200 p-2 rounded transition-colors duration-150 ease-in-out', // 기본 및 호버 스타일
-                    {
-                      // isActive가 true일 때 적용될 스타일
-                      'font-semibold underline decoration-ml-yellow decoration-2 underline-offset-4':
-                        isActive,
-                      // isActive가 false일 때 적용될 스타일 (필요하다면)
-                      'font-normal': !isActive,
-                    }
-                  )}
-                >
-                  {category.category_name}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <div className='mt-4'>
+              return (
+                <li key={category.category_id} className='mb-2'>
+                  <button
+                    onClick={() => handleCategoryClick(category.category_id)}
+                    // clsx를 사용하여 조건부 클래스 적용
+                    className={clsx(
+                      'w-full text-xl text-left hover:bg-gray-200 p-2 rounded transition-colors duration-150 ease-in-out', // 기본 및 호버 스타일
+                      {
+                        // isActive가 true일 때 적용될 스타일
+                        'font-semibold underline decoration-ml-yellow decoration-2 underline-offset-4':
+                          isActive,
+                        // isActive가 false일 때 적용될 스타일 (필요하다면)
+                        'font-normal': !isActive,
+                      }
+                    )}
+                  >
+                    {category.category_name}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </aside>
+      <div className='sticky bottom-0 p-4 bg-ml-gray'>
         <button
           onClick={handleOrderHistoryClick}
           // ml-yellow 배경색에 흰색 글씨가 잘 보이나요? 필요시 글자색 조정 (예: text-black)
@@ -70,7 +72,7 @@ const NavigationBar = () => {
           주문 내역 조회
         </button>
       </div>
-    </aside>
+    </div>
   );
 };
 

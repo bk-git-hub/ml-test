@@ -32,11 +32,6 @@ const CartItem = ({ item }: CartItemProps) => {
   return (
     <div className='flex items-center py-3 border-b border-gray-200 last:border-b-0'>
       {/* Left: Image */}
-      <img
-        src={item.menu.menu_img_url || 'https://via.placeholder.com/64'} // Placeholder if no image
-        alt={item.menu.menu_name}
-        className='w-16 h-16 object-cover rounded mr-3 flex-shrink-0' // Fixed size image
-      />
 
       {/* Middle: Name and Price */}
       <div className='flex-grow mr-3'>

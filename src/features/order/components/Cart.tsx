@@ -27,7 +27,7 @@ const Cart = () => {
   };
 
   return (
-    <aside className='w-80 bg-white border-l border-gray-200 flex flex-col h-full'>
+    <aside className='w-60 bg-white border-l border-gray-200 flex flex-col h-full'>
       {' '}
       {/* Adjusted width */}
       {/* Header */}
