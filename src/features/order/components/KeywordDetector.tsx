@@ -1,25 +1,58 @@
 import { useEffect, useState } from 'react';
 import { usePorcupine } from '@picovoice/porcupine-react';
-import VoiceRecorder from './VoiceRecorder';
+import VoiceRecorder from './VoiceRecorder'; // Make sure this path is correct
 
 const PORCUPINE_MODEL_PATH = '/pp/porcupine_params_ko.pv';
 const PORCUPINE_KEYWORD_PATH = '/pp/말랑아_ko_wasm_v3_0_0.ppn';
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
-const porcupineKeyword = {
-  publicPath: `${PORCUPINE_KEYWORD_PATH}`,
-  label: '말랑아',
-};
-
-const porcupineModel = {
-  publicPath: `${PORCUPINE_MODEL_PATH}`,
-};
-
 const KeywordDetector = () => {
-  const { keywordDetection, isListening, error, init, release, start, stop } =
-    usePorcupine();
+  const {
+    isLoaded,
+    keywordDetection,
+    isListening,
+    error,
+
+    init,
+    start,
+    stop,
+  } = usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+
+  useEffect(() => {
+    const initPorcupine = async () => {
+      try {
+        await init(
+          PORCUPINE_ACCESS_KEY,
+          [
+            {
+              publicPath: PORCUPINE_KEYWORD_PATH,
+              label: '말랑아',
+            },
+          ],
+          { publicPath: PORCUPINE_MODEL_PATH }
+        );
+      } catch (error) {
+        console.error('Failed to initialize Porcupine:', error);
+      }
+    };
+
+    initPorcupine();
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      start();
+    }
+    return () => {
+      if (isLoaded) {
+        stop();
+      }
+    };
+  }, [isLoaded, start, stop]);
+
+  // Initialize Porcupine
 
   // Handle keyword detection
   useEffect(() => {
@@ -27,70 +60,30 @@ const KeywordDetector = () => {
       setShowDetection(true);
       setIsRecording(true);
 
-      // Stop recording after 5 seconds
-      const recordingTimer = setTimeout(() => {
-        setIsRecording(false);
-      }, 5000);
+      const resetDetection = () => setShowDetection(false);
+      const stopRecording = () => setIsRecording(false);
 
-      // Reset detection state after 1 second
-      const detectionTimer = setTimeout(() => {
-        setShowDetection(false);
-      }, 1000);
+      const detectionTimer = setTimeout(resetDetection, 1000);
+      const recordingTimer = setTimeout(stopRecording, 5000);
 
       return () => {
-        clearTimeout(recordingTimer);
         clearTimeout(detectionTimer);
+        clearTimeout(recordingTimer);
       };
     }
   }, [keywordDetection]);
 
-  // Initialize Porcupine and start listening
-  useEffect(() => {
-    const initializeAndStart = async () => {
-      try {
-        await init(
-          `${PORCUPINE_ACCESS_KEY}`,
-          [porcupineKeyword],
-          porcupineModel
-        );
-        await start();
-      } catch (err) {
-        console.error('Error initializing Porcupine:', err);
-      }
-    };
-
-    initializeAndStart();
-
-    // Cleanup on component unmount
-    return () => {
-      const cleanup = async () => {
-        try {
-          await stop();
-        } catch (err) {
-          console.error('Error stopping Porcupine:', err);
-        } finally {
-          release();
-        }
-      };
-      cleanup();
-    };
-  }, [init, release, start, stop]);
-
   const handleRecordingComplete = (audioBlob: Blob) => {
-    // TODO: Send the audio blob to the AI server
-    console.log('Audio recording complete:', audioBlob);
-    // Here you would typically send the blob to your AI server
-    // For example:
+    console.log('Recording ready for upload:', audioBlob);
+    // Example: Upload to server
     // const formData = new FormData();
     // formData.append('audio', audioBlob, 'recording.wav');
-    // await fetch('YOUR_AI_SERVER_ENDPOINT', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
+    // fetch('YOUR_API_ENDPOINT', { method: 'POST', body: formData });
   };
 
   return (
     <>
+      {/* Status UI */}
       <div className='bottom-4 right-4 p-4 bg-white rounded-lg shadow-lg'>
         <div className='flex items-center space-x-2'>
           <div
@@ -113,10 +106,14 @@ const KeywordDetector = () => {
           </div>
         )}
       </div>
-      <VoiceRecorder
-        isRecording={isRecording}
-        onRecordingComplete={handleRecordingComplete}
-      />
+
+      {/* Voice Recorder (conditionally rendered when needed) */}
+      {isRecording && (
+        <VoiceRecorder
+          isRecording={isRecording}
+          onRecordingComplete={handleRecordingComplete}
+        />
+      )}
     </>
   );
 };
