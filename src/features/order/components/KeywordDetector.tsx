@@ -19,43 +19,6 @@ const KeywordDetector = () => {
   } = usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  // Initialize Porcupine
-  useEffect(() => {
-    let isMounted = true;
-
-    const initialize = async () => {
-      try {
-        await init(
-          PORCUPINE_ACCESS_KEY,
-          [
-            {
-              publicPath: PORCUPINE_KEYWORD_PATH,
-              label: '말랑아',
-            },
-          ],
-          { publicPath: PORCUPINE_MODEL_PATH }
-        );
-        if (isMounted) {
-          setIsInitialized(true);
-          await start();
-        }
-      } catch (err) {
-        console.error('Porcupine init error:', err);
-      }
-    };
-
-    initialize();
-
-    return () => {
-      isMounted = false;
-      if (isInitialized) {
-        stop().catch(console.error);
-        release();
-      }
-    };
-  }, [init, start, stop, release, isInitialized]);
 
   useEffect(() => {
     const initPorcupine = async () => {
