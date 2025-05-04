@@ -18,12 +18,13 @@ const MenuItemCard = ({ menu }: MenuItemCardProps) => {
     <div className='border rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col'>
       {/* Image */}
       <img
-        src={
-          menu.menu_img_url ||
-          'https://via.placeholder.com/150/CCCCCC/FFFFFF?text=No+Image'
-        }
+        src={menu.menu_img_url}
         alt={menu.menu_name}
-        className='w-full h-40 object-cover' // Fixed height for image consistency
+        className='w-full h-40 object-cover'
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = '/logo.png';
+        }}
       />
 
       {/* Content Area */}
