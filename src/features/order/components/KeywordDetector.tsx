@@ -7,8 +7,16 @@ const PORCUPINE_KEYWORD_PATH = '/pp/말랑아_ko_wasm_v3_0_0.ppn';
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
 const KeywordDetector = () => {
-  const { keywordDetection, isListening, error, init, release, start, stop } =
-    usePorcupine();
+  const {
+    isLoaded,
+    keywordDetection,
+    isListening,
+    error,
+
+    init,
+    start,
+    stop,
+  } = usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -48,6 +56,40 @@ const KeywordDetector = () => {
       }
     };
   }, [init, start, stop, release, isInitialized]);
+
+  useEffect(() => {
+    const initPorcupine = async () => {
+      try {
+        await init(
+          PORCUPINE_ACCESS_KEY,
+          [
+            {
+              publicPath: PORCUPINE_KEYWORD_PATH,
+              label: '말랑아',
+            },
+          ],
+          { publicPath: PORCUPINE_MODEL_PATH }
+        );
+      } catch (error) {
+        console.error('Failed to initialize Porcupine:', error);
+      }
+    };
+
+    initPorcupine();
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      start();
+    }
+    return () => {
+      if (isLoaded) {
+        stop();
+      }
+    };
+  }, [isLoaded, start, stop]);
+
+  // Initialize Porcupine
 
   // Handle keyword detection
   useEffect(() => {
