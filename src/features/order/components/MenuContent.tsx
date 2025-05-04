@@ -63,7 +63,7 @@ const MenuContent = () => {
     // The parent <main> in MainLayout already provides scrolling (overflow-y-auto)
     // If you need padding inside the scrollable area, add it here.
     <div className='p-4'>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+      <div className='grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {/* Responsive grid: 1 col on smallest screens, up to 4 on large */}
         {menuItems.map((menu) => (
           <MenuItemCard key={menu.menu_id} menu={menu} />
