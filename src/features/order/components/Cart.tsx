@@ -6,7 +6,7 @@ import { CartItemType } from '../types';
 
 const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
-  const clearCart = useCartStore((state) => state.clearCart);
+  //const clearCart = useCartStore((state) => state.clearCart);
 
   // Calculate total price
   const totalPrice = cartItems.reduce(
