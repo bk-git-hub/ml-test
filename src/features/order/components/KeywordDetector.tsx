@@ -3,7 +3,7 @@ import { usePorcupine } from '@picovoice/porcupine-react';
 import VoiceRecorder from './VoiceRecorder'; // Make sure this path is correct
 
 const PORCUPINE_MODEL_PATH = '/pp/porcupine_params_ko.pv';
-const PORCUPINE_KEYWORD_PATH = '/pp/말랑아_ko_wasm_v3_0_0.ppn';
+const PORCUPINE_KEYWORD_PATH = '/pp/mallanga_ko_wasm_v3_0_0.ppn';
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
 const KeywordDetector = () => {
@@ -19,38 +19,26 @@ const KeywordDetector = () => {
   } = usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-
   useEffect(() => {
     const initPorcupine = async () => {
       try {
         await init(
           PORCUPINE_ACCESS_KEY,
-          [
-            {
-              publicPath: PORCUPINE_KEYWORD_PATH,
-              label: '말랑아',
-            },
-          ],
+          [{ publicPath: PORCUPINE_KEYWORD_PATH, label: '말랑아' }],
           { publicPath: PORCUPINE_MODEL_PATH }
         );
+        await start(); // init 직후 start 호출
       } catch (error) {
-        console.error('Failed to initialize Porcupine:', error);
+        console.error('Porcupine 초기화 실패:', error);
       }
     };
 
     initPorcupine();
-  }, []);
 
-  useEffect(() => {
-    if (isLoaded) {
-      start();
-    }
     return () => {
-      if (isLoaded) {
-        stop();
-      }
+      if (isLoaded) stop();
     };
-  }, [isLoaded, start, stop]);
+  }, []);
 
   // Initialize Porcupine
 
