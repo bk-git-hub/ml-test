@@ -11,7 +11,7 @@ const AdminLayout: React.FC = () => {
             <div className='flex'>
               <div className='flex-shrink-0 flex items-center'>
                 <span className='text-xl font-bold text-gray-800'>
-                  말랑카페 관리자
+                  관리자 페이지
                 </span>
               </div>
             </div>
@@ -30,7 +30,7 @@ const AdminLayout: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3 py-2 text-sm font-medium rounded-md ${
                     isActive
-                      ? 'bg-gray-100 text-gray-900'
+                      ? 'bg-ml-yellow text-gray-900'
                       : 'text-gray-500 hover:text-gray-900'
                   }`
                 }
@@ -42,7 +42,7 @@ const AdminLayout: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3 py-2 text-sm font-medium rounded-md ${
                     isActive
-                      ? 'bg-gray-100 text-gray-900'
+                      ? 'bg-ml-yellow text-gray-900'
                       : 'text-gray-500 hover:text-gray-900'
                   }`
                 }
@@ -54,7 +54,7 @@ const AdminLayout: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3 py-2 text-sm font-medium rounded-md ${
                     isActive
-                      ? 'bg-gray-100 text-gray-900'
+                      ? 'bg-ml-yellow text-gray-900'
                       : 'text-gray-500 hover:text-gray-900'
                   }`
                 }
@@ -66,7 +66,7 @@ const AdminLayout: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3 py-2 text-sm font-medium rounded-md ${
                     isActive
-                      ? 'bg-gray-100 text-gray-900'
+                      ? 'bg-ml-yellow text-gray-900'
                       : 'text-gray-500 hover:text-gray-900'
                   }`
                 }

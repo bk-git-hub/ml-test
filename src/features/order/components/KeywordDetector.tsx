@@ -25,12 +25,6 @@ const KeywordDetector = () => {
 
   // Initialize Porcupine and start listening
   useEffect(() => {
-    console.log('Starting Porcupine initialization with:', {
-      accessKey: PORCUPINE_ACCESS_KEY,
-      keyword: porcupineKeyword,
-      model: porcupineModel,
-    });
-
     // init이 완료될 때까지 기다림
     init(`${PORCUPINE_ACCESS_KEY}`, porcupineKeyword, porcupineModel);
   }, []);

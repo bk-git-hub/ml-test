@@ -101,7 +101,7 @@ const AdminMenus: React.FC = () => {
                 onChange={(e) =>
                   setNewMenu({ ...newMenu, name: e.target.value })
                 }
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                 placeholder='메뉴명을 입력하세요'
               />
             </div>
@@ -118,7 +118,7 @@ const AdminMenus: React.FC = () => {
                 onChange={(e) =>
                   setNewMenu({ ...newMenu, categoryId: e.target.value })
                 }
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
               >
                 <option value=''>카테고리를 선택하세요</option>
                 {categories.map((category) => (
@@ -142,7 +142,7 @@ const AdminMenus: React.FC = () => {
                   setNewMenu({ ...newMenu, description: e.target.value })
                 }
                 rows={3}
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                 placeholder='메뉴에 대한 설명을 입력하세요'
               />
             </div>
@@ -160,7 +160,7 @@ const AdminMenus: React.FC = () => {
                 onChange={(e) =>
                   setNewMenu({ ...newMenu, price: Number(e.target.value) })
                 }
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                 placeholder='가격을 입력하세요'
               />
             </div>
@@ -177,9 +177,10 @@ const AdminMenus: React.FC = () => {
                 onChange={handleFileChange}
                 className='mt-1 block w-full text-sm text-gray-500
                   file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
+                  file:rounded-md 
                   file:text-sm file:font-semibold
-                  file:bg-indigo-50 file:text-indigo-700
+                  file:border
+                  file:border-ml-yellow file:text-black
                   hover:file:bg-indigo-100'
                 accept='image/*'
               />
@@ -204,7 +205,7 @@ const AdminMenus: React.FC = () => {
             <button
               type='button'
               onClick={handleAddMenu}
-              className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-ml-yellow hover:bg-ml-yellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
             >
               메뉴 추가
             </button>
@@ -241,7 +242,7 @@ const AdminMenus: React.FC = () => {
                             name: e.target.value,
                           })
                         }
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       />
                     </div>
                     <div>
@@ -260,7 +261,7 @@ const AdminMenus: React.FC = () => {
                             categoryId: e.target.value,
                           })
                         }
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       >
                         {categories.map((category) => (
                           <option key={category.id} value={category.id}>
@@ -286,7 +287,7 @@ const AdminMenus: React.FC = () => {
                           })
                         }
                         rows={3}
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       />
                     </div>
                     <div>
@@ -306,7 +307,7 @@ const AdminMenus: React.FC = () => {
                             price: Number(e.target.value),
                           })
                         }
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       />
                     </div>
                     <div className='flex items-center'>
@@ -333,14 +334,14 @@ const AdminMenus: React.FC = () => {
                       <button
                         type='button'
                         onClick={handleUpdateMenu}
-                        className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-ml-yellow hover:bg-ml-yellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         저장
                       </button>
                       <button
                         type='button'
                         onClick={() => setEditingMenu(null)}
-                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         취소
                       </button>
@@ -388,7 +389,7 @@ const AdminMenus: React.FC = () => {
                       <button
                         type='button'
                         onClick={() => handleEditMenu(menu)}
-                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         수정
                       </button>

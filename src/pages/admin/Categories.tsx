@@ -70,7 +70,7 @@ const AdminCategories: React.FC = () => {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, name: e.target.value })
                 }
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                 placeholder='카테고리명을 입력하세요'
               />
             </div>
@@ -91,14 +91,14 @@ const AdminCategories: React.FC = () => {
                   })
                 }
                 rows={3}
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                 placeholder='카테고리에 대한 설명을 입력하세요'
               />
             </div>
             <button
               type='button'
               onClick={handleAddCategory}
-              className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-ml-yellow hover:bg-ml-yellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
             >
               카테고리 추가
             </button>
@@ -135,7 +135,7 @@ const AdminCategories: React.FC = () => {
                             name: e.target.value,
                           })
                         }
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       />
                     </div>
                     <div>
@@ -155,21 +155,21 @@ const AdminCategories: React.FC = () => {
                           })
                         }
                         rows={3}
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                       />
                     </div>
                     <div className='flex space-x-2'>
                       <button
                         type='button'
                         onClick={handleUpdateCategory}
-                        className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-ml-yellow hover:bg-ml-yellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         저장
                       </button>
                       <button
                         type='button'
                         onClick={() => setEditingCategory(null)}
-                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         취소
                       </button>
@@ -189,7 +189,7 @@ const AdminCategories: React.FC = () => {
                       <button
                         type='button'
                         onClick={() => handleEditCategory(category)}
-                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        className='inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ml-yellow'
                       >
                         수정
                       </button>

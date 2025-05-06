@@ -49,7 +49,7 @@ const AdminOrders: React.FC = () => {
             onChange={(e) =>
               setSelectedStatus(e.target.value as OrderStatus | 'ALL')
             }
-            className='rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
           >
             <option value='ALL'>전체</option>
             <option value='PENDING'>대기중</option>
@@ -101,7 +101,7 @@ const AdminOrders: React.FC = () => {
                           e.target.value as OrderStatus
                         )
                       }
-                      className='rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+                      className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ml-yellow focus:ring-ml-yellow sm:text-sm'
                     >
                       <option value='PENDING'>대기중</option>
                       <option value='PREPARING'>준비중</option>
