@@ -7,129 +7,101 @@ const PORCUPINE_MODEL_PATH = `${
 }pp/porcupine_params_ko.pv`;
 const PORCUPINE_KEYWORD_PATH = `${
   import.meta.env.BASE_URL
-}pp/mallanga_ko_wasm_v3_0_0.ppn`;
+}pp/말랑아_ko_wasm_v3_0_0.ppn`;
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
 const porcupineKeyword = {
-  publicPath: PORCUPINE_KEYWORD_PATH,
+  publicPath: `${PORCUPINE_KEYWORD_PATH}`,
   label: '말랑아',
 };
 
 const porcupineModel = {
-  publicPath: PORCUPINE_MODEL_PATH,
+  publicPath: `${PORCUPINE_MODEL_PATH}`,
 };
 
 const KeywordDetector = () => {
-  const { keywordDetection, isListening, error, init, release, start, stop } =
+  const { keywordDetection, isListening, error, init, start, isLoaded } =
     usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize Porcupine and start listening
   useEffect(() => {
-    console.log('Initializing Porcupine...');
-    let isComponentMounted = true;
+    console.log('Starting Porcupine initialization with:', {
+      accessKey: PORCUPINE_ACCESS_KEY,
+      keyword: porcupineKeyword,
+      model: porcupineModel,
+    });
 
-    const initializeAndStart = async () => {
-      try {
-        console.log('Starting Porcupine initialization with:', {
-          accessKey: PORCUPINE_ACCESS_KEY,
-          keyword: porcupineKeyword,
-          model: porcupineModel,
-        });
+    // init이 완료될 때까지 기다림
+    init(`${PORCUPINE_ACCESS_KEY}`, porcupineKeyword, porcupineModel);
+  }, []);
 
-        await init(PORCUPINE_ACCESS_KEY, [porcupineKeyword], porcupineModel);
+  useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
 
-        if (!isComponentMounted) return;
-        console.log('Porcupine initialized successfully');
-
-        await start();
-
-        // Wait for isListening to be true (max 1s)
-        let retries = 0;
-        while (!isListening && retries < 10) {
-          await new Promise((res) => setTimeout(res, 100));
-          retries++;
-        }
-
-        if (!isComponentMounted) return;
-        if (isListening) {
-          console.log('Porcupine is now listening');
-          setIsInitialized(true);
-        } else {
-          console.warn('Porcupine did not start listening in time');
-        }
-      } catch (err) {
-        console.error('Error in Porcupine initialization/start:', err);
-        if (isComponentMounted) {
-          setIsInitialized(false);
-        }
-      }
-    };
-
-    initializeAndStart();
-
-    return () => {
-      console.log('Component unmounting - cleaning up Porcupine');
-      isComponentMounted = false;
-
-      const cleanup = async () => {
-        try {
-          console.log('Stopping Porcupine...');
-          await stop();
-          console.log('Porcupine stopped');
-        } catch (err) {
-          console.error('Error stopping Porcupine:', err);
-        } finally {
-          console.log('Releasing Porcupine resources...');
-          release();
-          console.log('Porcupine resources released');
-          if (isComponentMounted) {
-            setIsInitialized(false);
-          }
-        }
-      };
-      cleanup();
-    };
-  }, [init, release, start, stop]);
+    start();
+  }, [isLoaded]);
 
   // Handle keyword detection
   useEffect(() => {
+    if (!isListening) {
+      console.log('Not initialized yet, skipping keyword detection');
+      return;
+    }
+
+    console.log(
+      'Keyword detection effect - keywordDetection:',
+      keywordDetection
+    );
+
     if (keywordDetection !== null) {
       console.log('Keyword detected:', keywordDetection);
       setShowDetection(true);
       setIsRecording(true);
 
+      // Stop recording after 5 seconds
       const recordingTimer = setTimeout(() => {
         console.log('Recording timer completed - stopping recording');
         setIsRecording(false);
       }, 5000);
 
+      // Reset detection state after 1 second
       const detectionTimer = setTimeout(() => {
         console.log('Detection timer completed - resetting detection state');
         setShowDetection(false);
       }, 1000);
 
       return () => {
+        console.log('Cleaning up timers');
         clearTimeout(recordingTimer);
         clearTimeout(detectionTimer);
       };
     }
-  }, [keywordDetection, isInitialized, isListening]);
+  }, [keywordDetection, isListening]);
 
+  // isListening 상태 변경을 감지하는 별도의 useEffect 추가
   useEffect(() => {
     console.log('isListening state changed:', isListening);
   }, [isListening]);
+  useEffect(() => {
+    console.log('isLoaded state changed:', isLoaded);
+  }, [isLoaded]);
 
   const handleRecordingComplete = (audioBlob: Blob) => {
     console.log('Recording completed, audio blob size:', audioBlob.size);
     // TODO: Send the audio blob to the AI server
     console.log('Audio recording complete:', audioBlob);
-    // Example POST request
+    // Here you would typically send the blob to your AI server
+    // For example:
     // const formData = new FormData();
     // formData.append('audio', audioBlob, 'recording.wav');
-    // await fetch('/your-server-endpoint', { method: 'POST', body: formData });
+    // await fetch('YOUR_AI_SERVER_ENDPOINT', {
+    //   method: 'POST',
+    //   body: formData,
+    // });
   };
 
   return (
