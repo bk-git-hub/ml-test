@@ -3,13 +3,20 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // --- Layouts ---
-import MainLayout from '@/components/layout/MainLayout'; // Adjust path if needed
+import MainLayout from '../components/layout/MainLayout';
+import AdminLayout from '../components/layout/AdminLayout';
 
 // --- Screen/Page Components ---
-import { EntryScreen } from '../features/entry'; // Assuming correct export, adjust path if needed
-import OrderScreen from '@/features/order/routes/OrderScreen'; // Adjust path if needed
-import OrderHistoryPage from '@/pages/OrderHistoryPage';
-import MenuContent from '@/features/order/components/MenuContent';
+import { EntryScreen } from '../features/entry';
+import OrderScreen from '../features/order/routes/OrderScreen';
+import OrderHistoryPage from '../pages/OrderHistoryPage';
+import MenuContent from '../features/order/components/MenuContent';
+
+// --- Admin Pages ---
+import AdminDashboard from '../pages/admin/Dashboard';
+import AdminOrders from '../pages/admin/Orders';
+import AdminCategories from '../pages/admin/Categories';
+import AdminMenus from '../pages/admin/Menus';
 
 const AppRouter = () => {
   return (
@@ -24,6 +31,14 @@ const AppRouter = () => {
           <Route path='/order' element={<OrderScreen />} />
           <Route path='/order/:categoryId' element={<MenuContent />} />
           <Route path='/order-history' element={<OrderHistoryPage />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route path='/admin' element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path='orders' element={<AdminOrders />} />
+          <Route path='categories' element={<AdminCategories />} />
+          <Route path='menus' element={<AdminMenus />} />
         </Route>
 
         {/* Other top-level routes can go here */}
