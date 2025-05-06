@@ -22,15 +22,14 @@ const NavigationBar = () => {
     navigate(`/order/${categoryId}`); // 해당 카테고리 ID로 경로 이동
   };
 
-  // 주문 내역 조회 버튼 클릭 핸들러 (추후 구현 필요)
+  // 주문 내역 조회 버튼 클릭 핸들러
   const handleOrderHistoryClick = () => {
-    console.log('주문 내역 조회 클릭됨');
-    // navigate('/order-history'); // 예시: 주문 내역 페이지로 이동
+    navigate('/order-history');
   };
 
   return (
-    <div className='flex flex-col h-full'>
-      <aside className='w-50 bg-ml-gray p-4 flex flex-col'>
+    <div className='flex flex-col'>
+      <aside className='w-50 bg-ml-gray p-4 flex flex-col h-screen'>
         <nav className='flex-1 overflow-y-auto'>
           <ul>
             {mockCategories.map((category: Category) => {
@@ -62,16 +61,16 @@ const NavigationBar = () => {
             })}
           </ul>
         </nav>
+        <div className=' bg-ml-gray'>
+          <button
+            onClick={handleOrderHistoryClick}
+            // ml-yellow 배경색에 흰색 글씨가 잘 보이나요? 필요시 글자색 조정 (예: text-black)
+            className='w-full bg-ml-yellow hover:brightness-95 transition-all duration-150 ease-in-out text-white font-bold py-2 px-4 rounded'
+          >
+            주문 내역 조회
+          </button>
+        </div>
       </aside>
-      <div className='sticky bottom-0 p-4 bg-ml-gray'>
-        <button
-          onClick={handleOrderHistoryClick}
-          // ml-yellow 배경색에 흰색 글씨가 잘 보이나요? 필요시 글자색 조정 (예: text-black)
-          className='w-full bg-ml-yellow hover:brightness-95 transition-all duration-150 ease-in-out text-white font-bold py-2 px-4 rounded'
-        >
-          주문 내역 조회
-        </button>
-      </div>
     </div>
   );
 };
