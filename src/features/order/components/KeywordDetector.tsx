@@ -1,77 +1,139 @@
 import { useEffect, useState } from 'react';
 import { usePorcupine } from '@picovoice/porcupine-react';
-import VoiceRecorder from './VoiceRecorder'; // Make sure this path is correct
+import VoiceRecorder from './VoiceRecorder';
 
-const PORCUPINE_MODEL_PATH = '/pp/porcupine_params_ko.pv';
-const PORCUPINE_KEYWORD_PATH = '/pp/mallanga_ko_wasm_v3_0_0.ppn';
+const PORCUPINE_MODEL_PATH = `${
+  import.meta.env.BASE_URL
+}pp/porcupine_params_ko.pv`;
+const PORCUPINE_KEYWORD_PATH = `${
+  import.meta.env.BASE_URL
+}pp/mallanga_ko_wasm_v3_0_0.ppn`;
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
-const KeywordDetector = () => {
-  const {
-    isLoaded,
-    keywordDetection,
-    isListening,
-    error,
+const porcupineKeyword = {
+  publicPath: PORCUPINE_KEYWORD_PATH,
+  label: '말랑아',
+};
 
-    init,
-    start,
-    stop,
-  } = usePorcupine();
+const porcupineModel = {
+  publicPath: PORCUPINE_MODEL_PATH,
+};
+
+const KeywordDetector = () => {
+  const { keywordDetection, isListening, error, init, release, start, stop } =
+    usePorcupine();
   const [showDetection, setShowDetection] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize Porcupine and start listening
   useEffect(() => {
-    const initPorcupine = async () => {
+    console.log('Initializing Porcupine...');
+    let isComponentMounted = true;
+
+    const initializeAndStart = async () => {
       try {
-        await init(
-          PORCUPINE_ACCESS_KEY,
-          [{ publicPath: PORCUPINE_KEYWORD_PATH, label: '말랑아' }],
-          { publicPath: PORCUPINE_MODEL_PATH }
-        );
-        await start(); // init 직후 start 호출
-      } catch (error) {
-        console.error('Porcupine 초기화 실패:', error);
+        console.log('Starting Porcupine initialization with:', {
+          accessKey: PORCUPINE_ACCESS_KEY,
+          keyword: porcupineKeyword,
+          model: porcupineModel,
+        });
+
+        await init(PORCUPINE_ACCESS_KEY, [porcupineKeyword], porcupineModel);
+
+        if (!isComponentMounted) return;
+        console.log('Porcupine initialized successfully');
+
+        await start();
+
+        // Wait for isListening to be true (max 1s)
+        let retries = 0;
+        while (!isListening && retries < 10) {
+          await new Promise((res) => setTimeout(res, 100));
+          retries++;
+        }
+
+        if (!isComponentMounted) return;
+        if (isListening) {
+          console.log('Porcupine is now listening');
+          setIsInitialized(true);
+        } else {
+          console.warn('Porcupine did not start listening in time');
+        }
+      } catch (err) {
+        console.error('Error in Porcupine initialization/start:', err);
+        if (isComponentMounted) {
+          setIsInitialized(false);
+        }
       }
     };
 
-    initPorcupine();
+    initializeAndStart();
 
     return () => {
-      if (isLoaded) stop();
-    };
-  }, []);
+      console.log('Component unmounting - cleaning up Porcupine');
+      isComponentMounted = false;
 
-  // Initialize Porcupine
+      const cleanup = async () => {
+        try {
+          console.log('Stopping Porcupine...');
+          await stop();
+          console.log('Porcupine stopped');
+        } catch (err) {
+          console.error('Error stopping Porcupine:', err);
+        } finally {
+          console.log('Releasing Porcupine resources...');
+          release();
+          console.log('Porcupine resources released');
+          if (isComponentMounted) {
+            setIsInitialized(false);
+          }
+        }
+      };
+      cleanup();
+    };
+  }, [init, release, start, stop]);
 
   // Handle keyword detection
   useEffect(() => {
     if (keywordDetection !== null) {
+      console.log('Keyword detected:', keywordDetection);
       setShowDetection(true);
       setIsRecording(true);
 
-      const resetDetection = () => setShowDetection(false);
-      const stopRecording = () => setIsRecording(false);
+      const recordingTimer = setTimeout(() => {
+        console.log('Recording timer completed - stopping recording');
+        setIsRecording(false);
+      }, 5000);
 
-      const detectionTimer = setTimeout(resetDetection, 1000);
-      const recordingTimer = setTimeout(stopRecording, 5000);
+      const detectionTimer = setTimeout(() => {
+        console.log('Detection timer completed - resetting detection state');
+        setShowDetection(false);
+      }, 1000);
 
       return () => {
-        clearTimeout(detectionTimer);
         clearTimeout(recordingTimer);
+        clearTimeout(detectionTimer);
       };
     }
-  }, [keywordDetection]);
+  }, [keywordDetection, isInitialized, isListening]);
+
+  useEffect(() => {
+    console.log('isListening state changed:', isListening);
+  }, [isListening]);
 
   const handleRecordingComplete = (audioBlob: Blob) => {
-    console.log('Recording ready for upload:', audioBlob);
-    // Example: Upload to server
+    console.log('Recording completed, audio blob size:', audioBlob.size);
+    // TODO: Send the audio blob to the AI server
+    console.log('Audio recording complete:', audioBlob);
+    // Example POST request
     // const formData = new FormData();
     // formData.append('audio', audioBlob, 'recording.wav');
-    // fetch('YOUR_API_ENDPOINT', { method: 'POST', body: formData });
+    // await fetch('/your-server-endpoint', { method: 'POST', body: formData });
   };
 
   return (
     <>
-      {/* Status UI */}
       <div className='bottom-4 right-4 p-4 bg-white rounded-lg shadow-lg'>
         <div className='flex items-center space-x-2'>
           <div
@@ -94,14 +156,10 @@ const KeywordDetector = () => {
           </div>
         )}
       </div>
-
-      {/* Voice Recorder (conditionally rendered when needed) */}
-      {isRecording && (
-        <VoiceRecorder
-          isRecording={isRecording}
-          onRecordingComplete={handleRecordingComplete}
-        />
-      )}
+      <VoiceRecorder
+        isRecording={isRecording}
+        onRecordingComplete={handleRecordingComplete}
+      />
     </>
   );
 };
