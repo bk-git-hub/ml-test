@@ -24,7 +24,6 @@ export const useOrderStore = create<OrderState>((set) => ({
           orderNumber: 'ORD-001',
           items: [
             { menuId: '1', quantity: 2, menuName: '아메리카노', price: 4500 },
-            { menuId: '2', quantity: 1, menuName: '카페라떼', price: 5000 },
           ],
           totalAmount: 14000,
           status: 'completed',

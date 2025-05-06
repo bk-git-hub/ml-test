@@ -4,12 +4,12 @@ import { useMenuStore } from '../store/menuStore';
 const OrderPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const {
-    menus,
+    //menus,
     categories,
     isLoading,
     error,
     getMenusByCategory,
-    getCategoryById,
+    //getCategoryById,
   } = useMenuStore();
 
   if (error) {

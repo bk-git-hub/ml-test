@@ -28,6 +28,9 @@ const AdminMenus: React.FC = () => {
   const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  console.log(selectedFile);
+  setCategories([]);
+
   const handleAddMenu = () => {
     if (!newMenu.name?.trim() || !newMenu.categoryId) return;
 

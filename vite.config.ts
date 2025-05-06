@@ -5,6 +5,10 @@ import path from 'path'; // Import the 'path' module
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/', // Vercel root에 배포
+  build: {
+    assetsInlineLimit: 0,
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: [

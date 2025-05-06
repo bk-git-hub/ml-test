@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { usePorcupine } from '@picovoice/porcupine-react';
 import VoiceRecorder from './VoiceRecorder';
 
-const BASE_URL = 'https://mallang-test.vercel.app/';
+const BASE_PATH = import.meta.env.BASE_URL; // Vite가 build 모드에서 경로 세팅
 
-const PORCUPINE_MODEL_PATH = `${BASE_URL}pp/porcupine_params_ko.pv`;
-const PORCUPINE_KEYWORD_PATH = `${BASE_URL}pp/mallanga_ko_wasm_v3_0_0.ppn`;
+const PORCUPINE_MODEL_PATH = `${BASE_PATH}pp/porcupine_params_ko.pv`;
+const PORCUPINE_KEYWORD_PATH = `${BASE_PATH}pp/mallanga_ko_wasm_v3_0_0.ppn`;
 const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY;
 
 const porcupineKeyword = {
