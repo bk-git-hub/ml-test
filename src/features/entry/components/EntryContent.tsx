@@ -1,11 +1,12 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import LanguageSelector from './LanguageSelector';
 
 const EntryContent = () => {
   const navigate = useNavigate();
+  const { storeId, tableNumber } = useParams();
 
   const handleStartOrder = () => {
-    navigate('/order');
+    navigate(`order`);
   };
 
   return (

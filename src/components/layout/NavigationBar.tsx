@@ -11,6 +11,7 @@ const NavigationBar = () => {
   // URL 파라미터에서 categoryId를 가져오기 위함
   // 라우터 설정에서 경로가 /order/:categoryId 와 같이 정의되어 있어야 합니다.
   const params = useParams<{ categoryId?: string }>();
+  const { storeId, tableNumber } = useParams();
 
   // URL에서 가져온 categoryId를 숫자로 변환. 없거나 숫자가 아니면 NaN.
   const activeCategoryId = params.categoryId
@@ -19,12 +20,12 @@ const NavigationBar = () => {
 
   // 카테고리 버튼 클릭 핸들러
   const handleCategoryClick = (categoryId: number) => {
-    navigate(`/order/${categoryId}`); // 해당 카테고리 ID로 경로 이동
+    navigate(`/${storeId}/${tableNumber}/order/${categoryId}`); // 해당 카테고리 ID로 경로 이동
   };
 
   // 주문 내역 조회 버튼 클릭 핸들러
   const handleOrderHistoryClick = () => {
-    navigate('/order-history');
+    navigate(`/${storeId}/${tableNumber}/order-history`);
   };
 
   return (

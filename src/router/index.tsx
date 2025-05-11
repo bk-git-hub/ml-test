@@ -17,20 +17,31 @@ import AdminDashboard from '../pages/admin/Dashboard';
 import AdminOrders from '../pages/admin/Orders';
 import AdminCategories from '../pages/admin/Categories';
 import AdminMenus from '../pages/admin/Menus';
-
+import StoreEntry from '@/features/order/components/StoreEntry';
+import EntryContent from '@/features/entry/components/EntryContent';
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
         {/* Route without MainLayout */}
-        <Route path='/' element={<EntryScreen />} />
 
+        <Route path='/' element={<StoreEntry />} />
+        <Route path='/:storeId/:tableNumber' element={<EntryContent />} />
         {/* Routes that WILL use MainLayout */}
         <Route element={<MainLayout />}>
           {/* These routes will render inside MainLayout's <Outlet /> */}
-          <Route path='/order' element={<OrderScreen />} />
-          <Route path='/order/:categoryId' element={<MenuContent />} />
-          <Route path='/order-history' element={<OrderHistoryPage />} />
+          <Route
+            path='/:storeId/:tableNumber/order'
+            element={<OrderScreen />}
+          />
+          <Route
+            path='/:storeId/:tableNumber/order/:categoryId'
+            element={<MenuContent />}
+          />
+          <Route
+            path='/:storeId/:tableNumber/order-history'
+            element={<OrderHistoryPage />}
+          />
         </Route>
 
         {/* Admin Routes */}
