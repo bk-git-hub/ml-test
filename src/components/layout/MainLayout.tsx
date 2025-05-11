@@ -5,7 +5,7 @@ import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if
 
 import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder'; // Adjust path if needed
 import Cart from '@/features/order/components/Cart';
-import KeywordDetector from '@/features/order/components/KeywordDetector';
+import WakeWordDetector from '@/features/order/components/WakeWordDetector';
 const MainLayout = () => {
   return (
     // Outer grid: 3 columns, full screen height
@@ -31,7 +31,7 @@ const MainLayout = () => {
         {/* Replace with actual ChatHistory component later */}
         <div className='flex grow-0 h-[20%] p-4'>
           <ChatHistoryPlaceholder />
-          <KeywordDetector />
+          <WakeWordDetector />
         </div>
       </div>
       {/* End of Nested Grid */}
