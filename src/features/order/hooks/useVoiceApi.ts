@@ -53,19 +53,36 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
       }
 
       const data = await response.json();
+      console.log(data);
 
       // Add messages to chat
       addMessage({
-        text: data.user_message,
+        text: data.text,
         isUser: true,
         timestamp: Date.now(),
       });
 
-      addMessage({
-        text: data.chat_message,
-        isUser: false,
-        timestamp: Date.now(),
-      });
+      if (data.user_message) {
+        addMessage({
+          text: data.user_message,
+          isUser: true,
+          timestamp: Date.now(),
+        });
+      }
+
+      if (data.chat_message) {
+        addMessage({
+          text: data.chat_message,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+      }
+
+      // addMessage({
+      //   text: data.chat_message,
+      //   isUser: false,
+      //   timestamp: Date.now(),
+      // });
 
       return data;
     } catch (err) {
