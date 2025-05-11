@@ -1,10 +1,10 @@
 // src/features/order/routes/OrderScreen.tsx
 
 import { useParams } from 'react-router-dom'; // Import useParams
-
+import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder';
+import VoiceTester from '@/features/order/components/VoiceTester';
 const OrderScreen = () => {
   // Get the categoryId from the URL, if it exists
-  const { categoryId } = useParams<{ categoryId?: string }>();
 
   // TODO:
   // 1. Use the categoryId to fetch or filter menu items for that category.
@@ -12,21 +12,13 @@ const OrderScreen = () => {
 
   return (
     // Remove the outer div with 'flex h-screen' and the NavigationBar import/render
-    <div className='p-4'>
-      {' '}
-      {/* Add some padding */}
+    <div className='p-4 h-full'>
       <h1 className='text-2xl font-bold mb-4'>Order Screen</h1>
-      {categoryId ? (
-        <p>Displaying menus for Category ID: {categoryId}</p>
-      ) : (
-        <p>
-          Welcome to the Order Screen! Please select a category from the left.
-        </p>
-      )}
-      {/* Placeholder for menu items list */}
-      <div className='mt-4 border border-dashed border-gray-400 p-4 min-h-[200px]'>
-        Menu items for category '{categoryId || 'None Selected'}' will appear
-        here.
+      <div className='flex h-full'>
+        <div className=' h-full overflow-y-scroll '>
+          <ChatHistoryPlaceholder />
+        </div>
+        <VoiceTester />
       </div>
     </div>
   );

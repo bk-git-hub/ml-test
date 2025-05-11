@@ -31,8 +31,7 @@ export default function AdminNavBar() {
           }
         >
           <div className='flex items-center gap-2'>
-            <img src='/manage.svg' alt='대시보드' className='w-6 h-6' />
-            <span>대시보드</span>
+            <span>상점 정보</span>
           </div>
         </NavLink>
         <NavLink

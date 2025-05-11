@@ -35,7 +35,7 @@ const OrderHistoryPage: React.FC = () => {
         </div>
 
         {/* 두 번째 주문 내역 카드 */}
-        <div className='bg-white rounded-lg shadow p-4'>
+        {/* <div className='bg-white rounded-lg shadow p-4'>
           <div className='flex justify-between items-start mb-3'>
             <div>
               <h2 className='text-lg font-semibold'>주문번호: #12344</h2>
@@ -57,7 +57,7 @@ const OrderHistoryPage: React.FC = () => {
               <span>5,500원</span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
