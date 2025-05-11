@@ -28,7 +28,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col '>
       <aside className='w-50 bg-ml-gray p-4 flex flex-col h-screen'>
         <nav className='flex-1 overflow-y-auto'>
           <ul>
