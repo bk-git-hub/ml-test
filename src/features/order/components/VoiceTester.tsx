@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import VoiceRecorder from './VoiceRecorder';
+import { useChatStore } from '@/features/chat/store/chatStore';
 
 const VoiceTester = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -7,6 +8,7 @@ const VoiceTester = () => {
   const [error, setError] = useState<string | null>(null);
   const [apiUrl, setApiUrl] = useState('');
   const recordingTimeoutRef = useRef<number | null>(null);
+  const addMessage = useChatStore((state) => state.addMessage);
 
   const convertTo16kHzWav = async (audioBlob: Blob): Promise<Blob> => {
     const audioContext = new AudioContext({ sampleRate: 16000 });
@@ -78,38 +80,72 @@ const VoiceTester = () => {
 
   const handleRecordingComplete = async (audioBlob: Blob) => {
     if (!apiUrl) {
-      setError('API URL을 입력해주세요');
+      setError('API URL이 설정되지 않았습니다.');
       return;
     }
 
-    try {
-      setIsProcessing(true);
-      setError(null);
+    setIsProcessing(true);
+    setError(null);
 
-      console.log('Converting audio to 16kHz WAV...');
+    try {
+      // Convert audio to 16kHz WAV
       const wavBlob = await convertTo16kHzWav(audioBlob);
 
+      // Create form data
       const formData = new FormData();
       formData.append('voice', wavBlob, 'voice.wav');
       formData.append('kiosk_id', '33');
       formData.append('admin_id', '1');
 
-      console.log('Sending audio to server...');
+      // Send to STT server
       const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('음성 인식 서버 응답 오류');
       }
 
-      const result = await response.json();
-      console.log('Server response:', result);
-    } catch (error) {
-      console.error('Error processing audio:', error);
+      const data = await response.json();
+
+      // Add user's voice message to global chat
+      addMessage({
+        text: data.text,
+        isUser: true,
+        timestamp: Date.now(),
+      });
+
+      // Send to GPT server
+      try {
+        const gptResponse = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: data.text }),
+        });
+
+        if (!gptResponse.ok) {
+          throw new Error('GPT 서버 응답 오류');
+        }
+
+        const gptData = await gptResponse.json();
+
+        // Add GPT's response to global chat
+        addMessage({
+          text: gptData.response,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+      } catch (gptError) {
+        console.error('GPT 서버 오류:', gptError);
+        setError('GPT 서버 통신 중 오류가 발생했습니다.');
+      }
+    } catch (err) {
+      console.error('Error processing recording:', err);
       setError(
-        error instanceof Error ? error.message : 'Unknown error occurred'
+        err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.'
       );
     } finally {
       setIsProcessing(false);
@@ -117,14 +153,10 @@ const VoiceTester = () => {
   };
 
   const startRecording = () => {
-    if (!apiUrl) {
-      setError('API URL을 입력해주세요');
-      return;
-    }
     setIsRecording(true);
-    // Stop recording after 7 seconds
+    // Auto-stop after 7 seconds
     recordingTimeoutRef.current = window.setTimeout(() => {
-      setIsRecording(false);
+      stopRecording();
     }, 7000);
   };
 
