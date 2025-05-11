@@ -111,37 +111,25 @@ const VoiceTester = () => {
 
       // Add user's voice message to global chat
       addMessage({
-        text: data.text,
+        text: data.user_message,
         isUser: true,
         timestamp: Date.now(),
       });
 
-      // Send to GPT server
-      try {
-        const gptResponse = await fetch('/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ message: data.text }),
-        });
+      // Add AI's response to global chat
+      addMessage({
+        text: data.chat_message,
+        isUser: false,
+        timestamp: Date.now(),
+      });
 
-        if (!gptResponse.ok) {
-          throw new Error('GPT 서버 응답 오류');
-        }
-
-        const gptData = await gptResponse.json();
-
-        // Add GPT's response to global chat
-        addMessage({
-          text: gptData.response,
-          isUser: false,
-          timestamp: Date.now(),
-        });
-      } catch (gptError) {
-        console.error('GPT 서버 오류:', gptError);
-        setError('GPT 서버 통신 중 오류가 발생했습니다.');
-      }
+      // TODO: Handle different intents based on data.result
+      // This will be implemented later with specific handlers for:
+      // - get_category
+      // - get_menu
+      // - update_cart
+      // - place_order
+      // - get_order_history
     } catch (err) {
       console.error('Error processing recording:', err);
       setError(
