@@ -12,10 +12,10 @@ const OrderScreen = () => {
 
   return (
     // Remove the outer div with 'flex h-screen' and the NavigationBar import/render
-    <div className='p-4 h-full'>
+    <div className='p-4 h-full w-full  '>
       <h1 className='text-2xl font-bold mb-4'>Order Screen</h1>
-      <div className='flex h-full'>
-        <div className=' h-full overflow-y-scroll '>
+      <div className='flex h-full w-full'>
+        <div className=' h-full overflow-y-scroll flex-1'>
           <ChatHistoryPlaceholder />
         </div>
         <VoiceTester />
