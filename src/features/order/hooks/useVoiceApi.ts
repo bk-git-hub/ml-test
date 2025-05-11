@@ -56,11 +56,14 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
       console.log(data);
 
       // Add messages to chat
-      addMessage({
-        text: data.text,
-        isUser: true,
-        timestamp: Date.now(),
-      });
+
+      if (data.text) {
+        addMessage({
+          text: data.text,
+          isUser: true,
+          timestamp: Date.now(),
+        });
+      }
 
       if (data.user_message) {
         addMessage({
@@ -77,12 +80,6 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
           timestamp: Date.now(),
         });
       }
-
-      // addMessage({
-      //   text: data.chat_message,
-      //   isUser: false,
-      //   timestamp: Date.now(),
-      // });
 
       return data;
     } catch (err) {
