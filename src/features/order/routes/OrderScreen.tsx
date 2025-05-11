@@ -1,7 +1,7 @@
 // src/features/order/routes/OrderScreen.tsx
 
 import { useParams } from 'react-router-dom'; // Import useParams
-import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder';
+import ChatHistory from '@/features/chat/components/ChatHistory';
 import VoiceTester from '@/features/order/components/VoiceTester';
 const OrderScreen = () => {
   // Get the categoryId from the URL, if it exists
@@ -16,7 +16,7 @@ const OrderScreen = () => {
       <h1 className='text-2xl font-bold mb-4'>Order Screen</h1>
       <div className='flex h-full w-full'>
         <div className=' h-full overflow-y-scroll flex-1'>
-          <ChatHistoryPlaceholder />
+          <ChatHistory />
         </div>
         <VoiceTester />
       </div>

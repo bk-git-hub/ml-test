@@ -3,7 +3,7 @@
 import { Outlet } from 'react-router-dom'; // Import Outlet to render nested routes
 import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if needed
 
-import ChatHistoryPlaceholder from '@/features/chat/components/ChatHistoryPlaceholder'; // Adjust path if needed
+import ChatHistory from '@/features/chat/components/ChatHistory'; // Adjust path if needed
 import Cart from '@/features/order/components/Cart';
 import WakeWordDetector from '@/features/order/components/WakeWordDetector';
 import KeywordDetector from '@/features/order/components/KeywordDetector';
