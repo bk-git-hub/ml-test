@@ -11,7 +11,7 @@ const Cart = () => {
   // Calculate total price
   const totalPrice = cartItems.reduce(
     (total: number, item: CartItemType) =>
-      total + item.menu.menu_price * item.quantity,
+      total + item.menu.price * item.quantity,
     0
   );
 
@@ -46,7 +46,7 @@ const Cart = () => {
             {cartItems.map((item) => (
               // Use menu_id for key if options are not considered,
               // otherwise a unique cartItemId generated upon adding is better
-              <CartItem key={item.menu.menu_id} item={item} />
+              <CartItem key={item.menu.id} item={item} />
             ))}
           </div>
         )}
