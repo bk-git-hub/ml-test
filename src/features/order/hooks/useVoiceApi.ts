@@ -29,6 +29,33 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
   const [error, setError] = useState<string | null>(null);
   const addMessage = useChatStore((state) => state.addMessage);
 
+  const processIntent = (intent: string, items: responseItem[]) => {
+    switch (intent) {
+      case 'ORDER':
+        // 주문 처리 로직
+        console.log('주문 처리:', items);
+        break;
+      case 'CANCEL':
+        // 주문 취소 로직
+        console.log('주문 취소:', items);
+        break;
+      case 'MODIFY':
+        // 주문 수정 로직
+        console.log('주문 수정:', items);
+        break;
+      case 'INQUIRY':
+        // 주문 조회 로직
+        console.log('주문 조회:', items);
+        break;
+      case 'PAYMENT':
+        // 결제 처리 로직
+        console.log('결제 처리:', items);
+        break;
+      default:
+        console.log('알 수 없는 intent:', intent);
+    }
+  };
+
   const sendVoiceToApi = async (wavBlob: Blob): Promise<VoiceApiResponse> => {
     if (!apiUrl) {
       throw new Error('API URL이 설정되지 않았습니다.');
@@ -38,50 +65,68 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('voice', wavBlob, 'voice.wav');
-      formData.append('kiosk_id', '33');
-      formData.append('admin_id', '1');
+      // First API call to /stt
+      const sttFormData = new FormData();
+      sttFormData.append('voice', wavBlob, 'voice.wav');
+      sttFormData.append('kiosk_id', '33');
+      sttFormData.append('admin_id', '1');
 
-      const response = await fetch(apiUrl, {
+      const sttResponse = await fetch(`${apiUrl}/stt`, {
         method: 'POST',
-        body: formData,
+        body: sttFormData,
       });
 
-      if (!response.ok) {
+      if (!sttResponse.ok) {
         throw new Error('음성 인식 서버 응답 오류');
       }
 
-      const data = await response.json();
-      console.log(data);
+      const sttData = await sttResponse.json();
+      console.log('STT Response:', sttData);
 
-      // Add messages to chat
-
-      if (data.text) {
+      // Add user message to chat
+      if (sttData.text) {
         addMessage({
-          text: data.text,
+          text: sttData.text,
           isUser: true,
           timestamp: Date.now(),
         });
       }
 
-      if (data.user_message) {
-        addMessage({
-          text: data.user_message,
-          isUser: true,
-          timestamp: Date.now(),
-        });
+      // Second API call to /gpt
+      const gptResponse = await fetch(`${apiUrl}/gpt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          admin_id: 1,
+          kiosk_id: 33,
+          text: sttData.text,
+        }),
+      });
+
+      if (!gptResponse.ok) {
+        throw new Error('GPT 서버 응답 오류');
       }
 
-      if (data.chat_message) {
+      const gptData = await gptResponse.json();
+      console.log('GPT Response:', gptData);
+
+      // Add chat message to chat
+      if (gptData.chat_message) {
         addMessage({
-          text: data.chat_message,
+          text: gptData.chat_message,
           isUser: false,
           timestamp: Date.now(),
         });
       }
 
-      return data;
+      // Process the intent
+      if (gptData.result?.intent) {
+        processIntent(gptData.result.intent, gptData.result.items || []);
+      }
+
+      return gptData;
     } catch (err) {
       console.error('Error processing recording:', err);
       const errorMessage =
