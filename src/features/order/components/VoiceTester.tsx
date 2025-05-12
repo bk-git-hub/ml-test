@@ -2,7 +2,7 @@ import { useState } from 'react';
 import VoiceRecorder from './VoiceRecorder';
 import { useVoiceRecording } from '../hooks/useVoiceRecording';
 import { useVoiceApi } from '../hooks/useVoiceApi';
-
+import TextInput from './TextInput';
 const VoiceTester = () => {
   const [apiUrl, setApiUrl] = useState('');
   const { isRecording, startRecording, stopRecording, convertTo16kHzWav } =
@@ -74,6 +74,7 @@ const VoiceTester = () => {
           </div>
         )}
       </div>
+      <TextInput apiUrl={apiUrl} />
 
       <VoiceRecorder
         isRecording={isRecording}
