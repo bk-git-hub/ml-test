@@ -1,5 +1,5 @@
 // src/features/order/components/MenuItemCard.tsx
-import { Menu } from '../types';
+import { Menu } from '@/types/menu';
 import { useCartStore } from '@/store/cartStore';
 
 interface MenuItemCardProps {
@@ -10,7 +10,7 @@ const MenuItemCard = ({ menu }: MenuItemCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = () => {
-    console.log(`Adding ${menu.menu_name} to cart`);
+    console.log(`Adding ${menu.name} to cart`);
     addItem(menu);
   };
 
@@ -18,8 +18,8 @@ const MenuItemCard = ({ menu }: MenuItemCardProps) => {
     <div className='bg-ml-yellow rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col p-4 gap-4 items-center'>
       {/* Image */}
       <img
-        src={menu.menu_img_url}
-        alt={menu.menu_name}
+        src={menu.imageUrl}
+        alt={menu.name}
         className='w-[80%] object-cover'
         onError={(e) => {
           const target = e.target as HTMLImageElement;
@@ -35,14 +35,11 @@ const MenuItemCard = ({ menu }: MenuItemCardProps) => {
         <div className='flex-grow mb-3'>
           {' '}
           {/* Use flex-grow here too */}
-          <h3
-            className='font-semibold text-md mb-1 truncate'
-            title={menu.menu_name}
-          >
-            {menu.menu_name}
+          <h3 className='font-semibold text-md mb-1 truncate' title={menu.name}>
+            {menu.name}
           </h3>
           <p className='text-sm text-gray-700'>
-            {menu.menu_price.toLocaleString()}원
+            {menu.price.toLocaleString()}원
           </p>
         </div>
         {/* Add to Cart Button */}
