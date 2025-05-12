@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useChatStore } from '@/features/chat/store/chatStore';
+import { useCartStore } from '@/store/cartStore';
+import { useMenuStore } from '@/store/menuStore';
 
 interface UseVoiceApiProps {
   apiUrl: string;
@@ -28,6 +30,8 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const addMessage = useChatStore((state) => state.addMessage);
+  const { menus } = useMenuStore();
+  const { updateQuantity, removeItem } = useCartStore();
 
   const processIntent = (intent: string, items: responseItem[]) => {
     switch (intent) {
@@ -40,8 +44,34 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
         console.log('메뉴 탐색:', items);
         break;
       case 'update_cart':
-        // 주문 수정 로직
+        // 장바구니 수정 로직
         console.log('장바구니 수정:', items);
+        items.forEach((item) => {
+          if (
+            item.menu_id !== undefined &&
+            item.quantity !== undefined &&
+            item.state
+          ) {
+            // 모든 카테고리에서 메뉴 찾기
+            const menu = Object.values(menus)
+              .flat()
+              .find((m) => m.id === item.menu_id);
+
+            if (menu) {
+              switch (item.state) {
+                case 'add':
+                  updateQuantity(item.menu_id, item.quantity);
+                  break;
+                case 'delete':
+                  updateQuantity(item.menu_id, item.quantity * -1);
+                  break;
+                case 'deleteall':
+                  removeItem(item.menu_id);
+                  break;
+              }
+            }
+          }
+        });
         break;
       case 'place_order':
         // 주문 조회 로직
