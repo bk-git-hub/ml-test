@@ -31,41 +31,38 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
   const [error, setError] = useState<string | null>(null);
   const addMessage = useChatStore((state) => state.addMessage);
   const { menus } = useMenuStore();
-  const { updateQuantity, removeItem } = useCartStore();
+  const { updateQuantity, removeItem, addItem } = useCartStore();
 
   const processIntent = (intent: string, items: responseItem[]) => {
     switch (intent) {
       case 'get_category':
-        // 주문 처리 로직
         console.log('카테고리 탐색:', items);
         break;
       case 'get_menu':
-        // 주문 취소 로직
         console.log('메뉴 탐색:', items);
         break;
       case 'update_cart':
-        // 장바구니 수정 로직
         console.log('장바구니 수정:', items);
         items.forEach((item) => {
+          console.log(item);
           if (
             item.menu_id !== undefined &&
             item.quantity !== undefined &&
             item.state
           ) {
-            // 모든 카테고리에서 메뉴 찾기
-            const menu = Object.values(menus)
+            const smenu = Object.values(menus)
               .flat()
               .find((m) => m.id === item.menu_id);
-
-            if (menu) {
+            console.log('Smenu:', smenu);
+            if (smenu) {
               switch (item.state) {
                 case 'add':
-                  updateQuantity(item.menu_id, item.quantity);
+                  addItem({ ...smenu }, item.quantity);
                   break;
-                case 'delete':
+                case 'remove':
                   updateQuantity(item.menu_id, item.quantity * -1);
                   break;
-                case 'deleteall':
+                case 'removeall':
                   removeItem(item.menu_id);
                   break;
               }
@@ -74,11 +71,9 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
         });
         break;
       case 'place_order':
-        // 주문 조회 로직
         console.log('주문 확정:', items);
         break;
       case 'get_order_history':
-        // 결제 처리 로직
         console.log('주문 내역조회:', items);
         break;
       default:
