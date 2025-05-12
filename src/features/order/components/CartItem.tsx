@@ -13,7 +13,7 @@ const CartItem = ({ item }: CartItemProps) => {
   const removeItem = useCartStore((state) => state.removeItem);
 
   const handleIncrease = () => {
-    updateQuantity(item.menu.menu_id, item.quantity + 1);
+    updateQuantity(item.menu.id, item.quantity + 1);
   };
 
   const handleDecrease = () => {
@@ -21,12 +21,12 @@ const CartItem = ({ item }: CartItemProps) => {
     if (item.quantity - 1 <= 0) {
       handleRemove();
     } else {
-      updateQuantity(item.menu.menu_id, item.quantity - 1);
+      updateQuantity(item.menu.id, item.quantity - 1);
     }
   };
 
   const handleRemove = () => {
-    removeItem(item.menu.menu_id);
+    removeItem(item.menu.id);
   };
 
   return (
@@ -35,9 +35,9 @@ const CartItem = ({ item }: CartItemProps) => {
 
       {/* Middle: Name and Price */}
       <div className='flex-grow mr-3'>
-        <p className='font-semibold text-sm mb-1'>{item.menu.menu_name}</p>
+        <p className='font-semibold text-sm mb-1'>{item.menu.name}</p>
         <p className='text-xs text-gray-600'>
-          {item.menu.menu_price.toLocaleString()}원 {/* Format price */}
+          {item.menu.price.toLocaleString()}원 {/* Format price */}
         </p>
       </div>
 

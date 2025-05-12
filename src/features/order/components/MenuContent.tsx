@@ -1,7 +1,7 @@
 // src/features/order/components/MenuContent.tsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Menu } from '../types';
+import { Menu } from '@/types/menu';
 
 import MenuItemCard from './MenuItemCard';
 import { useMenuStore } from '@/store/menuStore';
@@ -24,22 +24,22 @@ const MenuContent = () => {
       // Get menus for the specific category and transform to order Menu type
       const categoryMenus = menus[currentCategoryId] || [];
       filteredItems = categoryMenus.map((menu) => ({
-        menu_id: menu.id,
-        menu_name: menu.name,
-        menu_price: menu.price,
-        category_id: menu.categoryId,
-        menu_img_url: menu.imageUrl || '',
+        id: menu.id,
+        name: menu.name,
+        price: menu.price,
+        categoryId: menu.categoryId,
+        imageUrl: menu.imageUrl || '',
       }));
     } else {
       // No valid category ID, show all items by flattening all categories
       filteredItems = Object.values(menus)
         .flat()
         .map((menu) => ({
-          menu_id: menu.id,
-          menu_name: menu.name,
-          menu_price: menu.price,
-          category_id: menu.categoryId,
-          menu_img_url: menu.imageUrl || '',
+          id: menu.id,
+          name: menu.name,
+          price: menu.price,
+          categoryId: menu.categoryId,
+          imageUrl: menu.imageUrl || '',
         }));
     }
 
@@ -61,7 +61,7 @@ const MenuContent = () => {
     <div className='p-4'>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {menuItems.map((menu) => (
-          <MenuItemCard key={menu.menu_id} menu={menu} />
+          <MenuItemCard key={menu.id} menu={menu} />
         ))}
       </div>
     </div>
