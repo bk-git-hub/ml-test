@@ -1,9 +1,63 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import LanguageSelector from './LanguageSelector';
+import { useMenuStore } from '@/store/menuStore';
+import { mockCategories } from '@/mocks/categories';
+import { mockMenuItems } from '@/mocks/menuItems';
+import { useEffect } from 'react';
+import { Menu } from '@/types/menu';
 
 const EntryContent = () => {
   const navigate = useNavigate();
   const { storeId, tableNumber } = useParams();
+  const { menus, categories, fetchAllMenus } = useMenuStore();
+
+  useEffect(() => {
+    // TODO: Replace with actual API call when ready
+    // For now, we'll use mock data
+    const initializeStore = async () => {
+      try {
+        // Simulate API response structure
+        const mockResponse = {
+          menus: mockMenuItems,
+          categories: mockCategories,
+        };
+
+        // Group menus by category
+        const menusByCategory = mockResponse.menus.reduce((acc, menu) => {
+          if (!acc[menu.category_id]) {
+            acc[menu.category_id] = [];
+          }
+          acc[menu.category_id].push({
+            id: menu.menu_id,
+            name: menu.menu_name,
+            price: menu.menu_price,
+            categoryId: menu.category_id,
+            imageUrl: menu.menu_img_url,
+          });
+          return acc;
+        }, {} as Record<number, Menu[]>);
+
+        // Update store with mock data
+        useMenuStore.setState({
+          menus: menusByCategory,
+          categories: mockResponse.categories.map((cat) => ({
+            id: cat.category_id,
+            name: cat.category_name,
+          })),
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error('Error initializing store:', error);
+        useMenuStore.setState({
+          error: 'Failed to load menu data',
+          isLoading: false,
+        });
+      }
+    };
+
+    initializeStore();
+  }, []);
 
   const handleStartOrder = () => {
     navigate(`order`);
