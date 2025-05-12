@@ -1,18 +1,16 @@
 // react-router-dom에서 필요한 훅 import
 import { useNavigate, useParams } from 'react-router-dom';
-import { mockCategories } from '@/mocks/categories'; // 경로가 맞는지 확인해주세요
-import { Category } from '@/types/order'; // 경로가 맞는지 확인해주세요
+import { Category } from '@/types/menu';
+import { useMenuStore } from '@/store/menuStore';
 import clsx from 'clsx'; // 조건부 클래스를 쉽게 적용하기 위해 clsx 라이브러리 사용 (선택 사항)
 // clsx 설치: npm install clsx 또는 yarn add clsx
 
 const NavigationBar = () => {
   // 페이지 이동을 위한 navigate 함수
   const navigate = useNavigate();
-  // URL 파라미터에서 categoryId를 가져오기 위함
-  // 라우터 설정에서 경로가 /order/:categoryId 와 같이 정의되어 있어야 합니다.
   const params = useParams<{ categoryId?: string }>();
   const { storeId, tableNumber } = useParams();
-
+  const { categories } = useMenuStore();
   // URL에서 가져온 categoryId를 숫자로 변환. 없거나 숫자가 아니면 NaN.
   const activeCategoryId = params.categoryId
     ? parseInt(params.categoryId, 10)
@@ -33,7 +31,7 @@ const NavigationBar = () => {
       <aside className='w-50 bg-ml-gray p-4 flex flex-col h-screen'>
         <nav className='flex-1 overflow-y-auto'>
           <ul>
-            {mockCategories.map((category: Category) => {
+            {categories.map((category: Category) => {
               // 현재 카테고리가 활성화된 카테고리인지 확인
               const isActive =
                 !isNaN(activeCategoryId) &&
