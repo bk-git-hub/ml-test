@@ -31,25 +31,25 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
 
   const processIntent = (intent: string, items: responseItem[]) => {
     switch (intent) {
-      case 'ORDER':
+      case 'get_category':
         // 주문 처리 로직
-        console.log('주문 처리:', items);
+        console.log('카테고리 탐색:', items);
         break;
-      case 'CANCEL':
+      case 'get_menu':
         // 주문 취소 로직
-        console.log('주문 취소:', items);
+        console.log('메뉴 탐색:', items);
         break;
-      case 'MODIFY':
+      case 'update_cart':
         // 주문 수정 로직
-        console.log('주문 수정:', items);
+        console.log('장바구니 수정:', items);
         break;
-      case 'INQUIRY':
+      case 'place_order':
         // 주문 조회 로직
-        console.log('주문 조회:', items);
+        console.log('주문 확정:', items);
         break;
-      case 'PAYMENT':
+      case 'get_order_history':
         // 결제 처리 로직
-        console.log('결제 처리:', items);
+        console.log('주문 내역조회:', items);
         break;
       default:
         console.log('알 수 없는 intent:', intent);
@@ -106,6 +106,7 @@ export const useVoiceApi = ({ apiUrl }: UseVoiceApiProps) => {
       });
 
       if (!gptResponse.ok) {
+        console.log(gptResponse);
         throw new Error('GPT 서버 응답 오류');
       }
 
