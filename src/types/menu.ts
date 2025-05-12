@@ -7,7 +7,6 @@ export interface Menu {
 }
 
 export interface Category {
-  id: number;
-  name: string;
-  description?: string;
+  category_id: number;
+  category_name: string;
 }

@@ -58,7 +58,9 @@ export const useMenuStore = create<MenuState>()(
       },
 
       getCategoryById: (categoryId: number) => {
-        return get().categories.find((category) => category.id === categoryId);
+        return get().categories.find(
+          (category) => category.category_id === categoryId
+        );
       },
     }),
     {

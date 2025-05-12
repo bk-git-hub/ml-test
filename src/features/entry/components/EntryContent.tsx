@@ -41,8 +41,8 @@ const EntryContent = () => {
         useMenuStore.setState({
           menus: menusByCategory,
           categories: mockResponse.categories.map((cat) => ({
-            id: cat.category_id,
-            name: cat.category_name,
+            category_id: cat.category_id,
+            category_name: cat.category_name,
           })),
           isLoading: false,
           error: null,
