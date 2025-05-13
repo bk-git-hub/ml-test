@@ -1,15 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import useSpeechToText from '../hooks/useSpeechToText';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 import { useChatStore } from '@/features/chat/store/chatStore';
 
 const Voice = () => {
-  const {
-    transcript,
-    listening,
-    startListening,
-    stopListening,
-    resetTranscript,
-  } = useSpeechToText();
+  const { listening, transcript, resetTranscript } = useSpeechRecognition();
 
   const [detectedCount, setDetectedCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -23,8 +19,8 @@ const Voice = () => {
   const isCapturing = useChatStore((state) => state.isCapturing);
 
   useEffect(() => {
-    startListening();
-    return () => stopListening();
+    SpeechRecognition.startListening({ language: 'ko-KR', continuous: true });
+    return () => SpeechRecognition.stopListening();
   }, []);
 
   // 텍스트가 변경될 때마다 마지막 감지 시간 업데이트
