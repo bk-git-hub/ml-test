@@ -15,7 +15,7 @@ const StoreEntry = () => {
     const tableNum = 11;
 
     // Navigate to the order page
-    navigate(`/${storeId}/${tableNum}`);
+    navigate(`/${storeId}/${tableNum}/order`);
   };
 
   return (

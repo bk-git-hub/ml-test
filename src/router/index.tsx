@@ -44,7 +44,6 @@ const AppRouter = () => {
             path='/:storeId/:tableNumber/order-history'
             element={<OrderHistoryPage />}
           />
-          <Route path='/stt-test' element={<Voice />} />
         </Route>
 
         {/* Admin Routes */}
