@@ -19,6 +19,8 @@ import AdminCategories from '../pages/admin/Categories';
 import AdminMenus from '../pages/admin/Menus';
 import StoreEntry from '@/features/order/components/StoreEntry';
 import EntryContent from '@/features/entry/components/EntryContent';
+
+import Voice from '@/features/order/components/Voice';
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -42,6 +44,7 @@ const AppRouter = () => {
             path='/:storeId/:tableNumber/order-history'
             element={<OrderHistoryPage />}
           />
+          <Route path='/stt-test' element={<Voice />} />
         </Route>
 
         {/* Admin Routes */}

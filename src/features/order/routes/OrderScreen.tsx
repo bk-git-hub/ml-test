@@ -2,7 +2,8 @@
 
 import { useParams } from 'react-router-dom'; // Import useParams
 import ChatHistory from '@/features/chat/components/ChatHistory';
-import VoiceTester from '@/features/order/components/VoiceTester';
+import Voice from '@/features/order/components/Voice';
+
 const OrderScreen = () => {
   // Get the categoryId from the URL, if it exists
 
@@ -18,7 +19,7 @@ const OrderScreen = () => {
         <div className=' h-full overflow-y-scroll flex-1'>
           <ChatHistory />
         </div>
-        <VoiceTester />
+        <Voice />
       </div>
     </div>
   );
