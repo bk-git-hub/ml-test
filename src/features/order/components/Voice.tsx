@@ -82,7 +82,7 @@ const Voice = () => {
   }, []);
 
   return (
-    <div className='p-6 h-40 rounded-xl shadow-lg bg-white text-center'>
+    <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
         <button
           className='absolute top-0 left-0 flex flex-col items-center justify-center w-screen h-screen p-4 cursor-pointer bg-[#FFFDF6]'
@@ -106,9 +106,9 @@ const Voice = () => {
         </button>
       )}
 
-      <div className='flex flex-col items-center h-5'>
+      <div className='flex flex-col items-center'>
         <p className='text-sm text-gray-600'>
-          {listening ? '듣는 중...' : '대기 중'}
+          {listening ? '키워드 말랑아 감지중...' : '대기 중'}
         </p>
       </div>
 
