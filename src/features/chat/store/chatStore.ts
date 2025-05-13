@@ -9,7 +9,9 @@ export interface Message {
 interface ChatStore {
   messages: Message[];
   addMessage: (message: Message) => void;
-  clearMessages: () => void;
+  updateLastMessage: (text: string) => void;
+  isCapturing: boolean;
+  setIsCapturing: (isCapturing: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -18,5 +20,12 @@ export const useChatStore = create<ChatStore>((set) => ({
     set((state) => ({
       messages: [...state.messages, message],
     })),
-  clearMessages: () => set({ messages: [] }),
+  updateLastMessage: (text) =>
+    set((state) => ({
+      messages: state.messages.map((msg, index) =>
+        index === state.messages.length - 1 ? { ...msg, text } : msg
+      ),
+    })),
+  isCapturing: false,
+  setIsCapturing: (isCapturing) => set({ isCapturing }),
 }));

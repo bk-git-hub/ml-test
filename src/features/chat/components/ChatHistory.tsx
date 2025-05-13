@@ -4,6 +4,7 @@ import ChatBubble from './ChatBubble';
 
 const ChatHistory = () => {
   const messages = useChatStore((state) => state.messages);
+  const isCapturing = useChatStore((state) => state.isCapturing);
 
   return (
     <div className='flex flex-col h-full'>
@@ -19,6 +20,9 @@ const ChatHistory = () => {
               key={index}
               message={message.text}
               isUser={message.isUser}
+              isUpdating={
+                message.isUser && index === messages.length - 1 && isCapturing
+              }
             />
           ))
         )}

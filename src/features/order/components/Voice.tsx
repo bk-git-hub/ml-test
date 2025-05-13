@@ -14,11 +14,13 @@ const Voice = () => {
   const [detectedCount, setDetectedCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [capturedText, setCapturedText] = useState('');
-  const [isCapturing, setIsCapturing] = useState(false);
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
   const KEYWORD = '가나다';
   const addMessage = useChatStore((state) => state.addMessage);
+  const updateLastMessage = useChatStore((state) => state.updateLastMessage);
+  const setIsCapturing = useChatStore((state) => state.setIsCapturing);
+  const isCapturing = useChatStore((state) => state.isCapturing);
 
   useEffect(() => {
     startListening();
@@ -36,9 +38,11 @@ const Voice = () => {
           .slice(keywordIndexRef.current + KEYWORD.length)
           .trim();
         setCapturedText(textAfterKeyword);
+        // 실시간으로 마지막 메시지 업데이트
+        updateLastMessage(textAfterKeyword);
       }
     }
-  }, [transcript, isCapturing]);
+  }, [transcript, isCapturing, updateLastMessage]);
 
   // 1초 동안 새로운 텍스트가 없으면 캡처 종료
   useEffect(() => {
@@ -47,15 +51,6 @@ const Voice = () => {
     const checkInterval = setInterval(() => {
       const now = Date.now();
       if (now - lastTextTimeRef.current > 1000) {
-        // 캡처된 텍스트가 있으면 chat store에 추가
-        if (capturedText) {
-          addMessage({
-            text: capturedText,
-            isUser: true,
-            timestamp: Date.now(),
-          });
-        }
-
         setIsCapturing(false);
         setIsProcessing(false);
         resetTranscript();
@@ -64,7 +59,7 @@ const Voice = () => {
     }, 100);
 
     return () => clearInterval(checkInterval);
-  }, [isCapturing, capturedText, addMessage]);
+  }, [isCapturing]);
 
   useEffect(() => {
     if (!transcript || isProcessing) return;
@@ -78,8 +73,15 @@ const Voice = () => {
       setCapturedText('');
       lastTextTimeRef.current = Date.now();
       keywordIndexRef.current = keywordIndex;
+
+      // 키워드가 감지되면 바로 새 메시지 추가
+      addMessage({
+        text: '',
+        isUser: true,
+        timestamp: Date.now(),
+      });
     }
-  }, [transcript, isProcessing]);
+  }, [transcript, isProcessing, addMessage]);
 
   return (
     <div className='p-6 rounded-xl shadow-lg bg-white text-center space-y-4'>
@@ -106,14 +108,9 @@ const Voice = () => {
       {isCapturing && (
         <div className='mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
           <p className='text-sm text-blue-600 mb-1'>음성 인식 중...</p>
-          <p className='text-sm font-mono'>{capturedText || '...'}</p>
+          <p className='text-sm font-mono'>{'...'}</p>
         </div>
       )}
-
-      <div className='mt-4 p-3 bg-gray-50 rounded-lg'>
-        <p className='text-sm text-gray-600 mb-1'>현재 인식된 텍스트:</p>
-        <p className='text-sm font-mono'>{transcript || '...'}</p>
-      </div>
     </div>
   );
 };
