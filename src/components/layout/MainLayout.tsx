@@ -22,7 +22,7 @@ const MainLayout = () => {
       {/* Main Content Area (Top Row of Nested Grid) */}
       {/* Takes remaining space in the nested grid's column */}
       <div className='flex flex-col flex-1 h-full'>
-        <main className='bg-white overflow-y-auto h-full flex-1'>
+        <main className='bg-white flex-1 p-4'>
           {' '}
           {/* Scrolling happens here */}
           {/* Content from nested routes will be rendered here */}

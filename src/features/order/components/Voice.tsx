@@ -13,19 +13,13 @@ const Voice = () => {
   const [capturedText, setCapturedText] = useState('');
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
-  const KEYWORD = '가나다';
+  const KEYWORD = '말랑아';
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
   const setIsCapturing = useChatStore((state) => state.setIsCapturing);
   const isCapturing = useChatStore((state) => state.isCapturing);
 
   // 사용자 인터랙션 이후 시작
-  const handleCovered = () => {
-    setIsCovered(false);
-
-    // 브라우저 보안 정책을 우회하기 위해 클릭 후에만 실행
-    SpeechRecognition.startListening({ language: 'ko-KR', continuous: true });
-  };
 
   // 실시간 텍스트 처리
   useEffect(() => {
@@ -48,7 +42,7 @@ const Voice = () => {
 
     const checkInterval = setInterval(() => {
       const now = Date.now();
-      if (now - lastTextTimeRef.current > 1000) {
+      if (now - lastTextTimeRef.current > 2000) {
         setIsCapturing(false);
         setIsProcessing(false);
         resetTranscript();
@@ -88,13 +82,17 @@ const Voice = () => {
   }, []);
 
   return (
-    <div className='p-6 rounded-xl shadow-lg bg-white text-center space-y-4'>
-      <h2 className='text-xl font-bold'>키워드 감지기 🎤</h2>
-
+    <div className='p-6 h-40 rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
         <button
-          className='relative flex flex-col items-center justify-center w-screen h-screen p-4 cursor-pointer bg-[#FFFDF6]'
-          onClick={handleCovered}
+          className='absolute top-0 left-0 flex flex-col items-center justify-center w-screen h-screen p-4 cursor-pointer bg-[#FFFDF6]'
+          onClick={() => {
+            setIsCovered(false);
+            return SpeechRecognition.startListening({
+              continuous: true,
+              language: 'ko-KR',
+            });
+          }}
         >
           <div className='absolute top-4 right-4'>
             <LanguageSelector />
@@ -108,28 +106,15 @@ const Voice = () => {
         </button>
       )}
 
-      <div className='flex flex-col items-center space-y-2'>
-        <div
-          className={`size-20 rounded-full bg-white transition-all duration-300 ${
-            listening ? 'animate-pulse bg-blue-100' : 'bg-gray-100'
-          }`}
-        />
+      <div className='flex flex-col items-center h-5'>
         <p className='text-sm text-gray-600'>
           {listening ? '듣는 중...' : '대기 중'}
         </p>
       </div>
 
-      <p className='text-gray-700'>"가나다"라고 말해보세요</p>
-
-      <div className='mt-4'>
-        <p className='text-sm text-gray-600'>감지된 키워드</p>
-        <p className='text-2xl font-bold text-blue-600'>{detectedCount}</p>
-      </div>
-
       {isCapturing && (
-        <div className='mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
-          <p className='text-sm text-blue-600 mb-1'>음성 인식 중...</p>
-          <p className='text-sm font-mono'>{capturedText || '...'}</p>
+        <div className=' bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow'>
+          <p className='text-sm text-black mb-1'>음성 인식 중...</p>
         </div>
       )}
     </div>
