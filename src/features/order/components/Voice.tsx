@@ -19,6 +19,12 @@ const Voice = () => {
   const isCapturing = useChatStore((state) => state.isCapturing);
 
   useEffect(() => {
+    if (!listening) {
+      SpeechRecognition.startListening({ language: 'ko-KR', continuous: true });
+    }
+  }, [listening]);
+
+  useEffect(() => {
     SpeechRecognition.startListening({ language: 'ko-KR', continuous: true });
     return () => SpeechRecognition.stopListening();
   }, []);
@@ -78,6 +84,8 @@ const Voice = () => {
       });
     }
   }, [transcript, isProcessing, addMessage]);
+
+  console.log('listening: ', listening);
 
   return (
     <div className='p-6 rounded-xl shadow-lg bg-white text-center space-y-4'>
