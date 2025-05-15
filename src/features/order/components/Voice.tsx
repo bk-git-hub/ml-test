@@ -3,7 +3,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import { useChatStore } from '@/features/chat/store/chatStore';
-import { LanguageSelector } from '@/features/entry';
+import LanguageSelector from '@/components/LanguageSelector';
 
 const Voice = () => {
   const { listening, transcript, resetTranscript } = useSpeechRecognition();
