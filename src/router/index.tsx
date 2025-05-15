@@ -18,7 +18,6 @@ import AdminOrders from '../pages/admin/Orders';
 import AdminCategories from '../pages/admin/Categories';
 import AdminMenus from '../pages/admin/Menus';
 import StoreEntry from '@/features/order/components/StoreEntry';
-import EntryContent from '@/features/entry/components/EntryContent';
 
 import Voice from '@/features/order/components/Voice';
 import AnotherScreen from '@/features/order/routes/AnotherScreen';
@@ -29,7 +28,7 @@ const AppRouter = () => {
         {/* Route without MainLayout */}
 
         <Route path='/' element={<StoreEntry />} />
-        <Route path='/:storeId/:tableNumber' element={<EntryContent />} />
+
         {/* Routes that WILL use MainLayout */}
         <Route element={<MainLayout />}>
           {/* These routes will render inside MainLayout's <Outlet /> */}
