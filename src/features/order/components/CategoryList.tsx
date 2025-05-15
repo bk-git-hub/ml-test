@@ -3,7 +3,8 @@ import { useMenuStore } from '@/store/menuStore';
 import clsx from 'clsx';
 
 const CategoryList = () => {
-  const { currentCategoryId, setCurrentCategory } = useNavigationStore();
+  const { currentCategoryId, setCurrentCategory, initializeCategory } =
+    useNavigationStore();
   const { categories } = useMenuStore();
 
   const handleCategoryClick = (categoryId: number) => {
@@ -11,6 +12,10 @@ const CategoryList = () => {
   };
 
   const handleOrderHistoryClick = () => {};
+
+  if (!currentCategoryId) {
+    initializeCategory();
+  }
 
   return (
     <div className='flex flex-col '>

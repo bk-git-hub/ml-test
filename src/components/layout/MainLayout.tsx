@@ -9,11 +9,7 @@ import Voice from '@/features/order/components/Voice';
 import CategoryList from '@/features/order/components/CategoryList';
 
 const MainLayout = () => {
-  const { initializeCategory } = useNavigationStore();
-  initializeCategory();
   return (
-    // Outer grid: 3 columns, full screen height
-    // Removed explicit grid-rows, height will be determined by h-screen
     <div className='flex w-screen h-screen'>
       {/* Navigation Bar (Left Column, Full Height) */}
       {/* Takes full height of the grid row implicitly */}
@@ -40,10 +36,6 @@ const MainLayout = () => {
           <Voice />
         </div>
       </div>
-      {/* End of Nested Grid */}
-      {/* Cart Area (Right Column, Full Height) */}
-      {/* Takes full height of the grid row implicitly */}
-      {/* Replace with actual Cart component later */}
       <Cart />
     </div> // End of Outer Grid
   );

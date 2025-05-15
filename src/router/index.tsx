@@ -32,18 +32,12 @@ const AppRouter = () => {
         {/* Routes that WILL use MainLayout */}
         <Route element={<MainLayout />}>
           {/* These routes will render inside MainLayout's <Outlet /> */}
+
           <Route
             path='/:storeId/:tableNumber/order'
-            element={<OrderScreen />}
-          />
-          <Route
-            path='/:storeId/:tableNumber/order/:categoryId'
             element={<MenuContent />}
           />
-          <Route
-            path='/:storeId/:tableNumber/order/:categoryId/:menuId'
-            element={<MenuContent />}
-          />
+
           <Route
             path='/:storeId/:tableNumber/order-history'
             element={<OrderHistoryPage />}
