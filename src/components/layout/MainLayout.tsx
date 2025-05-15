@@ -1,16 +1,16 @@
 // src/components/layout/MainLayout.tsx
 
 import { Outlet } from 'react-router-dom'; // Import Outlet to render nested routes
-import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if needed
 
+import { useNavigationStore } from '@/store/navigationStore';
 import ChatHistory from '@/features/chat/components/ChatHistory'; // Adjust path if needed
 import Cart from '@/features/order/components/Cart';
-
-import KeywordDetector from '@/features/order/components/KeywordDetector';
-import VoiceTester from '@/features/order/components/VoiceTester';
 import Voice from '@/features/order/components/Voice';
 import CategoryList from '@/features/order/components/CategoryList';
+
 const MainLayout = () => {
+  const { initializeCategory } = useNavigationStore();
+  initializeCategory();
   return (
     // Outer grid: 3 columns, full screen height
     // Removed explicit grid-rows, height will be determined by h-screen
@@ -24,7 +24,7 @@ const MainLayout = () => {
       {/* Main Content Area (Top Row of Nested Grid) */}
       {/* Takes remaining space in the nested grid's column */}
       <div className='flex flex-col flex-1 h-full'>
-        <main className='bg-white flex-1 p-4 h-[80%]'>
+        <main className='bg-white flex-1 p-4 h-[80%] overflow-y-scroll'>
           {' '}
           {/* Scrolling happens here */}
           {/* Content from nested routes will be rendered here */}
