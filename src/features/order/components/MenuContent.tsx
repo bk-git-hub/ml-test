@@ -28,7 +28,7 @@ const MenuContent = () => {
   }, []);
 
   return (
-    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4'>
+    <div className='grid grid-cols-2 sm:grid-cols-3  gap-4 p-4'>
       {filteredItems.map((menu) => (
         <MenuItemCard
           key={menu.id}
