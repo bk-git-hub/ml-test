@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useChatStore } from '@/features/chat/store/chatStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMenuStore } from '@/store/menuStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface UseTextApiProps {
   apiUrl: string;
@@ -35,31 +35,36 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const addMessage = useChatStore((state) => state.addMessage);
   const { menus } = useMenuStore();
   const { updateQuantity, removeItem, addItem } = useCartStore();
-  const navigate = useNavigate();
+  const { setCurrentCategory, setCurrentMenu, setCurrentView } =
+    useNavigationStore();
 
   const processIntent = (
     intent: string,
     item: ResponseItem,
     admin_id: number,
-    kiosk_id
+    kiosk_id: number
   ) => {
     switch (intent) {
       case 'get_category':
         console.log('카테고리 탐색:', item);
-        //TODO: 카테고리 ID를 받으면 해당 카테고리 메뉴 페이지로 이동
-        navigate(`/${admin_id}/${kiosk_id}/order/${item.category_id}`);
+        if (item.category_id !== null) {
+          setCurrentView('menu');
+          setCurrentCategory(item.category_id);
+        }
         break;
+
       case 'get_menu':
         console.log('메뉴 탐색:', item);
-        //TODO: 카테고리 ID와 메뉴ID를 받으면 해당 카테고리 페이지로 이동후 탐색된 메뉴를 최상위에 표시
-        navigate(
-          `/${admin_id}/${kiosk_id}/order/${item.category_id}/${item.menu_id}`
-        );
+        if (item.category_id !== null && item.menu_id !== null) {
+          setCurrentView('menu');
+          setCurrentCategory(item.category_id);
+          console.log('세팅');
+          setCurrentMenu(item.menu_id);
+        }
         break;
+
       case 'update_cart':
         console.log('장바구니 수정:', item);
-
-        console.log(item);
         if (
           item.menu_id !== undefined &&
           item.quantity !== undefined &&
@@ -83,17 +88,18 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
             }
           }
         }
-
         break;
+
       case 'place_order':
         console.log('주문 확정:', item);
-        //TODO: 주문 확정 API 호출출
+        //TODO: 주문 확정 API 호출
         break;
+
       case 'get_order_history':
         console.log('주문 내역조회:', item);
-        navigate(`/${admin_id}/${kiosk_id}/order-history`);
-        //TODO: 주문 내역조회 페이지로 이동동
+        setCurrentView('orderHistory');
         break;
+
       default:
         console.log('알 수 없는 intent:', intent);
     }
