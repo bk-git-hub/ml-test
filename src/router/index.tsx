@@ -7,7 +7,7 @@ import MainLayout from '../components/layout/MainLayout';
 import AdminLayout from '../components/layout/AdminLayout';
 
 // --- Screen/Page Components ---
-import { EntryScreen } from '../features/entry';
+
 import OrderScreen from '../features/order/routes/OrderScreen';
 import OrderHistoryPage from '../pages/OrderHistoryPage';
 import MenuContent from '../features/order/components/MenuContent';
