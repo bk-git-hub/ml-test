@@ -3,19 +3,27 @@ import { useMenuStore } from '@/store/menuStore';
 import clsx from 'clsx';
 
 const CategoryList = () => {
-  const { currentCategoryId, setCurrentCategory, initializeCategory } =
-    useNavigationStore();
+  const {
+    currentCategoryId,
+    setCurrentCategory,
+    initializeCategory,
+    setCurrentView,
+    currentView,
+  } = useNavigationStore();
   const { categories } = useMenuStore();
-
-  const handleCategoryClick = (categoryId: number) => {
-    setCurrentCategory(categoryId === currentCategoryId ? null : categoryId);
-  };
-
-  const handleOrderHistoryClick = () => {};
 
   if (!currentCategoryId) {
     initializeCategory();
   }
+
+  const handleCategoryClick = (categoryId: number) => {
+    setCurrentView('menu');
+    setCurrentCategory(categoryId === currentCategoryId ? null : categoryId);
+  };
+
+  const handleOrderHistoryClick = () => {
+    setCurrentView('orderHistory');
+  };
 
   return (
     <div className='flex flex-col '>
@@ -26,6 +34,7 @@ const CategoryList = () => {
               // 현재 카테고리가 활성화된 카테고리인지 확인
               const isActive =
                 !isNaN(currentCategoryId) &&
+                currentView === 'menu' &&
                 categories.category_id === currentCategoryId;
 
               return (
@@ -54,10 +63,14 @@ const CategoryList = () => {
         <div className=' bg-ml-gray'>
           <button
             onClick={handleOrderHistoryClick}
-            // ml-yellow 배경색에 흰색 글씨가 잘 보이나요? 필요시 글자색 조정 (예: text-black)
-            className='w-full bg-ml-yellow hover:brightness-95 transition-all duration-150 ease-in-out text-white font-bold py-2 px-4 rounded'
+            className={clsx(
+              'w-full transition-all duration-150 ease-in-out font-bold py-2 px-4 rounded',
+              currentView === 'orderHistory'
+                ? 'bg-gray-200 text-gray-700'
+                : 'bg-ml-yellow hover:brightness-95 text-white'
+            )}
           >
-            주문 내역 조회
+            {'주문 내역 조회'}
           </button>
         </div>
       </aside>

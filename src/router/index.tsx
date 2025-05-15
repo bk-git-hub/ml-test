@@ -1,6 +1,7 @@
 // src/router/index.tsx
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useNavigationStore } from '@/store/navigationStore';
 
 // --- Layouts ---
 import MainLayout from '../components/layout/MainLayout';
@@ -21,6 +22,12 @@ import StoreEntry from '@/features/order/components/StoreEntry';
 
 import Voice from '@/features/order/components/Voice';
 import AnotherScreen from '@/features/order/routes/AnotherScreen';
+
+const OrderContent = () => {
+  const { currentView } = useNavigationStore();
+  return currentView === 'menu' ? <MenuContent /> : <OrderHistoryPage />;
+};
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -35,13 +42,9 @@ const AppRouter = () => {
 
           <Route
             path='/:storeId/:tableNumber/order'
-            element={<MenuContent />}
+            element={<OrderContent />}
           />
 
-          <Route
-            path='/:storeId/:tableNumber/order-history'
-            element={<OrderHistoryPage />}
-          />
           <Route path='/another' element={<AnotherScreen />} />
         </Route>
 
