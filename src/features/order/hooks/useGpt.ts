@@ -37,9 +37,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     switch (intent) {
       case 'get_category':
         console.log('카테고리 탐색:', items);
+        //TODO: 카테고리 ID를 받으면 해당 카테고리 메뉴 페이지로 이동
         break;
       case 'get_menu':
         console.log('메뉴 탐색:', items);
+        //TODO: 카테고리 ID와 메뉴ID를 받으면 해당 카테고리 페이지로 이동후 탐색된 메뉴를 최상위에 표시시
         break;
       case 'update_cart':
         console.log('장바구니 수정:', items);
@@ -72,9 +74,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
       case 'place_order':
         console.log('주문 확정:', items);
+        //TODO: 주문 확정 API 호출출
         break;
       case 'get_order_history':
         console.log('주문 내역조회:', items);
+        //TODO: 주문 내역조회 페이지로 이동동
         break;
       default:
         console.log('알 수 없는 intent:', intent);
