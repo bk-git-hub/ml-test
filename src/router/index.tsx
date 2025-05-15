@@ -41,6 +41,10 @@ const AppRouter = () => {
             element={<MenuContent />}
           />
           <Route
+            path='/:storeId/:tableNumber/order/:categoryId/:menuId'
+            element={<MenuContent />}
+          />
+          <Route
             path='/:storeId/:tableNumber/order-history'
             element={<OrderHistoryPage />}
           />
