@@ -8,6 +8,7 @@ import { useMenuStore } from '@/store/menuStore';
 
 const MenuContent = () => {
   const { categoryId: categoryIdParam } = useParams<{ categoryId?: string }>();
+  const { menuId: menuIdParam } = useParams<{ menuId?: string }>();
   const [menuItems, setMenuItems] = useState<Menu[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { menus } = useMenuStore();
@@ -17,6 +18,7 @@ const MenuContent = () => {
     const currentCategoryId = categoryIdParam
       ? parseInt(categoryIdParam, 10)
       : undefined;
+    const currentMenuId = menuIdParam ? parseInt(menuIdParam, 10) : undefined;
 
     let filteredItems: Menu[] = [];
 
@@ -43,9 +45,21 @@ const MenuContent = () => {
         }));
     }
 
+    // If menuId is present, move the searched menu to the beginning
+    if (currentMenuId && !isNaN(currentMenuId)) {
+      const searchedMenuIndex = filteredItems.findIndex(
+        (menu) => menu.id === currentMenuId
+      );
+      if (searchedMenuIndex !== -1) {
+        const searchedMenu = filteredItems[searchedMenuIndex];
+        filteredItems.splice(searchedMenuIndex, 1);
+        filteredItems.unshift(searchedMenu);
+      }
+    }
+
     setMenuItems(filteredItems);
     setLoading(false);
-  }, [categoryIdParam, menus]); // Re-run effect when categoryIdParam or menus change
+  }, [categoryIdParam, menuIdParam, menus]); // Added menuIdParam to dependencies
 
   if (loading) {
     return <div className='text-center p-10'>Loading menu items...</div>;
@@ -61,7 +75,11 @@ const MenuContent = () => {
     <div className='p-4'>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {menuItems.map((menu) => (
-          <MenuItemCard key={menu.id} menu={menu} />
+          <MenuItemCard
+            key={menu.id}
+            menu={menu}
+            isSearched={menu.id === parseInt(menuIdParam || '-1')}
+          />
         ))}
       </div>
     </div>
