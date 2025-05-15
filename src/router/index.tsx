@@ -21,6 +21,7 @@ import StoreEntry from '@/features/order/components/StoreEntry';
 import EntryContent from '@/features/entry/components/EntryContent';
 
 import Voice from '@/features/order/components/Voice';
+import AnotherScreen from '@/features/order/routes/AnotherScreen';
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -44,6 +45,7 @@ const AppRouter = () => {
             path='/:storeId/:tableNumber/order-history'
             element={<OrderHistoryPage />}
           />
+          <Route path='/another' element={<AnotherScreen />} />
         </Route>
 
         {/* Admin Routes */}
