@@ -9,6 +9,7 @@ import Cart from '@/features/order/components/Cart';
 import KeywordDetector from '@/features/order/components/KeywordDetector';
 import VoiceTester from '@/features/order/components/VoiceTester';
 import Voice from '@/features/order/components/Voice';
+import CategoryList from '@/features/order/components/CategoryList';
 const MainLayout = () => {
   return (
     // Outer grid: 3 columns, full screen height
@@ -16,7 +17,7 @@ const MainLayout = () => {
     <div className='flex w-screen h-screen'>
       {/* Navigation Bar (Left Column, Full Height) */}
       {/* Takes full height of the grid row implicitly */}
-      <NavigationBar />
+      <CategoryList />
       {/* Center Area (Middle Column, contains nested grid for Content + Chat) */}
       {/* This div itself takes full height of the grid row implicitly */}{' '}
       {/* Nested Grid */}

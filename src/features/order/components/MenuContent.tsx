@@ -1,87 +1,41 @@
 // src/features/order/components/MenuContent.tsx
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Menu } from '@/types/menu';
-
 import MenuItemCard from './MenuItemCard';
+import { useNavigationStore } from '@/store/navigationStore';
 import { useMenuStore } from '@/store/menuStore';
 
 const MenuContent = () => {
-  const { categoryId: categoryIdParam } = useParams<{ categoryId?: string }>();
-  const { menuId: menuIdParam } = useParams<{ menuId?: string }>();
-  const [menuItems, setMenuItems] = useState<Menu[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { currentCategoryId, currentMenuId } = useNavigationStore();
   const { menus } = useMenuStore();
 
-  useEffect(() => {
-    setLoading(true);
-    const currentCategoryId = categoryIdParam
-      ? parseInt(categoryIdParam, 10)
-      : undefined;
-    const currentMenuId = menuIdParam ? parseInt(menuIdParam, 10) : undefined;
+  // 모든 메뉴를 하나의 배열로 변환
+  const allMenuItems = Object.values(menus).flat();
 
-    let filteredItems: Menu[] = [];
-
-    if (currentCategoryId && !isNaN(currentCategoryId)) {
-      // Get menus for the specific category and transform to order Menu type
-      const categoryMenus = menus[currentCategoryId] || [];
-      filteredItems = categoryMenus.map((menu) => ({
-        id: menu.id,
-        name: menu.name,
-        price: menu.price,
-        categoryId: menu.categoryId,
-        imageUrl: menu.imageUrl || '',
-      }));
-    } else {
-      // No valid category ID, show all items by flattening all categories
-      filteredItems = Object.values(menus)
-        .flat()
-        .map((menu) => ({
-          id: menu.id,
-          name: menu.name,
-          price: menu.price,
-          categoryId: menu.categoryId,
-          imageUrl: menu.imageUrl || '',
-        }));
+  // 필터링된 메뉴 아이템 계산
+  const filteredItems = allMenuItems.reduce<Menu[]>((items, item) => {
+    // 카테고리 필터링
+    if (currentCategoryId !== null && item.categoryId !== currentCategoryId) {
+      return items;
     }
 
-    // If menuId is present, move the searched menu to the beginning
-    if (currentMenuId && !isNaN(currentMenuId)) {
-      const searchedMenuIndex = filteredItems.findIndex(
-        (menu) => menu.id === currentMenuId
-      );
-      if (searchedMenuIndex !== -1) {
-        const searchedMenu = filteredItems[searchedMenuIndex];
-        filteredItems.splice(searchedMenuIndex, 1);
-        filteredItems.unshift(searchedMenu);
-      }
+    // 검색된 메뉴인 경우 맨 앞에 추가
+    if (currentMenuId !== null && item.id === currentMenuId) {
+      return [item, ...items];
     }
 
-    setMenuItems(filteredItems);
-    setLoading(false);
-  }, [categoryIdParam, menuIdParam, menus]); // Added menuIdParam to dependencies
-
-  if (loading) {
-    return <div className='text-center p-10'>Loading menu items...</div>;
-  }
-
-  if (menuItems.length === 0 && !loading) {
-    return (
-      <div className='text-center p-10'>선택된 카테고리에 메뉴가 없습니다.</div>
-    );
-  }
+    // 나머지 메뉴는 순서대로 추가
+    return [...items, item];
+  }, []);
 
   return (
-    <div className='p-4 h-full overflow-y-scroll'>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {menuItems.map((menu) => (
-          <MenuItemCard
-            key={menu.id}
-            menu={menu}
-            isSearched={menu.id === parseInt(menuIdParam || '-1')}
-          />
-        ))}
-      </div>
+    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4'>
+      {filteredItems.map((menu) => (
+        <MenuItemCard
+          key={menu.id}
+          menu={menu}
+          isSearched={menu.id === currentMenuId}
+        />
+      ))}
     </div>
   );
 };
