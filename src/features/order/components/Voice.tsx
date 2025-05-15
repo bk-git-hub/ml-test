@@ -4,6 +4,13 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { useChatStore } from '@/features/chat/store/chatStore';
 import LanguageSelector from '@/components/LanguageSelector';
+import { useGpt } from '../hooks/useGpt';
+
+interface VoiceProps {
+  apiUrl: string;
+}
+
+const apiUrl = import.meta.env.VITE_GPT_API_URL;
 
 const Voice = () => {
   const { listening, transcript, resetTranscript } = useSpeechRecognition();
@@ -18,6 +25,7 @@ const Voice = () => {
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
   const setIsCapturing = useChatStore((state) => state.setIsCapturing);
   const isCapturing = useChatStore((state) => state.isCapturing);
+  const { sendTextToApi } = useGpt({ apiUrl });
 
   // 사용자 인터랙션 이후 시작
 
@@ -45,13 +53,22 @@ const Voice = () => {
       if (now - lastTextTimeRef.current > 2000) {
         setIsCapturing(false);
         setIsProcessing(false);
+
+        // 캡처된 텍스트가 있으면 GPT API 호출
+        if (capturedText) {
+          sendTextToApi(capturedText).catch((err) => {
+            console.error('Error processing voice input:', err);
+          });
+        }
+
         resetTranscript();
         keywordIndexRef.current = -1;
+        setCapturedText('');
       }
     }, 100);
 
     return () => clearInterval(checkInterval);
-  }, [isCapturing]);
+  }, [isCapturing, capturedText, sendTextToApi]);
 
   // 키워드 감지
   useEffect(() => {
@@ -72,7 +89,7 @@ const Voice = () => {
         timestamp: Date.now(),
       });
     }
-  }, [transcript, isProcessing, addMessage]);
+  }, [transcript, isProcessing]);
 
   // 컴포넌트 언마운트 시 마이크 종료
   useEffect(() => {
@@ -113,8 +130,11 @@ const Voice = () => {
       </div>
 
       {isCapturing && (
-        <div className=' bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow'>
+        <div className='bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow'>
           <p className='text-sm text-black mb-1'>음성 인식 중...</p>
+          {/* {capturedText && (
+            <p className='text-sm text-gray-700 mt-2'>{capturedText}</p>
+          )} */}
         </div>
       )}
     </div>
