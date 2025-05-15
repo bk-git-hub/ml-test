@@ -6,10 +6,6 @@ import { useChatStore } from '@/features/chat/store/chatStore';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useGpt } from '../hooks/useGpt';
 
-interface VoiceProps {
-  apiUrl: string;
-}
-
 const apiUrl = import.meta.env.VITE_GPT_API_URL;
 
 const Voice = () => {
