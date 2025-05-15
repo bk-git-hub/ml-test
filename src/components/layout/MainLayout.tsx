@@ -5,9 +5,10 @@ import NavigationBar from '@/components/layout/NavigationBar'; // Adjust path if
 
 import ChatHistory from '@/features/chat/components/ChatHistory'; // Adjust path if needed
 import Cart from '@/features/order/components/Cart';
-import WakeWordDetector from '@/features/order/components/WakeWordDetector';
+
 import KeywordDetector from '@/features/order/components/KeywordDetector';
 import VoiceTester from '@/features/order/components/VoiceTester';
+import Voice from '@/features/order/components/Voice';
 const MainLayout = () => {
   return (
     // Outer grid: 3 columns, full screen height
@@ -22,7 +23,7 @@ const MainLayout = () => {
       {/* Main Content Area (Top Row of Nested Grid) */}
       {/* Takes remaining space in the nested grid's column */}
       <div className='flex flex-col flex-1 h-full'>
-        <main className='bg-white flex-1 p-4'>
+        <main className='bg-white flex-1 p-4 h-[80%]'>
           {' '}
           {/* Scrolling happens here */}
           {/* Content from nested routes will be rendered here */}
@@ -31,10 +32,11 @@ const MainLayout = () => {
         {/* Chat History Area (Bottom Row of Nested Grid) */}
         {/* Takes the height of its content */} {/* No col-span needed */}
         {/* Replace with actual ChatHistory component later */}
-        <div className='flex grow-0 h-[20%] p-4'>
-          {/* <ChatHistoryPlaceholder /> */}
-          {/* <KeywordDetector /> */}
-          {/* <VoiceTester /> */}
+        <div className='flex grow-0 h-[20%] p-4 gap-4'>
+          <div className='h-full overflow-y-scroll flex-1 bg-blue-100 rounded-2xl'>
+            <ChatHistory />
+          </div>
+          <Voice />
         </div>
       </div>
       {/* End of Nested Grid */}
