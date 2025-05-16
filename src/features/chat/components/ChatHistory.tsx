@@ -1,10 +1,20 @@
 // Example: src/features/chat/components/ChatHistoryPlaceholder.tsx (Create this file)
 import { useChatStore } from '../store/chatStore';
 import ChatBubble from './ChatBubble';
+import { useEffect, useRef } from 'react';
 
 const ChatHistory = () => {
   const messages = useChatStore((state) => state.messages);
   const isCapturing = useChatStore((state) => state.isCapturing);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className='flex flex-col h-full'>
@@ -26,6 +36,7 @@ const ChatHistory = () => {
             />
           ))
         )}
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );
