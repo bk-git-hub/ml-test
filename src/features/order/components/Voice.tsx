@@ -124,6 +124,9 @@ const Voice = () => {
         <p className='text-sm text-gray-600'>
           {listening ? '키워드 말랑아 감지중...' : '대기 중'}
         </p>
+        <p>
+          {transcript}
+        </p>
       </div>
 
       {isCapturing && (

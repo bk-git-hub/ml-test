@@ -13,7 +13,7 @@ const CartItem = ({ item }: CartItemProps) => {
   const removeItem = useCartStore((state) => state.removeItem);
 
   const handleIncrease = () => {
-    updateQuantity(item.menu.id, item.quantity + 1);
+    updateQuantity(item.menu.id,  1);
   };
 
   const handleDecrease = () => {
@@ -21,7 +21,7 @@ const CartItem = ({ item }: CartItemProps) => {
     if (item.quantity - 1 <= 0) {
       handleRemove();
     } else {
-      updateQuantity(item.menu.id, item.quantity - 1);
+      updateQuantity(item.menu.id, - 1);
     }
   };
 

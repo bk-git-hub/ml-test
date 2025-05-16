@@ -28,6 +28,7 @@ const Cart = () => {
   return (
     <>
       <aside className='w-60 bg-white border-l border-gray-200 flex flex-col h-full shrink-0'>
+        {/*폭 60x4 =240 픽셀*/}
         {' '}
         {/* Adjusted width */}
         {/* Header */}

@@ -40,8 +40,9 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
       <div className='flex flex-col flex-grow w-full'>
         {/* Name and Price */}
         <div className='flex-grow mb-3'>
+
           <h3
-            className={`font-semibold text-md mb-1 truncate ${
+            className={`font-semibold text-md mb-1 truncate text-center ${
               isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
             }`}
             title={menu.name}
@@ -49,7 +50,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
             {menu.name}
           </h3>
           <p
-            className={`text-sm text-gray-700 ${
+            className={`text-sm text-gray-700 text-center ${
               isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
             }`}
           >

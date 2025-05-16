@@ -22,6 +22,11 @@ import StoreEntry from '@/features/order/components/StoreEntry';
 
 import Voice from '@/features/order/components/Voice';
 import AnotherScreen from '@/features/order/routes/AnotherScreen';
+import {useEffect} from "react";
+import {mockMenuItems} from "@/mocks/menuItems.ts";
+import {mockCategories} from "@/mocks/categories.ts";
+import {Menu} from "@/types/menu.ts";
+import {useMenuStore} from "@/store/menuStore.ts";
 
 const OrderContent = () => {
   const { currentView } = useNavigationStore();
@@ -29,6 +34,54 @@ const OrderContent = () => {
 };
 
 const AppRouter = () => {
+
+    useEffect(() => {
+    // TODO: Replace with actual API call when ready
+    // For now, we'll use mock data
+    const initializeStore = async () => {
+      try {
+        // Simulate API response structure
+        const mockResponse = {
+          menus: mockMenuItems,
+          categories: mockCategories,
+        };
+
+        // Group menus by category
+        const menusByCategory = mockResponse.menus.reduce((acc, menu) => {
+          if (!acc[menu.category_id]) {
+            acc[menu.category_id] = [];
+          }
+          acc[menu.category_id].push({
+            id: menu.menu_id,
+            name: menu.menu_name,
+            price: menu.menu_price,
+            categoryId: menu.category_id,
+            imageUrl: menu.menu_img_url,
+          });
+          return acc;
+        }, {} as Record<number, Menu[]>);
+
+        // Update store with mock data
+        useMenuStore.setState({
+          menus: menusByCategory,
+          categories: mockResponse.categories.map((cat) => ({
+            category_id: cat.category_id,
+            category_name: cat.category_name,
+          })),
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error('Error initializing store:', error);
+        useMenuStore.setState({
+          error: 'Failed to load menu data',
+          isLoading: false,
+        });
+      }
+    };
+
+    initializeStore();
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
