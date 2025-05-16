@@ -3,15 +3,12 @@
 import { useCartStore } from '@/store/cartStore';
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
-import { useState } from 'react';
-import SpeechRecognition from 'react-speech-recognition';
-import { useVoiceStore } from '../store/voiceStore';
+import { useOrderStore } from '../store/orderStore';
+import OrderConfirmationModal from './OrderConfirmationModal';
 
 const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
-  const clearCart = useCartStore((state) => state.clearCart);
-  const [showModal, setShowModal] = useState(false);
-  const { setIsCovered } = useVoiceStore();
+  const { setShowOrderModal } = useOrderStore();
 
   // Calculate total price
   const totalPrice = cartItems.reduce(
@@ -25,17 +22,7 @@ const Cart = () => {
     console.log('주문하기 button clicked!');
     console.log('Cart Items:', cartItems);
     console.log('Total Price:', totalPrice);
-    setShowModal(true);
-  };
-
-  const handleConfirmOrder = () => {
-    // TODO: Implement order placement logic
-    // - Send order details (cartItems, totalPrice) to the server
-    // - Handle response (success/error)
-    setIsCovered(true);
-    SpeechRecognition.stopListening();
-    clearCart();
-    setShowModal(false);
+    setShowOrderModal(true);
   };
 
   return (
@@ -88,24 +75,7 @@ const Cart = () => {
         )}
       </aside>
 
-      {/* Order Confirmation Modal */}
-      {showModal && (
-        <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50'>
-          <div className='bg-white rounded-lg p-6 max-w-sm w-full mx-4 '>
-            <h3 className='text-xl font-bold text-center mb-4'>
-              주문이 완료되었습니다
-            </h3>
-            <div className='flex justify-center'>
-              <button
-                onClick={handleConfirmOrder}
-                className='bg-ml-yellow hover:brightness-95 text-white font-bold py-2 px-6 rounded'
-              >
-                확인
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <OrderConfirmationModal />
     </>
   );
 };
