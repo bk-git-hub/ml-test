@@ -3,6 +3,7 @@ import { useChatStore } from '@/features/chat/store/chatStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMenuStore } from '@/store/menuStore';
 import { useNavigationStore } from '@/store/navigationStore';
+import { useOrderStore } from '../store/orderStore';
 
 interface UseTextApiProps {
   apiUrl: string;
@@ -37,6 +38,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const { updateQuantity, removeItem, addItem } = useCartStore();
   const { setCurrentCategory, setCurrentMenu, setCurrentView } =
     useNavigationStore();
+  const { setShowOrderModal } = useOrderStore();
 
   const processIntent = (
     intent: string,
@@ -92,7 +94,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
 
       case 'place_order':
         console.log('주문 확정:', item);
-        //TODO: 주문 확정 API 호출
+        setShowOrderModal(true);
         break;
 
       case 'get_order_history':
