@@ -4,11 +4,14 @@ import { useCartStore } from '@/store/cartStore';
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
 import { useState } from 'react';
+import SpeechRecognition from 'react-speech-recognition';
+import { useVoiceStore } from '../store/voiceStore';
 
 const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const clearCart = useCartStore((state) => state.clearCart);
   const [showModal, setShowModal] = useState(false);
+  const { setIsCovered } = useVoiceStore();
 
   // Calculate total price
   const totalPrice = cartItems.reduce(
@@ -29,6 +32,8 @@ const Cart = () => {
     // TODO: Implement order placement logic
     // - Send order details (cartItems, totalPrice) to the server
     // - Handle response (success/error)
+    setIsCovered(true);
+    SpeechRecognition.stopListening();
     clearCart();
     setShowModal(false);
   };
