@@ -3,6 +3,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import { useChatStore } from '@/features/chat/store/chatStore';
+import { useVoiceStore } from '../store/voiceStore';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useGpt } from '../hooks/useGpt';
 
@@ -10,7 +11,7 @@ const apiUrl = import.meta.env.VITE_GPT_API_URL;
 
 const Voice = () => {
   const { listening, transcript, resetTranscript } = useSpeechRecognition();
-  const [isCovered, setIsCovered] = useState(true);
+  const { isCovered, setIsCovered } = useVoiceStore();
   const [detectedCount, setDetectedCount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [capturedText, setCapturedText] = useState('');
