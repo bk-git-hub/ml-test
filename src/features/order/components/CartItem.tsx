@@ -1,7 +1,6 @@
-// src/features/order/components/CartItemComponent.tsx
-
 import { useCartStore } from '@/store/cartStore';
-import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid'; // Example icons (install @heroicons/react)
+import { useLanguageStore } from '@/store/languageStore';
+import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { CartItemType } from '../types';
 
 interface CartItemProps {
@@ -11,17 +10,17 @@ interface CartItemProps {
 const CartItem = ({ item }: CartItemProps) => {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
+  const { language } = useLanguageStore();
 
   const handleIncrease = () => {
-    updateQuantity(item.menu.id,  1);
+    updateQuantity(item.menu.id, 1);
   };
 
   const handleDecrease = () => {
-    // Remove if quantity becomes 0, otherwise update
     if (item.quantity - 1 <= 0) {
       handleRemove();
     } else {
-      updateQuantity(item.menu.id, - 1);
+      updateQuantity(item.menu.id, -1);
     }
   };
 
@@ -29,12 +28,17 @@ const CartItem = ({ item }: CartItemProps) => {
     removeItem(item.menu.id);
   };
 
+  const translatedName =
+    language === 'en' && item.menu.name_en ? item.menu.name_en : item.menu.name;
+
+  const translatedCurrency = language === 'en' ? '₩' : '원';
+
   return (
     <div className="flex items-center py-2 border-b border-indigo-100 last:border-b-0 mb-1 last:mb-0">
       {/* Left: Image */}
       <img
         src={item.menu.imageUrl}
-        alt={item.menu.name}
+        alt={translatedName}
         className="w-12 h-12 object-cover rounded mr-3 flex-shrink-0"
         onError={(e) => {
           const target = e.target as HTMLImageElement;
@@ -44,9 +48,11 @@ const CartItem = ({ item }: CartItemProps) => {
 
       {/* Middle: Name and Price */}
       <div className="flex-grow mr-3 min-w-0">
-        <p className="font-semibold text-sm mb-1 text-slate-800 whitespace-nowrap">{item.menu.name}</p>
+        <p className="font-semibold text-sm mb-1 text-slate-800 whitespace-nowrap">
+          {translatedName}
+        </p>
         <p className="text-xs text-slate-600 whitespace-nowrap">
-          {item.menu.price.toLocaleString()}원
+          {item.menu.price.toLocaleString()} {translatedCurrency}
         </p>
       </div>
 
@@ -59,7 +65,9 @@ const CartItem = ({ item }: CartItemProps) => {
         >
           <MinusIcon className="w-3.5 h-3.5 text-indigo-500" />
         </button>
-        <span className="text-center font-medium text-sm w-5 text-slate-700">{item.quantity}</span>
+        <span className="text-center font-medium text-sm w-5 text-slate-700">
+          {item.quantity}
+        </span>
         <button
           onClick={handleIncrease}
           className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-indigo-100 transition-colors"
@@ -69,8 +77,6 @@ const CartItem = ({ item }: CartItemProps) => {
         </button>
       </div>
     </div>
-
-
   );
 };
 

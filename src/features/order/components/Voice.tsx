@@ -221,9 +221,8 @@ const Voice = () => {
               : <>키워드 말랑아<br />감지중...</>
             : language === 'en'
             ? 'Waiting...'
-            : '대기 중'}
+            : '대기 중...'}
         </p>
-        <p>{transcript}</p>
       </div>
 
       {isCapturing && (

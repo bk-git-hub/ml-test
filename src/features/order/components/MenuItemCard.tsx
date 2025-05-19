@@ -1,3 +1,4 @@
+//MenuItemCard
 import { Menu } from '@/types/menu';
 import { useCartStore } from '@/store/cartStore';
 import { useLanguageStore } from '@/store/languageStore';
@@ -17,6 +18,14 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
     console.log(`Adding ${translatedName} to cart`);
     addItem(menu);
   };
+
+  console.log('language:', language, 'menu.name_en:', menu.name_en);
+  // 상세 상태 콘솔 로그
+  console.log('MenuItemCard Rendered');
+  console.log('language:', language);
+  console.log('menu:', menu);
+  console.log('menu.name_en:', menu.name_en);
+  console.log('translatedName:', translatedName);
 
   return (
     <div

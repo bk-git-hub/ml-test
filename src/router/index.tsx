@@ -54,7 +54,7 @@ const menusByCategory = mockResponse.menus.reduce((acc, menu) => {
   acc[menu.category_id].push({
     id: menu.menu_id,
     name: menu.menu_name,
-    nameEn: menu.menu_name_en, // ✅ 영어 이름 저장
+    name_en: menu.menu_name_en, // ✅ 영어 이름 저장
     price: menu.menu_price,
     categoryId: menu.category_id,
     imageUrl: menu.menu_img_url,

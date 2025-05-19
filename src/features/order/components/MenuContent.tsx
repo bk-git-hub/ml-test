@@ -1,3 +1,4 @@
+    import { useEffect } from 'react';
 import { Menu } from '@/types/menu';
 import MenuItemCard from './MenuItemCard';
 import { useNavigationStore } from '@/store/navigationStore';
@@ -5,7 +6,11 @@ import { useMenuStore } from '@/store/menuStore';
 
 const MenuContent = () => {
   const { currentCategoryId, currentMenuId } = useNavigationStore();
-  const { menus } = useMenuStore();
+  const { menus, fetchAllMenus } = useMenuStore();
+
+  useEffect(() => {
+    fetchAllMenus();
+  }, [fetchAllMenus]);
 
   const allMenuItems = Object.values(menus).flat();
 
