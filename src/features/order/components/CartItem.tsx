@@ -30,46 +30,47 @@ const CartItem = ({ item }: CartItemProps) => {
   };
 
   return (
-    <div className='flex items-center py-3 border-b border-gray-200 last:border-b-0'>
+    <div className="flex items-center py-2 border-b border-gray-200 last:border-b-0 mb-1 last:mb-0">
       {/* Left: Image */}
+      <img
+        src={item.menu.imageUrl}
+        alt={item.menu.name}
+        className="w-12 h-12 object-cover rounded mr-3 flex-shrink-0"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = '/logo.png';
+        }}
+      />
 
       {/* Middle: Name and Price */}
-      <div className='flex-grow mr-3'>
-        <p className='font-semibold text-sm mb-1'>{item.menu.name}</p>
-        <p className='text-xs text-gray-600'>
-          {item.menu.price.toLocaleString()}원 {/* Format price */}
+      <div className="flex-grow mr-3 min-w-0">
+        <p className="font-semibold text-sm mb-1 whitespace-nowrap">{item.menu.name}</p>
+        <p className="text-xs text-gray-600 whitespace-nowrap">
+          {item.menu.price.toLocaleString()}원
         </p>
       </div>
 
       {/* Right: Quantity Controls */}
-      <div className='flex items-center flex-shrink-0'>
+      <div className="flex items-center flex-shrink-0 space-x-1">
         <button
           onClick={handleDecrease}
-          className='p-1 rounded-full hover:bg-gray-200 transition-colors'
-          aria-label='Decrease quantity'
+          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+          aria-label="Decrease quantity"
         >
-          <MinusIcon className='w-4 h-4 text-gray-600' />
+          <MinusIcon className="w-3.5 h-3.5 text-gray-600" />
         </button>
-        <span className='mx-2 w-6 text-center font-medium text-sm'>
-          {item.quantity}
-        </span>
+        <span className="text-center font-medium text-sm w-5">{item.quantity}</span>
         <button
           onClick={handleIncrease}
-          className='p-1 rounded-full hover:bg-gray-200 transition-colors'
-          aria-label='Increase quantity'
+          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+          aria-label="Increase quantity"
         >
-          <PlusIcon className='w-4 h-4 text-gray-600' />
+          <PlusIcon className="w-3.5 h-3.5 text-gray-600" />
         </button>
-        {/* Optional: Explicit Remove Button */}
-        {/* <button
-           onClick={handleRemove}
-           className="ml-2 p-1 text-red-500 hover:text-red-700"
-           aria-label="Remove item"
-         >
-           <TrashIcon className="w-4 h-4" />
-         </button> */}
       </div>
+
     </div>
+
   );
 };
 

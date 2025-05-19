@@ -17,7 +17,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
 
   return (
     <div
-      className={`bg-ml-yellow rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col p-4 gap-4 items-center ${
+      className={`bg-ml-yellow-light rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col p-4 gap-4 items-center ${
         isSearched
           ? 'animate-[pulse_1s_ease-in-out_5] border-2 border-ml-yellow-light ring-2 ring-ml-yellow-light'
           : ''

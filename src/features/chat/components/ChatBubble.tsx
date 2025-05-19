@@ -15,12 +15,12 @@ export default function ChatBubble({
         className={`max-w-[70%] rounded-lg px-4 py-2 ${
           isUser
             ? isUpdating
-              ? 'bg-ml-yellow-light text-black rounded-br-none shadow-md'
-              : 'bg-ml-yellow text-black rounded-br-none shadow-md'
-            : 'bg-white text-black rounded-bl-none shadow-md'
+              ? 'bg-[#F4C7AB] text-[#3D2B27] rounded-br-none shadow-md'
+              : 'bg-[#F4C7AB] text-[#3D2B27] rounded-br-none shadow-md'
+            : 'bg-[#FFE8D6] text-[#5A3E36] rounded-bl-none shadow-md'
         }`}
       >
-        {message}
+        <span className="text-sm">{message}</span>
       </div>
     </div>
   );

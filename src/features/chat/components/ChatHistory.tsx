@@ -1,4 +1,3 @@
-// Example: src/features/chat/components/ChatHistoryPlaceholder.tsx (Create this file)
 import { useChatStore } from '../store/chatStore';
 import ChatBubble from './ChatBubble';
 import { useEffect, useRef } from 'react';
@@ -18,10 +17,16 @@ const ChatHistory = () => {
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='flex-1 p-4 overflow-y-auto'>
+      <div
+        className="flex-1 p-4 overflow-y-auto bg-white rounded-lg"
+        style={{
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 1)', // 좀 더 진한 그림자 직접 지정
+          border: '1px solid rgba(0, 0, 0, 0.1)', // 연한 테두리로 대비 향상
+        }}
+      >
         {messages.length === 0 ? (
           <ChatBubble
-            message='안녕하세요! 어떤 도움이 필요하신가요?'
+            message="안녕하세요! 어떤 도움이 필요하신가요?"
             isUser={false}
           />
         ) : (

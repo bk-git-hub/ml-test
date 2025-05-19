@@ -1,5 +1,3 @@
-// src/features/order/components/CartComponent.tsx
-
 import { useCartStore } from '@/store/cartStore';
 import CartItem from './CartItem';
 import { CartItemType } from '../types';
@@ -10,71 +8,78 @@ const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const { setShowOrderModal } = useOrderStore();
 
-  // Calculate total price
   const totalPrice = cartItems.reduce(
     (total: number, item: CartItemType) =>
       total + item.menu.price * item.quantity,
     0
   );
 
-  // Handler for the "주문하기" button
   const handlePlaceOrder = () => {
-    console.log('주문하기 button clicked!');
-    console.log('Cart Items:', cartItems);
-    console.log('Total Price:', totalPrice);
     setShowOrderModal(true);
   };
 
   return (
     <>
-      <aside className='w-60 bg-white border-l border-gray-200 flex flex-col h-full shrink-0'>
-        {/*폭 60x4 =240 픽셀*/}
-        {' '}
-        {/* Adjusted width */}
+      <aside className="w-65 bg-[#FFF9F0] rounded-xl shadow-lg p-6 mt-4 mb-6 mr-6 ml-4 flex flex-col">
         {/* Header */}
-        <div className='p-4 border-b border-gray-200 flex-shrink-0'>
-          <h2 className='text-xl font-bold text-center'>장바구니</h2>
-          {/* The horizontal line is implicitly the border-b above/below */}
+        <div className="mb-3">
+          <h2 className="text-2xl font-semibold text-gray-800 text-center tracking-wide">
+            장바구니
+          </h2>
         </div>
-        {/* Cart Items List - Scrollable */}
-        <div className='flex-1 overflow-y-auto p-4'>
-          {cartItems.length === 0 ? (
-            <p className='text-center text-gray-500 mt-10'>
-              장바구니가 비어있습니다.
-            </p>
-          ) : (
-            <div>
-              {cartItems.map((item) => (
-                // Use menu_id for key if options are not considered,
-                // otherwise a unique cartItemId generated upon adding is better
-                <CartItem key={item.menu.id} item={item} />
-              ))}
+
+        {/* 카트 리스트 */}
+          <div className="flex-1 overflow-y-auto pr-1">
+            {cartItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center mt-16 text-gray-400 select-none">
+                {/* 이미지 넣을 경우 */}
+                <img
+                  src="/public/empty-cart.png" // 이미지 경로 바꿔주세요
+                  alt="빈 장바구니 아이콘"
+                  className="w-12 h-12 mb-4"
+                />
+
+                <p className="text-center text-gray-600 text-base font-medium">
+                  장바구니가 비어 있어요
+                </p>
+                <p className="text-sm text-gray-400 mt-1">
+                  원하는 메뉴를 먼저 골라주세요
+                </p>
+              </div>
+
+            ) : (
+              cartItems.map((item, idx) => (
+                <CartItem
+                  key={item.menu.id}
+                  item={item}
+                  isLast={idx === cartItems.length - 1}
+                />
+              ))
+            )}
+          </div>
+
+          {/* Footer (하단 띄워진 느낌) */}
+          {cartItems.length > 0 && (
+            <div className="pt-4 mt-4 bg-[#FFF9F0] border-t">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-base font-medium text-gray-700">총 주문 금액:</span>
+                <span className="text-2xl font-bold text-gradient bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+                  {totalPrice.toLocaleString()}원
+                </span>
+              </div>
+
+              <button
+                onClick={handlePlaceOrder}
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600
+                           text-white font-semibold py-4 rounded-xl shadow-md transition duration-300 ease-in-out
+                           focus:outline-none focus:ring-4 focus:ring-yellow-300"
+              >
+                주문하기
+              </button>
             </div>
           )}
-        </div>
-        {/* Footer - Only show if cart has items */}
-        {cartItems.length > 0 && (
-          <div className='p-4 border-t border-gray-200 flex-shrink-0'>
-            {/* Total Price Display */}
-            <div className='flex justify-between items-center mb-4'>
-              <span className='text-lg font-semibold'>총 주문 금액:</span>
-              <span className='text-xl font-bold text-ml-yellow'>
-                {' '}
-                {/* Assuming ml-yellow for emphasis */}
-                {totalPrice.toLocaleString()}원
-              </span>
-            </div>
+        </aside>
 
-            {/* Order Button */}
-            <button
-              onClick={handlePlaceOrder}
-              className='w-full bg-ml-yellow hover:brightness-95 transition-all duration-150 ease-in-out text-white font-bold py-3 px-4 rounded text-lg' // Larger padding/text
-            >
-              주문하기
-            </button>
-          </div>
-        )}
-      </aside>
 
       <OrderConfirmationModal />
     </>
