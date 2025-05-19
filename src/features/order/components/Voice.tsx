@@ -26,7 +26,7 @@ const Voice = () => {
   // 여러 키워드 배열
   const KEYWORDS = language === 'en'
     ? ['malang', 'hello', 'start']  // 영어 키워드 예시//////////////////////////////////////////추가 가능
-    : ['말랑아', '안녕', '시작'];     // 한국어 키워드 예시
+    : ['말랑아', '빨랑아', '빨랑 와'];     // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
@@ -168,12 +168,12 @@ const Voice = () => {
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
-        <button
+        <div
           className="
             absolute top-0 left-0 w-screen h-screen p-6
             flex flex-col items-center justify-center
             cursor-pointer
-            bg-white/70
+            bg-white/80
             border-4 border-indigo-500
             rounded-none
             shadow-xl
@@ -186,15 +186,26 @@ const Voice = () => {
                 continuous: true,
                 language: langCode,
               });
-            }, 200); // 상호작용 후 딜레이 두고 시작
+            }, 200);
           }}
         >
           <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
             Mallang Order
           </div>
 
+          {/* ✅ 한/영 전환 버튼 */}
           <div className="absolute top-6 right-6">
-            <LanguageSelector />
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // 💥 prevent parent div click
+                useLanguageStore.setState((state) => ({
+                  language: state.language === 'en' ? 'ko' : 'en',
+                }));
+              }}
+              className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition"
+            >
+              {language === 'en' ? '한글' : 'ENG'}
+            </button>
           </div>
 
           <img
@@ -210,8 +221,10 @@ const Voice = () => {
               ? 'Touch the screen\nto start your order'
               : '화면을 터치해\n주문을 시작하세요'}
           </p>
-        </button>
+        </div>
       )}
+
+
 
       <div className='flex flex-col items-center'>
         <p className='text-sm text-gray-600'>
