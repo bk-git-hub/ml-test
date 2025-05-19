@@ -1,5 +1,9 @@
-import { ResMenu } from '@/types/menu';
+// src/mock/menu.ts
 
+import { ResMenu } from '@/types/menu';
+import { Menu } from '@/types/menu';
+
+// ✅ mock 데이터
 export const mockMenuItems: ResMenu[] = [
   {
     menu_id: 0,
@@ -74,3 +78,15 @@ export const mockMenuItems: ResMenu[] = [
     menu_img_url: 'https://via.placeholder.com/150/FFD700/FFFFFF?text=하이볼',
   },
 ];
+
+// ✅ 변환 함수
+export const mapResMenuToMenu = (resMenus: ResMenu[]): Menu[] => {
+  return resMenus.map((item) => ({
+    id: item.menu_id,
+    name: item.menu_name,
+    name_en: item.menu_name_en,
+    price: item.menu_price,
+    imageUrl: item.menu_img_url,
+    categoryId: item.category_id,
+  }));
+};

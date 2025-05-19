@@ -1,6 +1,9 @@
+// src/store/menuStore.ts
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Menu, Category } from '../types/menu';
+import { mapResMenuToMenu } from '../utils/menuMapper'; // 경로 맞춰서 import 하세요
 
 interface MenuState {
   menus: Record<number, Menu[]>;
@@ -23,12 +26,14 @@ export const useMenuStore = create<MenuState>()(
       fetchAllMenus: async () => {
         set({ isLoading: true, error: null });
         try {
-          // TODO: 실제 API 엔드포인트로 변경
           const response = await fetch('/api/menus/all');
           const data = await response.json();
 
-          // 카테고리별로 메뉴 그룹화
-          const menusByCategory = data.menus.reduce(
+          // API에서 받은 ResMenu[] → Menu[] 변환
+          const menus = mapResMenuToMenu(data.menus);
+
+          // 카테고리별 메뉴 그룹화
+          const menusByCategory = menus.reduce(
             (acc: Record<number, Menu[]>, menu: Menu) => {
               if (!acc[menu.categoryId]) {
                 acc[menu.categoryId] = [];

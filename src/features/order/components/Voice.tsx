@@ -6,6 +6,7 @@ import { useChatStore } from '@/features/chat/store/chatStore';
 import { useVoiceStore } from '../store/voiceStore';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useGpt } from '../hooks/useGpt';
+import { useLanguageStore } from '@/store/languageStore';
 
 const apiUrl = import.meta.env.VITE_GPT_API_URL;
 
@@ -17,16 +18,18 @@ const Voice = () => {
   const [capturedText, setCapturedText] = useState('');
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
-  const KEYWORD = '말랑아';
+
+  const { language } = useLanguageStore();
+  const langCode = language === 'en' ? 'en-US' : 'ko-KR';
+  const KEYWORD = language === 'en' ? 'mallang' : '말랑아';
+
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
   const setIsCapturing = useChatStore((state) => state.setIsCapturing);
   const isCapturing = useChatStore((state) => state.isCapturing);
   const { sendTextToApi } = useGpt({ apiUrl });
 
-  // 사용자 인터랙션 이후 시작
-
-  // 실시간 텍스트 처리
+  // 🧠 실시간 텍스트 감지
   useEffect(() => {
     if (transcript) {
       lastTextTimeRef.current = Date.now();
@@ -41,7 +44,7 @@ const Voice = () => {
     }
   }, [transcript, isCapturing, updateLastMessage]);
 
-  // 일정 시간 텍스트가 없으면 캡처 종료
+  // 🔁 일정 시간 텍스트 없으면 인식 종료 및 처리
   useEffect(() => {
     if (!isCapturing) return;
 
@@ -51,7 +54,6 @@ const Voice = () => {
         setIsCapturing(false);
         setIsProcessing(false);
 
-        // 캡처된 텍스트가 있으면 GPT API 호출
         if (capturedText) {
           sendTextToApi(capturedText).catch((err) => {
             console.error('Error processing voice input:', err);
@@ -67,7 +69,7 @@ const Voice = () => {
     return () => clearInterval(checkInterval);
   }, [isCapturing, capturedText, sendTextToApi]);
 
-  // 키워드 감지
+  // 🎯 키워드 감지
   useEffect(() => {
     if (!transcript || isProcessing) return;
 
@@ -88,7 +90,19 @@ const Voice = () => {
     }
   }, [transcript, isProcessing]);
 
-  // 컴포넌트 언마운트 시 마이크 종료
+  // ✅ 언어 변경 또는 덮개 해제 시 마이크 재시작
+  useEffect(() => {
+    if (!isCovered) {
+      SpeechRecognition.stopListening().then(() => {
+        SpeechRecognition.startListening({
+          continuous: true,
+          language: langCode,
+        });
+      });
+    }
+  }, [language, isCovered]);
+
+  // 🔇 언마운트 시 마이크 정지
   useEffect(() => {
     return () => {
       SpeechRecognition.stopListening();
@@ -98,66 +112,63 @@ const Voice = () => {
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
-          <button
-            className="
-              absolute top-0 left-0 w-screen h-screen p-6
-              flex flex-col items-center justify-center
-              cursor-pointer
-              bg-white/70
-              border-4 border-indigo-500
-              rounded-none
-              shadow-xl
-              backdrop-blur-md
-            "
-            onClick={() => {
-              setIsCovered(false);
-              return SpeechRecognition.startListening({
-                continuous: true,
-                language: 'ko-KR',
-              });
-            }}
-          >
-            <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
-              Mallang Order
-            </div>
+        <button
+          className="
+            absolute top-0 left-0 w-screen h-screen p-6
+            flex flex-col items-center justify-center
+            cursor-pointer
+            bg-white/70
+            border-4 border-indigo-500
+            rounded-none
+            shadow-xl
+            backdrop-blur-md
+          "
+          onClick={() => {
+            setIsCovered(false); // ✅ 마이크 재시작은 useEffect가 담당
+          }}
+        >
+          <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
+            Mallang Order
+          </div>
 
-            <div className="absolute top-6 right-6">
-              <LanguageSelector />
-            </div>
+          <div className="absolute top-6 right-6">
+            <LanguageSelector />
+          </div>
 
-            <img
-              src="/logoT.png"
-              alt="말랑 로고"
-              width={300}
-              height={300}
-              className="mb-10 rounded-lg shadow-lg"
-            />
+          <img
+            src="/logoT.png"
+            alt="말랑 로고"
+            width={300}
+            height={300}
+            className="mb-10 rounded-lg shadow-lg"
+          />
 
-            <p className="text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight">
-              화면을 터치해<br />
-              주문을 시작하세요
-            </p>
-          </button>
-        )}
-
-
-
+          <p className="text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight whitespace-pre-line">
+            {language === 'en'
+              ? 'Touch the screen\nto start your order'
+              : '화면을 터치해\n주문을 시작하세요'}
+          </p>
+        </button>
+      )}
 
       <div className='flex flex-col items-center'>
         <p className='text-sm text-gray-600'>
-          {listening ? '키워드 말랑아 감지중...' : '대기 중'}
+          {listening
+            ? language === 'en'
+              ? 'Listening for the keyword...'
+              : '키워드 말랑아 감지중...'
+            : language === 'en'
+            ? 'Waiting...'
+            : '대기 중'}
         </p>
-        <p>
-          {transcript}
-        </p>
+        <p>{transcript}</p>
       </div>
 
       {isCapturing && (
-        <div className='bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow'>
-          <p className='text-sm text-black mb-1'>음성 인식 중...</p>
-          {/* {capturedText && (
-            <p className='text-sm text-gray-700 mt-2'>{capturedText}</p>
-          )} */}
+        <div className='bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow p-2 mt-2'>
+          <p className='text-sm text-black mb-1'>
+            {language === 'en' ? 'Recognizing speech...' : '음성 인식 중...'}
+          </p>
         </div>
       )}
     </div>
