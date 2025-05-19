@@ -67,7 +67,7 @@ const StoreEntry = () => {
       {/* Right Section */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center">
         <img
-          src="/public/logoT.png"
+          src="/logoT.png"
           alt="Mallang character"
           className="w-3/4 max-h-[80%] object-contain"
         />
