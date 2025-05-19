@@ -1,5 +1,6 @@
 import { useNavigationStore } from '@/store/navigationStore';
 import { useMenuStore } from '@/store/menuStore';
+import { useLanguageStore } from '@/store/languageStore'; // languageStore 가정
 import clsx from 'clsx';
 
 const CategoryList = () => {
@@ -11,6 +12,7 @@ const CategoryList = () => {
     currentView,
   } = useNavigationStore();
   const { categories } = useMenuStore();
+  const { language } = useLanguageStore(); // 'ko' 또는 'en'
 
   if (!currentCategoryId) {
     initializeCategory();
@@ -37,6 +39,10 @@ const CategoryList = () => {
                 currentView === 'menu' &&
                 category.category_id === currentCategoryId;
 
+              // 언어에 따라 이름 선택
+              const categoryName =
+                language === 'en' ? category.category_name_en : category.category_name;
+
               return (
                 <li key={category.category_id}>
                   <button
@@ -48,7 +54,7 @@ const CategoryList = () => {
                         : 'text-indigo-200 hover:bg-indigo-200 hover:text-indigo-800'
                     )}
                   >
-                    {category.category_name}
+                    {categoryName}
                   </button>
                 </li>
               );
@@ -65,12 +71,11 @@ const CategoryList = () => {
               currentView === 'orderHistory' && 'shadow-inner ring-2 ring-indigo-500'
             )}
           >
-            주문 내역 조회
+            {language === 'en' ? 'Order History' : '주문 내역 조회'}
           </button>
         </div>
       </aside>
     </div>
-
   );
 };
 

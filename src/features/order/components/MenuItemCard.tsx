@@ -1,17 +1,19 @@
-// src/features/order/components/MenuItemCard.tsx
 import { Menu } from '@/types/menu';
 import { useCartStore } from '@/store/cartStore';
+import { useLanguageStore } from '@/store/languageStore';  // 추가
 
 interface MenuItemCardProps {
   menu: Menu;
   isSearched: boolean;
+  displayName?: string;
 }
 
-const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
+const MenuItemCard = ({ menu, isSearched, displayName }: MenuItemCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
+  const { language } = useLanguageStore();  // language 상태 받아오기
 
   const handleAddToCart = () => {
-    console.log(`Adding ${menu.name} to cart`);
+    console.log(`Adding ${displayName ?? menu.name} to cart`);
     addItem(menu);
   };
 
@@ -26,7 +28,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
       {/* Image */}
       <img
         src={menu.imageUrl}
-        alt={menu.name}
+        alt={displayName ?? menu.name}
         className={`w-[80%] object-cover ${
           isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
         }`}
@@ -44,9 +46,9 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
             className={`font-semibold text-md mb-1 truncate text-center text-indigo-900 ${
               isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
             }`}
-            title={menu.name}
+            title={displayName ?? menu.name}
           >
-            {menu.name}
+            {displayName ?? menu.name}
           </h3>
           <p
             className={`text-sm text-indigo-700 text-center ${
@@ -63,7 +65,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
             isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
           }`}
         >
-          담기
+        {language === 'en' ? 'Add to cart' : '담기'}
         </button>
       </div>
     </div>
@@ -71,4 +73,3 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
 };
 
 export default MenuItemCard;
-

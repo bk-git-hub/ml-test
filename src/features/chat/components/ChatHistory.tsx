@@ -1,11 +1,13 @@
 import { useChatStore } from '../store/chatStore';
 import ChatBubble from './ChatBubble';
 import { useEffect, useRef } from 'react';
+import { useLanguageStore } from '@/store/languageStore';
 
 const ChatHistory = () => {
   const messages = useChatStore((state) => state.messages);
   const isCapturing = useChatStore((state) => state.isCapturing);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { language } = useLanguageStore();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,7 +28,7 @@ const ChatHistory = () => {
       >
         {messages.length === 0 ? (
           <ChatBubble
-            message="안녕하세요! 어떤 도움이 필요하신가요?"
+            message={language === 'en' ? "Hello! How can I assist you today?" : "안녕하세요! 어떤 도움이 필요하신가요?"}
             isUser={false}
           />
         ) : (

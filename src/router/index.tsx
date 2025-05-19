@@ -46,31 +46,34 @@ const AppRouter = () => {
           categories: mockCategories,
         };
 
-        // Group menus by category
-        const menusByCategory = mockResponse.menus.reduce((acc, menu) => {
-          if (!acc[menu.category_id]) {
-            acc[menu.category_id] = [];
-          }
-          acc[menu.category_id].push({
-            id: menu.menu_id,
-            name: menu.menu_name,
-            price: menu.menu_price,
-            categoryId: menu.category_id,
-            imageUrl: menu.menu_img_url,
-          });
-          return acc;
-        }, {} as Record<number, Menu[]>);
+// Group menus by category
+const menusByCategory = mockResponse.menus.reduce((acc, menu) => {
+  if (!acc[menu.category_id]) {
+    acc[menu.category_id] = [];
+  }
+  acc[menu.category_id].push({
+    id: menu.menu_id,
+    name: menu.menu_name,
+    nameEn: menu.menu_name_en, // ✅ 영어 이름 저장
+    price: menu.menu_price,
+    categoryId: menu.category_id,
+    imageUrl: menu.menu_img_url,
+  });
+  return acc;
+}, {} as Record<number, Menu[]>);
 
-        // Update store with mock data
-        useMenuStore.setState({
-          menus: menusByCategory,
-          categories: mockResponse.categories.map((cat) => ({
-            category_id: cat.category_id,
-            category_name: cat.category_name,
-          })),
-          isLoading: false,
-          error: null,
-        });
+// Update store with mock data
+useMenuStore.setState({
+  menus: menusByCategory,
+  categories: mockResponse.categories.map((cat) => ({
+    category_id: cat.category_id,
+    category_name: cat.category_name,
+    category_name_en: cat.category_name_en, // ✅ 영어 카테고리 저장
+  })),
+  isLoading: false,
+  error: null,
+});
+
       } catch (error) {
         console.error('Error initializing store:', error);
         useMenuStore.setState({
