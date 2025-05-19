@@ -18,10 +18,15 @@ const Voice = () => {
   const [capturedText, setCapturedText] = useState('');
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
+  const detectedKeywordRef = useRef<string | null>(null);
 
   const { language } = useLanguageStore();
   const langCode = language === 'en' ? 'en-US' : 'ko-KR';
-  const KEYWORD = language === 'en' ? 'mallang' : '말랑아';
+
+  // 여러 키워드 배열
+  const KEYWORDS = language === 'en'
+    ? ['malang', 'hello', 'start']  // 영어 키워드 예시//////////////////////////////////////////추가 가능
+    : ['말랑아', '안녕', '시작'];     // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
@@ -34,9 +39,9 @@ const Voice = () => {
     if (transcript) {
       lastTextTimeRef.current = Date.now();
 
-      if (isCapturing && keywordIndexRef.current !== -1) {
+      if (isCapturing && keywordIndexRef.current !== -1 && detectedKeywordRef.current) {
         const textAfterKeyword = transcript
-          .slice(keywordIndexRef.current + KEYWORD.length)
+          .slice(keywordIndexRef.current + detectedKeywordRef.current.length)
           .trim();
         setCapturedText(textAfterKeyword);
         updateLastMessage(textAfterKeyword);
@@ -62,6 +67,7 @@ const Voice = () => {
 
         resetTranscript();
         keywordIndexRef.current = -1;
+        detectedKeywordRef.current = null;
         setCapturedText('');
       }
     }, 100);
@@ -69,18 +75,30 @@ const Voice = () => {
     return () => clearInterval(checkInterval);
   }, [isCapturing, capturedText, sendTextToApi]);
 
-  // 🎯 키워드 감지
+  // 🎯 키워드 감지 (여러 키워드 중 첫 발견된 키워드 선택)
   useEffect(() => {
     if (!transcript || isProcessing) return;
 
-    const keywordIndex = transcript.indexOf(KEYWORD);
-    if (keywordIndex !== -1 && keywordIndexRef.current === -1) {
+    let foundKeyword: string | null = null;
+    let foundIndex = -1;
+
+    for (const keyword of KEYWORDS) {
+      const idx = transcript.indexOf(keyword);
+      if (idx !== -1) {
+        foundKeyword = keyword;
+        foundIndex = idx;
+        break; // 첫 발견 키워드만 처리
+      }
+    }
+
+    if (foundKeyword && keywordIndexRef.current === -1) {
       setIsProcessing(true);
       setDetectedCount((prev) => prev + 1);
       setIsCapturing(true);
       setCapturedText('');
       lastTextTimeRef.current = Date.now();
-      keywordIndexRef.current = keywordIndex;
+      keywordIndexRef.current = foundIndex;
+      detectedKeywordRef.current = foundKeyword;
 
       addMessage({
         text: '',
@@ -88,19 +106,29 @@ const Voice = () => {
         timestamp: Date.now(),
       });
     }
-  }, [transcript, isProcessing]);
+  }, [transcript, isProcessing, KEYWORDS]);
 
-  // ✅ 언어 변경 또는 덮개 해제 시 마이크 재시작
+  // ✅ 언어 변경 또는 덮개 해제 시 마이크 재시작 강제 보장 + 디버깅 로그
   useEffect(() => {
-    if (!isCovered) {
-      SpeechRecognition.stopListening().then(() => {
+    const tryStartListening = async () => {
+      console.log('🎤 Restarting listening...');
+      await SpeechRecognition.stopListening();
+      setTimeout(() => {
         SpeechRecognition.startListening({
           continuous: true,
           language: langCode,
         });
-      });
+        setTimeout(() => {
+          console.log('🎧 listening (delayed):', listening);
+          console.log('🗣️ transcript (delayed):', transcript);
+        }, 1000);
+      }, 300);
+    };
+
+    if (!isCovered && !listening) {
+      tryStartListening();
     }
-  }, [language, isCovered]);
+  }, [language, isCovered, listening, langCode, transcript]);
 
   // 🔇 언마운트 시 마이크 정지
   useEffect(() => {
@@ -108,6 +136,34 @@ const Voice = () => {
       SpeechRecognition.stopListening();
     };
   }, []);
+
+  // 🎧 listening 상태, transcript 실시간 로그 (디버깅용)
+  useEffect(() => {
+    console.log('🎧 listening 상태:', listening);
+    console.log('🗣️ transcript:', transcript);
+  }, [listening, transcript]);
+
+  useEffect(() => {
+    const restartListening = async () => {
+      try {
+        console.log('▶️ Restarting listening due to language/isCovered change...');
+        await SpeechRecognition.stopListening();
+        // 0.3초 기다렸다가 시작 (마이크가 완전히 멈추도록)
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        await SpeechRecognition.startListening({
+          continuous: true,
+          language: langCode,
+        });
+        console.log('▶️ Started listening with language:', langCode);
+      } catch (error) {
+        console.error('Error restarting listening:', error);
+      }
+    };
+
+    if (!isCovered) {
+      restartListening();
+    }
+  }, [language, isCovered, langCode]);
 
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
@@ -124,7 +180,13 @@ const Voice = () => {
             backdrop-blur-md
           "
           onClick={() => {
-            setIsCovered(false); // ✅ 마이크 재시작은 useEffect가 담당
+            setIsCovered(false);
+            setTimeout(() => {
+              SpeechRecognition.startListening({
+                continuous: true,
+                language: langCode,
+              });
+            }, 200); // 상호작용 후 딜레이 두고 시작
           }}
         >
           <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
@@ -155,8 +217,8 @@ const Voice = () => {
         <p className='text-sm text-gray-600'>
           {listening
             ? language === 'en'
-              ? 'Listening for the keyword...'
-              : '키워드 말랑아 감지중...'
+              ? <>Listening for<br />the keyword...</>
+              : <>키워드 말랑아<br />감지중...</>
             : language === 'en'
             ? 'Waiting...'
             : '대기 중'}
