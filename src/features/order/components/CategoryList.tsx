@@ -27,12 +27,9 @@ const CategoryList = () => {
 
   return (
     <div className="flex">
-      <aside className="bg-ml-yellow rounded-xl shadow-lg p-4 mt-4 mb-6 ml-4 w-40 flex flex-col select-none">
-        {/* 상단 로고 & 타이틀 */}
-
-
+      <aside className="bg-slate-800 rounded-xl shadow-lg p-4 mt-4 mb-6 ml-4 w-40 flex flex-col select-none">
         {/* 카테고리 목록 */}
-        <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-ml-yellow-light scrollbar-track-ml-yellow/20">
+        <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-indigo-900/30">
           <ul className="flex flex-col gap-2">
             {categories.map((category) => {
               const isActive =
@@ -47,8 +44,8 @@ const CategoryList = () => {
                     className={clsx(
                       'w-full py-3 rounded-lg text-center transition-colors duration-300 ease-in-out text-sm font-semibold',
                       isActive
-                        ? 'bg-white text-ml-yellow shadow-lg underline decoration-ml-yellow decoration-2 underline-offset-4'
-                        : 'text-white hover:bg-white/30 hover:text-ml-yellow'
+                        ? 'bg-indigo-100 text-indigo-900 shadow-lg underline decoration-indigo-600 decoration-2 underline-offset-4'
+                        : 'text-indigo-200 hover:bg-indigo-200 hover:text-indigo-800'
                     )}
                   >
                     {category.category_name}
@@ -64,8 +61,8 @@ const CategoryList = () => {
           <button
             onClick={handleOrderHistoryClick}
             className={clsx(
-              'w-full font-semibold py-3 rounded-md text-sm bg-white text-ml-yellow transition duration-200 ease-in-out hover:brightness-90 shadow-sm',
-              currentView === 'orderHistory' && 'shadow-inner'
+              'w-full font-semibold py-3 rounded-md text-sm bg-indigo-100 text-indigo-900 transition duration-200 ease-in-out hover:brightness-90 shadow-sm',
+              currentView === 'orderHistory' && 'shadow-inner ring-2 ring-indigo-500'
             )}
           >
             주문 내역 조회
@@ -73,6 +70,7 @@ const CategoryList = () => {
         </div>
       </aside>
     </div>
+
   );
 };
 

@@ -98,27 +98,50 @@ const Voice = () => {
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
-        <button
-          className='absolute top-0 left-0 flex flex-col items-center justify-center w-screen h-screen p-4 cursor-pointer bg-[#FFFDF6]'
-          onClick={() => {
-            setIsCovered(false);
-            return SpeechRecognition.startListening({
-              continuous: true,
-              language: 'ko-KR',
-            });
-          }}
-        >
-          <div className='absolute top-4 right-4'>
-            <LanguageSelector />
-          </div>
-          <div className='text-[#5C504D] flex flex-col items-center justify-center text-center'>
-            <img src='/logoT.png' width={300} height={300} />
-            <p className='text-5xl mb-8 animate-pulse'>
-              "화면을 터치하여 주문을 시작하세요."
+          <button
+            className="
+              absolute top-0 left-0 w-screen h-screen p-6
+              flex flex-col items-center justify-center
+              cursor-pointer
+              bg-white/70
+              border-4 border-indigo-500
+              rounded-none
+              shadow-xl
+              backdrop-blur-md
+            "
+            onClick={() => {
+              setIsCovered(false);
+              return SpeechRecognition.startListening({
+                continuous: true,
+                language: 'ko-KR',
+              });
+            }}
+          >
+            <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
+              Mallang Order
+            </div>
+
+            <div className="absolute top-6 right-6">
+              <LanguageSelector />
+            </div>
+
+            <img
+              src="/logoT.png"
+              alt="말랑 로고"
+              width={300}
+              height={300}
+              className="mb-10 rounded-lg shadow-lg"
+            />
+
+            <p className="text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight">
+              화면을 터치해<br />
+              주문을 시작하세요
             </p>
-          </div>
-        </button>
-      )}
+          </button>
+        )}
+
+
+
 
       <div className='flex flex-col items-center'>
         <p className='text-sm text-gray-600'>

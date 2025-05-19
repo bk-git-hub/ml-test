@@ -20,7 +20,7 @@ const Cart = () => {
 
   return (
     <>
-      <aside className="w-65 bg-[#FFF9F0] rounded-xl shadow-lg p-6 mt-4 mb-6 mr-6 ml-4 flex flex-col">
+      <aside className="w-65 bg-slate-50 rounded-xl shadow-lg p-6 mt-4 mb-6 mr-6 ml-4 flex flex-col">
         {/* Header */}
         <div className="mb-3">
           <h2 className="text-2xl font-semibold text-gray-800 text-center tracking-wide">
@@ -31,20 +31,18 @@ const Cart = () => {
         {/* 카트 리스트 */}
           <div className="flex-1 overflow-y-auto pr-1">
             {cartItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center mt-16 text-gray-400 select-none">
-                {/* 이미지 넣을 경우 */}
-                <img
-                  src="/public/empty-cart.png" // 이미지 경로 바꿔주세요
-                  alt="빈 장바구니 아이콘"
-                  className="w-12 h-12 mb-4"
-                />
-
-                <p className="text-center text-gray-600 text-base font-medium">
-                  장바구니가 비어 있어요
-                </p>
-                <p className="text-sm text-gray-400 mt-1">
-                  원하는 메뉴를 먼저 골라주세요
-                </p>
+              <div className="flex flex-col items-center justify-center mt-16 text-slate-400 select-none">
+                  <img
+                    src="/public/basket.png"
+                    alt="빈 장바구니 아이콘"
+                    className="w-12 h-12 mb-4"
+                  />
+                  <p className="text-center text-slate-600 text-base font-medium">
+                    장바구니가 비어 있어요
+                  </p>
+                  <p className="text-sm text-slate-400 mt-1">
+                    원하는 메뉴를 먼저 골라주세요
+                  </p>
               </div>
 
             ) : (
@@ -60,25 +58,25 @@ const Cart = () => {
 
           {/* Footer (하단 띄워진 느낌) */}
           {cartItems.length > 0 && (
-            <div className="pt-4 mt-4 bg-[#FFF9F0] border-t">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-base font-medium text-gray-700">총 주문 금액:</span>
-                <span className="text-2xl font-bold text-gradient bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-                  {totalPrice.toLocaleString()}원
-                </span>
-              </div>
+              <div className="pt-4 mt-4 bg-slate-50 border-t border-indigo-100">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-base font-medium text-slate-700">총 주문 금액:</span>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text text-transparent">
+                    {totalPrice.toLocaleString()}원
+                  </span>
+                </div>
 
-              <button
-                onClick={handlePlaceOrder}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600
-                           text-white font-semibold py-4 rounded-xl shadow-md transition duration-300 ease-in-out
-                           focus:outline-none focus:ring-4 focus:ring-yellow-300"
-              >
-                주문하기
-              </button>
-            </div>
-          )}
-        </aside>
+                <button
+                  onClick={handlePlaceOrder}
+                  className="w-full bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800
+                             text-white font-semibold py-4 rounded-xl shadow-md transition duration-300 ease-in-out
+                             focus:outline-none focus:ring-4 focus:ring-indigo-300"
+                >
+                  주문하기
+                </button>
+              </div>
+            )}
+          </aside>
 
 
       <OrderConfirmationModal />

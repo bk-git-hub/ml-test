@@ -16,12 +16,12 @@ const ChatHistory = () => {
   }, [messages]);
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className="flex flex-col h-full">
       <div
-        className="flex-1 p-4 overflow-y-auto bg-white rounded-lg"
+        className="flex-1 p-4 overflow-y-auto bg-indigo-50 rounded-lg"
         style={{
-          boxShadow: '0 8px 16px rgba(0, 0, 0, 1)', // 좀 더 진한 그림자 직접 지정
-          border: '1px solid rgba(0, 0, 0, 0.1)', // 연한 테두리로 대비 향상
+          boxShadow: '0 8px 16px rgba(79, 70, 229, 0.3)', // indigo-600 투명한 그림자
+          border: '1px solid rgba(79, 70, 229, 0.2)', // 연한 인디고 테두리
         }}
       >
         {messages.length === 0 ? (

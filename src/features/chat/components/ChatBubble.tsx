@@ -15,9 +15,9 @@ export default function ChatBubble({
         className={`max-w-[70%] rounded-lg px-4 py-2 ${
           isUser
             ? isUpdating
-              ? 'bg-[#F4C7AB] text-[#3D2B27] rounded-br-none shadow-md'
-              : 'bg-[#F4C7AB] text-[#3D2B27] rounded-br-none shadow-md'
-            : 'bg-[#FFE8D6] text-[#5A3E36] rounded-bl-none shadow-md'
+              ? 'bg-indigo-300 text-indigo-900 rounded-br-none shadow-md'
+              : 'bg-indigo-200 text-indigo-900 rounded-br-none shadow-md'
+            : 'bg-indigo-100 text-indigo-700 rounded-bl-none shadow-md'
         }`}
       >
         <span className="text-sm">{message}</span>

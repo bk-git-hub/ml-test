@@ -30,7 +30,7 @@ const CartItem = ({ item }: CartItemProps) => {
   };
 
   return (
-    <div className="flex items-center py-2 border-b border-gray-200 last:border-b-0 mb-1 last:mb-0">
+    <div className="flex items-center py-2 border-b border-indigo-100 last:border-b-0 mb-1 last:mb-0">
       {/* Left: Image */}
       <img
         src={item.menu.imageUrl}
@@ -44,8 +44,8 @@ const CartItem = ({ item }: CartItemProps) => {
 
       {/* Middle: Name and Price */}
       <div className="flex-grow mr-3 min-w-0">
-        <p className="font-semibold text-sm mb-1 whitespace-nowrap">{item.menu.name}</p>
-        <p className="text-xs text-gray-600 whitespace-nowrap">
+        <p className="font-semibold text-sm mb-1 text-slate-800 whitespace-nowrap">{item.menu.name}</p>
+        <p className="text-xs text-slate-600 whitespace-nowrap">
           {item.menu.price.toLocaleString()}원
         </p>
       </div>
@@ -54,22 +54,22 @@ const CartItem = ({ item }: CartItemProps) => {
       <div className="flex items-center flex-shrink-0 space-x-1">
         <button
           onClick={handleDecrease}
-          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-indigo-100 transition-colors"
           aria-label="Decrease quantity"
         >
-          <MinusIcon className="w-3.5 h-3.5 text-gray-600" />
+          <MinusIcon className="w-3.5 h-3.5 text-indigo-500" />
         </button>
-        <span className="text-center font-medium text-sm w-5">{item.quantity}</span>
+        <span className="text-center font-medium text-sm w-5 text-slate-700">{item.quantity}</span>
         <button
           onClick={handleIncrease}
-          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+          className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-indigo-100 transition-colors"
           aria-label="Increase quantity"
         >
-          <PlusIcon className="w-3.5 h-3.5 text-gray-600" />
+          <PlusIcon className="w-3.5 h-3.5 text-indigo-500" />
         </button>
       </div>
-
     </div>
+
 
   );
 };

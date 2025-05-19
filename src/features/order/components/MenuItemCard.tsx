@@ -17,9 +17,9 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
 
   return (
     <div
-      className={`bg-ml-yellow-light rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col p-4 gap-4 items-center ${
+      className={`bg-indigo-100 rounded-lg shadow hover:shadow-md transition-shadow duration-200 ease-in-out overflow-hidden flex flex-col p-4 gap-4 items-center ${
         isSearched
-          ? 'animate-[pulse_1s_ease-in-out_5] border-2 border-ml-yellow-light ring-2 ring-ml-yellow-light'
+          ? 'animate-[pulse_1s_ease-in-out_5] border-2 border-indigo-300 ring-2 ring-indigo-300'
           : ''
       }`}
     >
@@ -37,12 +37,11 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
       />
 
       {/* Content Area */}
-      <div className='flex flex-col flex-grow w-full'>
+      <div className="flex flex-col flex-grow w-full">
         {/* Name and Price */}
-        <div className='flex-grow mb-3'>
-
+        <div className="flex-grow mb-3">
           <h3
-            className={`font-semibold text-md mb-1 truncate text-center ${
+            className={`font-semibold text-md mb-1 truncate text-center text-indigo-900 ${
               isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
             }`}
             title={menu.name}
@@ -50,7 +49,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
             {menu.name}
           </h3>
           <p
-            className={`text-sm text-gray-700 text-center ${
+            className={`text-sm text-indigo-700 text-center ${
               isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
             }`}
           >
@@ -60,7 +59,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
         {/* Add to Cart Button */}
         <button
           onClick={handleAddToCart}
-          className={`mt-auto w-full bg-white hover:brightness-110 font-semibold py-2 px-3 rounded text-sm transition-colors duration-150 ease-in-out ${
+          className={`mt-auto w-full bg-white hover:bg-indigo-200 font-semibold py-2 px-3 rounded text-sm transition-colors duration-150 ease-in-out ${
             isSearched ? 'animate-[pulse_1s_ease-in-out_5]' : ''
           }`}
         >
@@ -72,3 +71,4 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
 };
 
 export default MenuItemCard;
+
