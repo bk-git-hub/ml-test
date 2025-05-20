@@ -4,11 +4,15 @@ import { CartItemType } from '../types';
 import { useOrderStore } from '../store/orderStore';
 import OrderConfirmationModal from './OrderConfirmationModal';
 import { useLanguageStore } from '@/store/languageStore';
+import { useParams } from 'react-router-dom';
+import { useKioskStore } from '@/store/kioskStore';
 
 const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const { setShowOrderModal } = useOrderStore();
   const { language } = useLanguageStore();
+  const { kioskId } = useParams();
+  const { kioskId: storeKioskId } = useKioskStore();
 
   const t = {
     cartTitle: language === 'ko' ? '장바구니' : 'Cart',
@@ -28,8 +32,37 @@ const Cart = () => {
     0
   );
 
-  const handlePlaceOrder = () => {
-    setShowOrderModal(true);
+  const handlePlaceOrder = async () => {
+    try {
+      const orderItems = cartItems.map((item) => ({
+        menuId: item.menu.menuId,
+        quantity: item.quantity,
+      }));
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/order`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            kioskId: Number(kioskId),
+            items: orderItems,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      // 주문 성공 시 모달 표시
+      setShowOrderModal(true);
+    } catch (error) {
+      console.error('Error placing order:', error);
+      // TODO: 에러 처리 (예: 에러 메시지 표시)
+    }
   };
 
   return (
