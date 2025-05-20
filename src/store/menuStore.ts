@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Menu, Category, MenuResponse } from '../types/menu';
+import { useNavigationStore } from './navigationStore';
 
 interface MenuState {
   categories: Category[];
@@ -39,6 +40,13 @@ export const useMenuStore = create<MenuState>()(
             categories: filteredCategories,
             isLoading: false,
           });
+
+          // Set the first category as selected if there are categories
+          if (filteredCategories.length > 0) {
+            useNavigationStore
+              .getState()
+              .setCurrentCategory(filteredCategories[0].categoryId);
+          }
         } catch (error) {
           set({
             error: '메뉴를 불러오는데 실패했습니다',

@@ -35,7 +35,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   initializeCategory: () => {
     const { categories } = useMenuStore.getState();
     if (categories.length > 0 && get().currentCategoryId === null) {
-      set({ currentCategoryId: categories[0].category_id });
+      set({ currentCategoryId: categories[0].categoryId });
     }
   },
 }));
