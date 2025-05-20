@@ -48,10 +48,10 @@ const OrderHistoryPage: React.FC = () => {
               <span
                 className={`px-3 py-1 rounded-full text-sm ${
                   order.status === 'completed'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-indigo-100 text-indigo-800'      // 인디고 계열
                     : order.status === 'pending'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-gray-100 text-gray-800'
+                    ? 'bg-yellow-100 text-yellow-800'      // 인디고와 대비되는 노랑 계열
+                    : 'bg-gray-100 text-gray-800'           // 중립 회색 계열
                 }`}
               >
                 {getStatusLabel(order.status)}
@@ -63,14 +63,14 @@ const OrderHistoryPage: React.FC = () => {
                   <span>
                     {item.menuName} x {item.quantity}
                   </span>
-                  <span>{(item.price * item.quantity).toLocaleString()}\</span>
+                  <span>{(item.price * item.quantity).toLocaleString()} ₩</span>
                 </div>
               ))}
             </div>
             <div className='border-t pt-3'>
               <div className='flex justify-between font-semibold'>
                 <span>{language === 'en' ? 'Total Amount' : '총 금액'}</span>
-                <span>{order.totalAmount.toLocaleString()}원</span>
+                <span>{order.totalAmount.toLocaleString()} ₩</span>
               </div>
             </div>
           </div>
