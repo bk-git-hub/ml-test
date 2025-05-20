@@ -2,15 +2,13 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Menu, Category } from '../types/menu';
-import { mapResMenuToMenu } from '../utils/menuMapper'; // 경로 맞춰서 import 하세요
+import { Menu, Category, MenuResponse } from '../types/menu';
 
 interface MenuState {
-  menus: Record<number, Menu[]>;
   categories: Category[];
   isLoading: boolean;
   error: string | null;
-  fetchAllMenus: () => Promise<void>;
+  fetchMenusByCategory: (kioskId: number) => Promise<void>;
   getMenusByCategory: (categoryId: number) => Menu[];
   getCategoryById: (categoryId: number) => Category | undefined;
 }
@@ -18,35 +16,27 @@ interface MenuState {
 export const useMenuStore = create<MenuState>()(
   persist(
     (set, get) => ({
-      menus: {},
       categories: [],
       isLoading: false,
       error: null,
 
-      fetchAllMenus: async () => {
+      fetchMenusByCategory: async (kioskId: number) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await fetch('/api/menus/all');
-          const data = await response.json();
+          const response = await fetch(
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/kiosk/${kioskId}/menu-by-category`
+          );
+          const data: MenuResponse = await response.json();
 
-          // API에서 받은 ResMenu[] → Menu[] 변환
-          const menus = mapResMenuToMenu(data.menus);
-
-          // 카테고리별 메뉴 그룹화
-          const menusByCategory = menus.reduce(
-            (acc: Record<number, Menu[]>, menu: Menu) => {
-              if (!acc[menu.categoryId]) {
-                acc[menu.categoryId] = [];
-              }
-              acc[menu.categoryId].push(menu);
-              return acc;
-            },
-            {}
+          // Filter out the "전체" category
+          const filteredCategories = data.filter(
+            (category) => category.categoryName !== '전체'
           );
 
           set({
-            menus: menusByCategory,
-            categories: data.categories,
+            categories: filteredCategories,
             isLoading: false,
           });
         } catch (error) {
@@ -59,19 +49,21 @@ export const useMenuStore = create<MenuState>()(
       },
 
       getMenusByCategory: (categoryId: number) => {
-        return get().menus[categoryId] || [];
+        const category = get().categories.find(
+          (category) => category.categoryId === categoryId
+        );
+        return category?.menus || [];
       },
 
       getCategoryById: (categoryId: number) => {
         return get().categories.find(
-          (category) => category.category_id === categoryId
+          (category) => category.categoryId === categoryId
         );
       },
     }),
     {
       name: 'menu-storage',
       partialize: (state) => ({
-        menus: state.menus,
         categories: state.categories,
       }),
     }

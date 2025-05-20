@@ -1,15 +1,16 @@
 export interface Menu {
-  id: number;
-  name: string;
-  name_en: string;
-  price: number;
+  menuId: number;
+  menuName: string;
+  menuNameEn: string;
+  menuPrice: number;
   imageUrl: string;
-  categoryId: number;
 }
 
-// ✅ Category 타입 정의
 export interface Category {
-  category_id: number;
-  name: string;
-  name_en: string;
+  categoryId: number;
+  categoryName: string;
+  categoryNameEn: string;
+  menus: Menu[];
 }
+
+export type MenuResponse = Category[];
