@@ -19,8 +19,8 @@ const OrderContent = () => {
       fetchMenusByCategory(Number(kioskId));
     }
   }, [kioskId, fetchMenusByCategory]);
-  return <div>ordercontent</div>;
-  //   return currentView === 'menu' ? <MenuContent /> : <OrderHistoryPage />;
+
+  return currentView === 'menu' ? <MenuContent /> : <div>history</div>;
 };
 
 export default OrderContent;
