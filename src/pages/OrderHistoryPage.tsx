@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useOrderStore } from '@/store/orderStore';
+import { useOrderHistoryStore } from '@/store/orderHistoryStore';
 import { useLanguageStore } from '@/store/languageStore';
 
 const OrderHistoryPage: React.FC = () => {
-  const { orders, fetchOrders, isLoading, error } = useOrderStore();
+  const { orders, fetchOrders, isLoading, error } = useOrderHistoryStore();
   const { language } = useLanguageStore();
 
   useEffect(() => {
@@ -26,12 +26,20 @@ const OrderHistoryPage: React.FC = () => {
         {language === 'en' ? 'Order History' : '주문 내역'}
       </h1>
 
-      {isLoading && <p>{language === 'en' ? 'Loading orders...' : '주문 내역을 불러오는 중...'}</p>}
+      {isLoading && (
+        <p>
+          {language === 'en'
+            ? 'Loading orders...'
+            : '주문 내역을 불러오는 중...'}
+        </p>
+      )}
       {error && <p className='text-red-600'>{error}</p>}
 
       <div className='space-y-4'>
         {orders.length === 0 && !isLoading && (
-          <p>{language === 'en' ? 'No orders found.' : '주문 내역이 없습니다.'}</p>
+          <p>
+            {language === 'en' ? 'No orders found.' : '주문 내역이 없습니다.'}
+          </p>
         )}
 
         {orders.map((order) => (
@@ -39,19 +47,22 @@ const OrderHistoryPage: React.FC = () => {
             <div className='flex justify-between items-start mb-3'>
               <div>
                 <h2 className='text-lg font-semibold'>
-                  {language === 'en' ? 'Order Number' : '주문번호'}: {order.orderNumber}
+                  {language === 'en' ? 'Order Number' : '주문번호'}:{' '}
+                  {order.orderNumber}
                 </h2>
                 <p className='text-sm text-gray-500'>
-                  {new Date(order.createdAt).toLocaleString(language === 'en' ? 'en-US' : 'ko-KR')}
+                  {new Date(order.createdAt).toLocaleString(
+                    language === 'en' ? 'en-US' : 'ko-KR'
+                  )}
                 </p>
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-sm ${
                   order.status === 'completed'
-                    ? 'bg-indigo-100 text-indigo-800'      // 인디고 계열
+                    ? 'bg-indigo-100 text-indigo-800' // 인디고 계열
                     : order.status === 'pending'
-                    ? 'bg-yellow-100 text-yellow-800'      // 인디고와 대비되는 노랑 계열
-                    : 'bg-gray-100 text-gray-800'           // 중립 회색 계열
+                    ? 'bg-yellow-100 text-yellow-800' // 인디고와 대비되는 노랑 계열
+                    : 'bg-gray-100 text-gray-800' // 중립 회색 계열
                 }`}
               >
                 {getStatusLabel(order.status)}
