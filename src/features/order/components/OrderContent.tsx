@@ -20,7 +20,7 @@ const OrderContent = () => {
     }
   }, [kioskId, fetchMenusByCategory]);
 
-  return currentView === 'menu' ? <MenuContent /> : <div>history</div>;
+  return currentView === 'menu' ? <MenuContent /> : <OrderHistoryPage />;
 };
 
 export default OrderContent;
