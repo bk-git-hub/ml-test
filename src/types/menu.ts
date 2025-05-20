@@ -13,13 +13,3 @@ export interface Category {
   name: string;
   name_en: string;
 }
-
-// ✅ ResMenu 타입 정의
-export interface ResMenu {
-  menu_id: number;
-  menu_name: string;
-  menu_name_en: string;
-  menu_price: number;
-  menu_img_url: string;
-  category_id: number;
-}
