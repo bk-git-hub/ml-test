@@ -226,25 +226,26 @@ const Voice = () => {
 
 
 
-      <div className='flex flex-col items-center'>
-        <p className='text-sm text-gray-600'>
-          {listening
-            ? language === 'en'
-              ? <>Listening for<br />the keyword...</>
-              : <>키워드 말랑아<br />감지중...</>
-            : language === 'en'
-            ? 'Waiting...'
-            : '대기 중...'}
-        </p>
-      </div>
+      <div className="flex flex-col items-center">
+              <p className="text-sm text-indigo-600">
+                {listening
+                  ? language === 'en'
+                    ? <>Listening for<br />the keyword…</>
+                    : <>키워드 말랑아<br />감지중…</>
+                  : language === 'en'
+                  ? 'Waiting…'
+                  : '대기 중…'}
+              </p>
+            </div>
 
-      {isCapturing && (
-        <div className='bg-blue-50 rounded-lg border bg-ml-yellow-light border border-ml-yellow p-2 mt-2'>
-          <p className='text-sm text-black mb-1'>
-            {language === 'en' ? 'Recognizing speech...' : '음성 인식 중...'}
-          </p>
-        </div>
-      )}
+            {isCapturing && (
+              <div className="bg-indigo-100 rounded-lg border border-indigo-300 p-2 mt-2 shadow-sm">
+                <p className="text-sm text-indigo-900 mb-1">
+                  {language === 'en' ? 'Recognizing speech…' : '음성 인식 중…'}
+                </p>
+              </div>
+            )}
+
     </div>
   );
 };

@@ -48,7 +48,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
           <h3 className="font-semibold text-md mb-1 truncate text-center text-indigo-900" title={translatedName}>
             {translatedName}
           </h3>
-          <p className="text-sm text-indigo-700 text-center">{menu.price.toLocaleString()}₩</p>
+          <p className="text-sm text-indigo-700 text-center">{menu.price.toLocaleString()} ₩</p>
         </div>
         <button
           onClick={handleAddToCart}

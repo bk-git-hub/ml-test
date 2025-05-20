@@ -71,7 +71,7 @@ const Cart = () => {
             <div className="flex justify-between items-center mb-4">
               <span className="text-base font-medium text-slate-700">{t.totalLabel}</span>
               <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text text-transparent">
-                {totalPrice.toLocaleString()} \
+                {totalPrice.toLocaleString()} ₩
               </span>
             </div>
 

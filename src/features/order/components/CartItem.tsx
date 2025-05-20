@@ -31,7 +31,7 @@ const CartItem = ({ item }: CartItemProps) => {
   const translatedName =
     language === 'en' && item.menu.name_en ? item.menu.name_en : item.menu.name;
 
-  const translatedCurrency = language === 'en' ? '₩' : '원';
+  const translatedCurrency = language === 'en' ? '₩' : '₩';
 
   return (
     <div className="flex items-center py-2 border-b border-indigo-100 last:border-b-0 mb-1 last:mb-0">
