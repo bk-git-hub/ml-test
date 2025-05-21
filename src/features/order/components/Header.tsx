@@ -1,7 +1,7 @@
 import { useLanguageStore } from '@/store/languageStore';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import SpeechRecognition from 'react-speech-recognition';
 const Header = () => {
   const { language, toggleLanguage } = useLanguageStore();
   const { kioskId } = useParams();
@@ -105,7 +105,15 @@ const Header = () => {
 
         {/* 언어 토글 버튼 */}
         <button
-          onClick={toggleLanguage}
+          onClick={() => {
+            console.log('한영 전환');
+            toggleLanguage();
+            SpeechRecognition.stopListening();
+            return SpeechRecognition.startListening({
+              continuous: true,
+              language: language === 'ko' ? 'ko-KR' : 'en-US',
+            });
+          }}
           className='bg-indigo-200 hover:bg-indigo-300 text-indigo-900 font-semibold py-1 px-3 rounded transition-colors'
           aria-label='Toggle language'
         >
