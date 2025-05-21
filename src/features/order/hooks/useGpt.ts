@@ -4,7 +4,8 @@ import { useCartStore } from '@/store/cartStore';
 import { useMenuStore } from '@/store/menuStore';
 import { useNavigationStore } from '@/store/navigationStore';
 import { useOrderStore } from '../store/orderStore';
-
+import { getSpeech } from '@/utils/getSpeech';
+import { useLanguageStore } from '@/store/languageStore';
 interface UseTextApiProps {
   apiUrl: string;
 }
@@ -40,6 +41,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     useNavigationStore();
   const { setShowOrderModal } = useOrderStore();
   const { clearCart } = useCartStore();
+  const { language } = useLanguageStore();
 
   const processIntent = (
     intent: string,
@@ -159,6 +161,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           isUser: false,
           timestamp: Date.now(),
         });
+        getSpeech(data.chat_message, language === 'en' ? 'en' : 'ko');
       }
 
       // Process the intent
