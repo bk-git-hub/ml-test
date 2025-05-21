@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import SpeechRecognition from 'react-speech-recognition';
 const Header = () => {
   const { language, toggleLanguage } = useLanguageStore();
-  const { kioskId } = useParams();
+  const { kioskId, kioskNumber } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ const Header = () => {
         <div className='text-lg font-semibold text-indigo-900 flex items-center gap-2'>
           <span>{language === 'en' ? 'Table Number:' : '테이블 번호:'}</span>
           <span className='bg-indigo-300 w-10 h-10 rounded-full flex items-center justify-center text-2xl text-indigo-900 font-bold shadow-sm select-none'>
-            5
+            {kioskNumber}
           </span>
         </div>
 

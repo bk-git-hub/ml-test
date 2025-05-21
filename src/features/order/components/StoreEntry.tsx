@@ -34,7 +34,7 @@ const StoreEntry = () => {
       }
 
       setKioskData(data);
-      navigate(`/${data.adminId}/${data.kioskId}/${data.kioskNumber}/order`);
+      navigate(`/${data.adminId}/${data.kioskId}/${kioskNumber}/order`);
     } catch (error: any) {
       console.error('Error activating kiosk:', error);
       toast.error(error.message || 'Failed to activate kiosk');
