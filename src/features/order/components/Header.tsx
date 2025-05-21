@@ -111,7 +111,7 @@ const Header = () => {
             SpeechRecognition.stopListening();
             return SpeechRecognition.startListening({
               continuous: true,
-              language: language === 'ko' ? 'ko-KR' : 'en-US',
+              language: language === 'ko' ? 'en-US' : 'ko-KR',
             });
           }}
           className='bg-indigo-200 hover:bg-indigo-300 text-indigo-900 font-semibold py-1 px-3 rounded transition-colors'
