@@ -80,7 +80,7 @@ const Cart = () => {
           {cartItems.length === 0 ? (
             <div className='flex flex-col items-center justify-center mt-16 text-slate-400 select-none'>
               <img
-                src='/public/basket.png'
+                src='/basket.png'
                 alt='empty cart'
                 className='w-12 h-12 mb-4'
               />
