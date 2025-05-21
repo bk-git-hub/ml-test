@@ -39,7 +39,7 @@ const MenuItemCard = ({ menu, isSearched }: MenuItemCardProps) => {
       <img
         src={menu.imageUrl}
         alt={translatedName}
-        className='w-[80%] object-cover'
+        className='w-[80%] aspect-square object-cover'
         onError={(e) => {
           (e.target as HTMLImageElement).src = '/logo.png';
         }}
