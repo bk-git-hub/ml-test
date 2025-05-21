@@ -10,6 +10,7 @@ const CategoryList = () => {
     initializeCategory,
     setCurrentView,
     currentView,
+    setCurrentMenu,
   } = useNavigationStore();
   const { categories } = useMenuStore();
   const { language } = useLanguageStore(); // 'ko' 또는 'en'
@@ -23,6 +24,7 @@ const CategoryList = () => {
   }
 
   const handleCategoryClick = (categoryId: number) => {
+    setCurrentMenu(null);
     setCurrentView('menu');
     setCurrentCategory(categoryId === currentCategoryId ? null : categoryId);
   };
