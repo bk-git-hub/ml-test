@@ -19,4 +19,7 @@ export default defineConfig({
       },
     ],
   },
+  preview: {
+    port: 3000, // <-- 여기서 포트를 지정
+  },
 });
