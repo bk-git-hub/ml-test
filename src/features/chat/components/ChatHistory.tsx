@@ -3,12 +3,13 @@ import ChatBubble from './ChatBubble';
 import { useEffect, useRef } from 'react';
 import { useLanguageStore } from '@/store/languageStore';
 import { getSpeech } from '@/utils/getSpeech';
-
+import { useVoiceStore } from '@/features/order/store/voiceStore';
 const ChatHistory = () => {
   const messages = useChatStore((state) => state.messages);
   const isCapturing = useChatStore((state) => state.isCapturing);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguageStore();
+  const { isCovered } = useVoiceStore();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -19,11 +20,12 @@ const ChatHistory = () => {
   }, [messages]);
 
   useEffect(() => {
+    if (isCovered) return;
     const testTTS = () => {
       try {
         const testMessage =
           language === 'en'
-            ? 'Hello! How can I assist you today?'
+            ? 'Hello! How may I help you?'
             : '안녕하세요! 어떤 도움이 필요하신가요?';
 
         console.log('Testing TTS with message:', testMessage);
@@ -34,7 +36,7 @@ const ChatHistory = () => {
     };
 
     testTTS();
-  }, [language]);
+  }, [language, isCovered]);
 
   return (
     <div className='flex flex-col h-full'>
@@ -49,7 +51,7 @@ const ChatHistory = () => {
           <ChatBubble
             message={
               language === 'en'
-                ? 'Hello! How can I assist you today?'
+                ? 'Hello! How may I help you?'
                 : '안녕하세요! 어떤 도움이 필요하신가요?'
             }
             isUser={false}
