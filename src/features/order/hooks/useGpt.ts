@@ -145,8 +145,8 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          admin_id: 1,
-          kiosk_id: 33,
+          admin_id: admin_id,
+          kiosk_id: kiosk_id,
           text: text,
         }),
       });
