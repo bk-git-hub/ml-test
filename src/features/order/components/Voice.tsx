@@ -24,9 +24,10 @@ const Voice = () => {
   const langCode = language === 'en' ? 'en-US' : 'ko-KR';
 
   // 여러 키워드 배열
-  const KEYWORDS = language === 'en'
-    ? ['malang', 'hello', 'start']  // 영어 키워드 예시//////////////////////////////////////////추가 가능
-    : ['말랑아', '빨랑아', '빨랑 와'];     // 한국어 키워드 예시
+  const KEYWORDS =
+    language === 'en'
+      ? ['malang', 'hello', 'start'] // 영어 키워드 예시//////////////////////////////////////////추가 가능
+      : ['말랑아', '빨랑아', '빨랑 와']; // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
@@ -39,7 +40,11 @@ const Voice = () => {
     if (transcript) {
       lastTextTimeRef.current = Date.now();
 
-      if (isCapturing && keywordIndexRef.current !== -1 && detectedKeywordRef.current) {
+      if (
+        isCapturing &&
+        keywordIndexRef.current !== -1 &&
+        detectedKeywordRef.current
+      ) {
         const textAfterKeyword = transcript
           .slice(keywordIndexRef.current + detectedKeywordRef.current.length)
           .trim();
@@ -146,7 +151,9 @@ const Voice = () => {
   useEffect(() => {
     const restartListening = async () => {
       try {
-        console.log('▶️ Restarting listening due to language/isCovered change...');
+        console.log(
+          '▶️ Restarting listening due to language/isCovered change...'
+        );
         await SpeechRecognition.stopListening();
         // 0.3초 기다렸다가 시작 (마이크가 완전히 멈추도록)
         await new Promise((resolve) => setTimeout(resolve, 300));
@@ -169,7 +176,7 @@ const Voice = () => {
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
       {isCovered && (
         <div
-          className="
+          className='
             absolute top-0 left-0 w-screen h-screen p-6
             flex flex-col items-center justify-center
             cursor-pointer
@@ -178,7 +185,7 @@ const Voice = () => {
             rounded-none
             shadow-xl
             backdrop-blur-md
-          "
+          '
           onClick={() => {
             setIsCovered(false);
             setTimeout(() => {
@@ -189,12 +196,12 @@ const Voice = () => {
             }, 200);
           }}
         >
-          <div className="absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md">
+          <div className='absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md'>
             Mallang Order
           </div>
 
           {/* ✅ 한/영 전환 버튼 */}
-          <div className="absolute top-6 right-6">
+          <div className='absolute top-6 right-6'>
             <button
               onClick={(e) => {
                 e.stopPropagation(); // 💥 prevent parent div click
@@ -202,21 +209,21 @@ const Voice = () => {
                   language: state.language === 'en' ? 'ko' : 'en',
                 }));
               }}
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition"
+              className='px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition'
             >
               {language === 'en' ? '한글' : 'ENG'}
             </button>
           </div>
 
           <img
-            src="/logoT.png"
-            alt="말랑 로고"
+            src='/logoT.png'
+            alt='말랑 로고'
             width={300}
             height={300}
-            className="mb-10 rounded-lg shadow-lg"
+            className='mb-10 rounded-lg shadow-lg'
           />
 
-          <p className="text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight whitespace-pre-line">
+          <p className='text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight whitespace-pre-line'>
             {language === 'en'
               ? 'Touch the screen\nto start your order'
               : '화면을 터치해\n주문을 시작하세요'}
@@ -224,28 +231,37 @@ const Voice = () => {
         </div>
       )}
 
-
-
-      <div className="flex flex-col items-center">
-              <p className="text-sm text-indigo-600">
-                {listening
-                  ? language === 'en'
-                    ? <>Listening for<br />the keyword…</>
-                    : <>키워드 말랑아<br />감지중…</>
-                  : language === 'en'
-                  ? 'Waiting…'
-                  : '대기 중…'}
-              </p>
-            </div>
-
-            {isCapturing && (
-              <div className="bg-indigo-100 rounded-lg border border-indigo-300 p-2 mt-2 shadow-sm">
-                <p className="text-sm text-indigo-900 mb-1">
-                  {language === 'en' ? 'Recognizing speech…' : '음성 인식 중…'}
-                </p>
-              </div>
+      {isCapturing ? (
+        <div className='bg-indigo-100 rounded-lg border border-indigo-300 p-2 mt-2 shadow-sm'>
+          <p className='text-sm text-indigo-900 mb-1'>
+            {language === 'en' ? 'Recognizing speech…' : '음성 인식 중…'}
+          </p>
+        </div>
+      ) : (
+        <div className='flex flex-col items-center'>
+          <p className='text-sm text-indigo-600'>
+            {listening ? (
+              language === 'en' ? (
+                <>
+                  Listening for
+                  <br />
+                  the keyword…
+                </>
+              ) : (
+                <>
+                  키워드 말랑아
+                  <br />
+                  감지중…
+                </>
+              )
+            ) : language === 'en' ? (
+              'Waiting…'
+            ) : (
+              '대기 중…'
             )}
-
+          </p>
+        </div>
+      )}
     </div>
   );
 };
