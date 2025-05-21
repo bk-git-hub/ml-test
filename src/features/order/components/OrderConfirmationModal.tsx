@@ -13,6 +13,7 @@ const OrderConfirmationModal = () => {
         handleOrderConfirmation();
       }, 3000);
 
+      setCountdown(3);
       const countdownTimer = setInterval(() => {
         setCountdown((prev) => prev - 1);
       }, 1000);
