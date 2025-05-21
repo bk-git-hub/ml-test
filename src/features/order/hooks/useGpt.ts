@@ -6,6 +6,7 @@ import { useNavigationStore } from '@/store/navigationStore';
 import { useOrderStore } from '../store/orderStore';
 import { getSpeech } from '@/utils/getSpeech';
 import { useLanguageStore } from '@/store/languageStore';
+import { useParams } from 'react-router-dom';
 interface UseTextApiProps {
   apiUrl: string;
 }
@@ -42,6 +43,8 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const { setShowOrderModal } = useOrderStore();
   const { clearCart } = useCartStore();
   const { language } = useLanguageStore();
+  const { cartItems } = useCartStore();
+  const { kioskId } = useParams();
 
   const processIntent = (
     intent: string,
@@ -105,7 +108,34 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
 
       case 'place_order':
         console.log('주문 확정:', item);
-        setShowOrderModal(true);
+        try {
+          const orderItems = cartItems.map((item) => ({
+            menuId: item.menu.menuId,
+            quantity: item.quantity,
+          }));
+
+          fetch(`${import.meta.env.VITE_API_URL}/api/order`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              kioskId: Number(kioskId),
+              items: orderItems,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Failed to place order');
+              }
+              setShowOrderModal(true);
+            })
+            .catch((error) => {
+              console.error('Error placing order:', error);
+            });
+        } catch (error) {
+          console.error('Error in place_order intent:', error);
+        }
         break;
 
       case 'get_order_history':
