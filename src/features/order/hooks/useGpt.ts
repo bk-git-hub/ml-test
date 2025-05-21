@@ -74,6 +74,13 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
       case 'update_cart':
         console.log('장바구니 수정:', items);
         items.forEach((item) => {
+          // Handle removeall state first
+          if (item.state === 'removeall') {
+            clearCart();
+            return;
+          }
+
+          // Handle other states (add, remove)
           if (
             item.menu_id !== undefined &&
             item.quantity !== undefined &&
@@ -97,9 +104,6 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
                   break;
                 case 'remove':
                   updateQuantity(item.menu_id, item.quantity * -1 || -1);
-                  break;
-                case 'removeall':
-                  clearCart();
                   break;
               }
             }
