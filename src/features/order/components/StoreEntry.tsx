@@ -97,14 +97,28 @@ const StoreEntry = () => {
 
       {/* Right Section */}
       <div className='w-full md:w-1/2 bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center'>
-        <img
-          src='/logoT.png'
-          alt='Mallang character'
-          className='w-3/4 max-h-[80%] object-contain'
-        />
+        <div
+          className='w-48 h-48 rounded-full bg-gradient-to-br from-indigo-200 to-indigo-400
+              text-indigo-900 font-extrabold text-7xl tracking-tight flex items-center justify-center
+              shadow-[0_10px_30px_rgba(99,102,241,0.4)] border border-indigo-300 relative overflow-hidden'
+          style={{
+            fontFamily: "'Pretendard', sans-serif",
+            letterSpacing: '-1.5px',
+          }}
+        >
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #5c6ac4 0%, #3b43a9 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.15))',
+            }}
+          >
+            ML
+          </span>
+        </div>
       </div>
     </div>
   );
 };
-
 export default StoreEntry;
