@@ -7,6 +7,8 @@ import { useOrderStore } from '../store/orderStore';
 import { getSpeech } from '@/utils/getSpeech';
 import { useLanguageStore } from '@/store/languageStore';
 import { useParams } from 'react-router-dom';
+import { useOrderHistoryStore } from '@/store/orderHistoryStore';
+
 interface UseTextApiProps {
   apiUrl: string;
 }
@@ -45,15 +47,28 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const { language } = useLanguageStore();
   const { cartItems } = useCartStore();
   const { kioskId } = useParams();
+  const { fetchOrders, orders } = useOrderHistoryStore();
 
   const processIntent = (
     intent: string,
     items: ResponseItem[],
     admin_id: number,
-    kiosk_id: number
+    kiosk_id: number,
+    chat_message: string
   ) => {
+    let totalAmount: number;
+    let formattedAmount: string;
+    let historyMessage: string;
+    let orders: ReturnType<typeof useOrderHistoryStore.getState>['orders'];
+
     switch (intent) {
       case 'get_category':
+        addMessage({
+          text: chat_message,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
         console.log('카테고리 탐색:', items);
         if (items[0]?.category_id !== null) {
           setCurrentView('menu');
@@ -62,6 +77,13 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'get_menu':
+        addMessage({
+          text: chat_message,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
+
         console.log('메뉴 탐색:', items);
         if (items[0]?.category_id !== null && items[0]?.menu_id !== null) {
           setCurrentView('menu');
@@ -72,6 +94,13 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'update_cart':
+        addMessage({
+          text: chat_message,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
+
         console.log('장바구니 수정:', items);
         items.forEach((item) => {
           // Handle removeall state first
@@ -112,6 +141,13 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'place_order':
+        addMessage({
+          text: chat_message,
+          isUser: false,
+          timestamp: Date.now(),
+        });
+        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
+
         console.log('주문 확정:', items);
         try {
           const orderItems = cartItems.map((item) => ({
@@ -145,7 +181,42 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
 
       case 'get_order_history':
         console.log('주문 내역조회:', items);
-        setCurrentView('orderHistory');
+        fetchOrders(Number(kioskId)).then(() => {
+          const currentOrders = useOrderHistoryStore.getState().orders;
+          totalAmount = currentOrders.reduce((sum, order) => {
+            const orderTotal = order.items.reduce(
+              (itemSum, item) => itemSum + item.menuPrice * item.quantity,
+              0
+            );
+            return sum + orderTotal;
+          }, 0);
+
+          formattedAmount = new Intl.NumberFormat('ko-KR', {
+            style: 'currency',
+            currency: 'KRW',
+          }).format(totalAmount);
+
+          historyMessage =
+            language === 'en'
+              ? `I'll show you your order history. Your total amount is ${formattedAmount}`
+              : `주문 내역을 보여드리겠습니다. 총 주문 금액은 ${formattedAmount}입니다`;
+
+          if (totalAmount === 0) {
+            historyMessage =
+              language === 'en'
+                ? `I'll show you your order history.`
+                : `주문 내역을 보여드리겠습니다. `;
+          }
+
+          addMessage({
+            text: historyMessage,
+            isUser: false,
+            timestamp: Date.now(),
+          });
+          getSpeech(historyMessage, language === 'en' ? 'en' : 'ko');
+
+          setCurrentView('orderHistory');
+        });
         break;
 
       default:
@@ -194,14 +265,6 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
       console.log('GPT Response:', data);
 
       // Add chat message to chat
-      if (data.chat_message) {
-        addMessage({
-          text: data.chat_message,
-          isUser: false,
-          timestamp: Date.now(),
-        });
-        getSpeech(data.chat_message, language === 'en' ? 'en' : 'ko');
-      }
 
       // Process the intent
       if (data.result?.intent) {
@@ -209,7 +272,8 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           data.result.intent,
           data.result.items,
           data.result.admin_id,
-          data.result.kiosk_id
+          data.result.kiosk_id,
+          data.chat_message
         );
       }
 
