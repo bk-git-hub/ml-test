@@ -87,10 +87,10 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           if (foundMenu) {
             switch (item.state) {
               case 'add':
-                addItem(foundMenu, item.quantity);
+                addItem(foundMenu, item.quantity || 1);
                 break;
               case 'remove':
-                updateQuantity(item.menu_id, item.quantity * -1);
+                updateQuantity(item.menu_id, item.quantity * -1 || -1);
                 break;
               case 'removeall':
                 //removeItem(item.menu_id);
