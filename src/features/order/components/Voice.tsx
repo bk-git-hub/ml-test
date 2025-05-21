@@ -4,7 +4,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { useChatStore } from '@/features/chat/store/chatStore';
 import { useVoiceStore } from '../store/voiceStore';
-import LanguageSelector from '@/components/LanguageSelector';
+
 import { useGpt } from '../hooks/useGpt';
 import { useLanguageStore } from '@/store/languageStore';
 
@@ -114,26 +114,26 @@ const Voice = () => {
   }, [transcript, isProcessing, KEYWORDS]);
 
   // ✅ 언어 변경 또는 덮개 해제 시 마이크 재시작 강제 보장 + 디버깅 로그
-  useEffect(() => {
-    const tryStartListening = async () => {
-      console.log('🎤 Restarting listening...');
-      await SpeechRecognition.stopListening();
-      setTimeout(() => {
-        SpeechRecognition.startListening({
-          continuous: true,
-          language: langCode,
-        });
-        setTimeout(() => {
-          console.log('🎧 listening (delayed):', listening);
-          console.log('🗣️ transcript (delayed):', transcript);
-        }, 1000);
-      }, 300);
-    };
+  // useEffect(() => {
+  //   const tryStartListening = async () => {
+  //     console.log('🎤 Restarting listening...');
+  //     await SpeechRecognition.stopListening();
+  //     setTimeout(() => {
+  //       SpeechRecognition.startListening({
+  //         continuous: true,
+  //         language: langCode,
+  //       });
+  //       setTimeout(() => {
+  //         console.log('🎧 listening (delayed):', listening);
+  //         console.log('🗣️ transcript (delayed):', transcript);
+  //       }, 1000);
+  //     }, 300);
+  //   };
 
-    if (!isCovered && !listening) {
-      tryStartListening();
-    }
-  }, [language, isCovered, listening, langCode, transcript]);
+  //   if (!isCovered && !listening) {
+  //     tryStartListening();
+  //   }
+  // }, [language, isCovered, listening, langCode, transcript]);
 
   // 🔇 언마운트 시 마이크 정지
   useEffect(() => {
@@ -147,30 +147,6 @@ const Voice = () => {
     console.log('🎧 listening 상태:', listening);
     console.log('🗣️ transcript:', transcript);
   }, [listening, transcript]);
-
-  useEffect(() => {
-    const restartListening = async () => {
-      try {
-        console.log(
-          '▶️ Restarting listening due to language/isCovered change...'
-        );
-        await SpeechRecognition.stopListening();
-        // 0.3초 기다렸다가 시작 (마이크가 완전히 멈추도록)
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        await SpeechRecognition.startListening({
-          continuous: true,
-          language: langCode,
-        });
-        console.log('▶️ Started listening with language:', langCode);
-      } catch (error) {
-        console.error('Error restarting listening:', error);
-      }
-    };
-
-    if (!isCovered) {
-      restartListening();
-    }
-  }, [language, isCovered, langCode]);
 
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
@@ -188,12 +164,10 @@ const Voice = () => {
           '
           onClick={() => {
             setIsCovered(false);
-            setTimeout(() => {
-              SpeechRecognition.startListening({
-                continuous: true,
-                language: langCode,
-              });
-            }, 200);
+            return SpeechRecognition.startListening({
+              continuous: true,
+              language: langCode,
+            });
           }}
         >
           <div className='absolute top-6 left-6 text-2xl font-bold text-indigo-600 select-none drop-shadow-md'>
@@ -204,7 +178,8 @@ const Voice = () => {
           <div className='absolute top-6 right-6'>
             <button
               onClick={(e) => {
-                e.stopPropagation(); // 💥 prevent parent div click
+                e.stopPropagation();
+                setIsCovered(true);
                 useLanguageStore.setState((state) => ({
                   language: state.language === 'en' ? 'ko' : 'en',
                 }));
@@ -215,13 +190,26 @@ const Voice = () => {
             </button>
           </div>
 
-          <img
-            src='/logoT.png'
-            alt='말랑 로고'
-            width={300}
-            height={300}
-            className='mb-10 rounded-lg shadow-lg'
-          />
+          <div
+            className='w-[300px] h-[300px] rounded-full bg-gradient-to-br from-indigo-200 to-indigo-400
+              text-indigo-900 font-extrabold text-7xl tracking-tight flex items-center justify-center
+              shadow-[0_10px_30px_rgba(99,102,241,0.4)] border border-indigo-300 relative overflow-hidden'
+            style={{
+              fontFamily: "'Pretendard', sans-serif",
+              letterSpacing: '-1.5px',
+            }}
+          >
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #5c6ac4 0%, #3b43a9 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.15))',
+              }}
+            >
+              ML
+            </span>
+          </div>
 
           <p className='text-[2.5rem] sm:text-4xl md:text-5xl font-bold text-indigo-600 text-center animate-pulse select-none leading-tight whitespace-pre-line'>
             {language === 'en'
