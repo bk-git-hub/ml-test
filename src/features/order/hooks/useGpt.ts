@@ -118,7 +118,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     }
   };
 
-  const sendTextToApi = async (text: string): Promise<TextApiResponse> => {
+  const sendTextToApi = async (
+    text: string,
+    admin_id: string,
+    kiosk_id: string
+  ): Promise<TextApiResponse> => {
     if (!apiUrl) {
       throw new Error('API URL이 설정되지 않았습니다.');
     }

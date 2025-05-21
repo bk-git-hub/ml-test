@@ -7,7 +7,7 @@ import { useVoiceStore } from '../store/voiceStore';
 
 import { useGpt } from '../hooks/useGpt';
 import { useLanguageStore } from '@/store/languageStore';
-
+import { useParams } from 'react-router-dom';
 const apiUrl = import.meta.env.VITE_GPT_API_URL;
 
 const Voice = () => {
@@ -19,6 +19,7 @@ const Voice = () => {
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
   const detectedKeywordRef = useRef<string | null>(null);
+  const { adminId, kioskId } = useParams();
 
   const { language } = useLanguageStore();
   const langCode = language === 'en' ? 'en-US' : 'ko-KR';
@@ -65,7 +66,7 @@ const Voice = () => {
         setIsProcessing(false);
 
         if (capturedText) {
-          sendTextToApi(capturedText).catch((err) => {
+          sendTextToApi(capturedText, adminId, kioskId).catch((err) => {
             console.error('Error processing voice input:', err);
           });
         }
