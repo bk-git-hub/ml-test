@@ -34,11 +34,12 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const addMessage = useChatStore((state) => state.addMessage);
-  const { menus } = useMenuStore();
+  const { categories, getMenusByCategory } = useMenuStore();
   const { updateQuantity, removeItem, addItem } = useCartStore();
   const { setCurrentCategory, setCurrentMenu, setCurrentView } =
     useNavigationStore();
   const { setShowOrderModal } = useOrderStore();
+  const { clearCart } = useCartStore();
 
   const processIntent = (
     intent: string,
@@ -72,20 +73,28 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           item.quantity !== undefined &&
           item.state
         ) {
-          const smenu = Object.values(menus)
-            .flat()
-            .find((m) => m.id === item.menu_id);
-          console.log('Smenu:', smenu);
-          if (smenu) {
+          // Find the menu across all categories
+          let foundMenu = null;
+          for (const category of categories) {
+            const menus = getMenusByCategory(category.categoryId);
+            const menu = menus.find((m) => m.menuId === item.menu_id);
+            if (menu) {
+              foundMenu = menu;
+              break;
+            }
+          }
+
+          if (foundMenu) {
             switch (item.state) {
               case 'add':
-                addItem({ ...smenu }, item.quantity);
+                addItem(foundMenu, item.quantity);
                 break;
               case 'remove':
                 updateQuantity(item.menu_id, item.quantity * -1);
                 break;
               case 'removeall':
-                removeItem(item.menu_id);
+                //removeItem(item.menu_id);
+                clearCart();
                 break;
             }
           }

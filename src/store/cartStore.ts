@@ -18,7 +18,7 @@ export const useCartStore = create<CartState>((set) => ({
   addItem: (menu, quantity = 1) =>
     set((state) => {
       const existingItemIndex = state.cartItems.findIndex(
-        (item) => item.menu.id === menu.id
+        (item) => item.menu.menuId === menu.menuId
       );
 
       if (existingItemIndex > -1) {
@@ -39,14 +39,14 @@ export const useCartStore = create<CartState>((set) => ({
   // 액션: 아이템 제거 (기존 cartReducer의 REMOVE_ITEM 로직)
   removeItem: (menuId) =>
     set((state) => ({
-      cartItems: state.cartItems.filter((item) => item.menu.id !== menuId),
+      cartItems: state.cartItems.filter((item) => item.menu.menuId !== menuId),
     })),
 
   // 액션: 수량 변경 (기존 cartReducer의 UPDATE_QUANTITY 로직)
   updateQuantity: (menuId, quantity) =>
     set((state) => {
       const existingItem = state.cartItems.find(
-        (item) => item.menu.id === menuId
+        (item) => item.menu.menuId === menuId
       );
       if (!existingItem) return state;
 
@@ -55,13 +55,17 @@ export const useCartStore = create<CartState>((set) => ({
       if (newQuantity <= 0) {
         // 수량이 0 이하이면 제거
         return {
-          cartItems: state.cartItems.filter((item) => item.menu.id !== menuId),
+          cartItems: state.cartItems.filter(
+            (item) => item.menu.menuId !== menuId
+          ),
         };
       } else {
         // 수량 업데이트
         return {
           cartItems: state.cartItems.map((item) =>
-            item.menu.id === menuId ? { ...item, quantity: newQuantity } : item
+            item.menu.menuId === menuId
+              ? { ...item, quantity: newQuantity }
+              : item
           ),
         };
       }
