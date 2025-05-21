@@ -1,15 +1,19 @@
 import { useOrderStore } from '../store/orderStore';
 import { useLanguageStore } from '@/store/languageStore';
+import { useNavigationStore } from '@/store/navigationStore';
 import { useEffect, useState } from 'react';
-
+import { useMenuStore } from '@/store/menuStore';
 const OrderConfirmationModal = () => {
   const { showOrderModal, handleOrderConfirmation } = useOrderStore();
   const { language } = useLanguageStore();
   const [countdown, setCountdown] = useState(3);
-
+  const { setCurrentCategory, setCurrentView } = useNavigationStore();
+  const { categories } = useMenuStore();
   useEffect(() => {
     if (showOrderModal) {
       const timer = setTimeout(() => {
+        setCurrentCategory(categories[0].categoryId);
+        setCurrentView('menu');
         handleOrderConfirmation();
       }, 3000);
 
