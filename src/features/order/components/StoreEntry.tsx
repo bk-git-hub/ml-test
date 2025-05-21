@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useKioskStore } from '../../../store/kioskStore';
+import { toast } from 'sonner';
 
 const StoreEntry = () => {
   const [storeName, setStoreName] = useState('');
@@ -26,16 +27,17 @@ const StoreEntry = () => {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to activate kiosk');
+        throw new Error(data.message || 'Failed to activate kiosk');
       }
 
-      const data = await response.json();
       setKioskData(data);
       navigate(`/${data.kioskId}/order`);
     } catch (error) {
       console.error('Error activating kiosk:', error);
-      // TODO: Add proper error handling/notification
+      toast.error('Failed to activate kiosk');
     }
   };
 

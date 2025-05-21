@@ -11,6 +11,7 @@ import MainLayout from '../components/layout/MainLayout';
 import OrderContent from '@/features/order/components/OrderContent';
 
 import StoreEntry from '@/features/order/components/StoreEntry';
+import { Toaster } from 'sonner';
 
 const AppRouter = () => {
   return (
@@ -31,6 +32,7 @@ const AppRouter = () => {
 
         {/* Other top-level routes can go here */}
       </Routes>
+      <Toaster />
     </BrowserRouter>
   );
 };
