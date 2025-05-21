@@ -2,6 +2,7 @@ import { useChatStore } from '../store/chatStore';
 import ChatBubble from './ChatBubble';
 import { useEffect, useRef } from 'react';
 import { useLanguageStore } from '@/store/languageStore';
+import { getSpeech } from '@/utils/getSpeech';
 
 const ChatHistory = () => {
   const messages = useChatStore((state) => state.messages);
@@ -17,10 +18,28 @@ const ChatHistory = () => {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    const testTTS = () => {
+      try {
+        const testMessage =
+          language === 'en'
+            ? 'Hello! How can I assist you today?'
+            : '안녕하세요! 어떤 도움이 필요하신가요?';
+
+        console.log('Testing TTS with message:', testMessage);
+        getSpeech(testMessage, language === 'en' ? 'en' : 'ko');
+      } catch (error) {
+        console.error('TTS test failed:', error);
+      }
+    };
+
+    testTTS();
+  }, [language]);
+
   return (
-    <div className="flex flex-col h-full">
+    <div className='flex flex-col h-full'>
       <div
-        className="flex-1 p-4 overflow-y-auto bg-indigo-50 rounded-lg"
+        className='flex-1 p-4 overflow-y-auto bg-indigo-50 rounded-lg'
         style={{
           boxShadow: '0 8px 16px rgba(79, 70, 229, 0.3)', // indigo-600 투명한 그림자
           border: '1px solid rgba(79, 70, 229, 0.2)', // 연한 인디고 테두리
@@ -28,7 +47,11 @@ const ChatHistory = () => {
       >
         {messages.length === 0 ? (
           <ChatBubble
-            message={language === 'en' ? "Hello! How can I assist you today?" : "안녕하세요! 어떤 도움이 필요하신가요?"}
+            message={
+              language === 'en'
+                ? 'Hello! How can I assist you today?'
+                : '안녕하세요! 어떤 도움이 필요하신가요?'
+            }
             isUser={false}
           />
         ) : (
