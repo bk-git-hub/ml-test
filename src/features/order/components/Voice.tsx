@@ -28,7 +28,7 @@ const Voice = () => {
   const KEYWORDS =
     language === 'en'
       ? ['malang', 'hello', 'Malang'] // 영어 키워드 예시//////////////////////////////////////////추가 가능
-      : ['말랑아', '빨랑아', '빨랑 와']; // 한국어 키워드 예시
+      : ['말랑아', '빨랑아', '빨랑 와', '말랑한']; // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
