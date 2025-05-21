@@ -117,7 +117,7 @@ const Header = () => {
           className='bg-indigo-200 hover:bg-indigo-300 text-indigo-900 font-semibold py-1 px-3 rounded transition-colors'
           aria-label='Toggle language'
         >
-          {language === 'en' ? 'KO' : 'EN'}
+          {language === 'en' ? 'KO' : 'ENG'}
         </button>
       </div>
     </header>
