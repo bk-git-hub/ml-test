@@ -48,66 +48,67 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
 
   const processIntent = (
     intent: string,
-    item: ResponseItem,
+    items: ResponseItem[],
     admin_id: number,
     kiosk_id: number
   ) => {
     switch (intent) {
       case 'get_category':
-        console.log('카테고리 탐색:', item);
-        if (item.category_id !== null) {
+        console.log('카테고리 탐색:', items);
+        if (items[0]?.category_id !== null) {
           setCurrentView('menu');
-          setCurrentCategory(item.category_id);
+          setCurrentCategory(items[0].category_id);
         }
         break;
 
       case 'get_menu':
-        console.log('메뉴 탐색:', item);
-        if (item.category_id !== null && item.menu_id !== null) {
+        console.log('메뉴 탐색:', items);
+        if (items[0]?.category_id !== null && items[0]?.menu_id !== null) {
           setCurrentView('menu');
-          setCurrentCategory(item.category_id);
+          setCurrentCategory(items[0].category_id);
           console.log('세팅');
-          setCurrentMenu(item.menu_id);
+          setCurrentMenu(items[0].menu_id);
         }
         break;
 
       case 'update_cart':
-        console.log('장바구니 수정:', item);
-        if (
-          item.menu_id !== undefined &&
-          item.quantity !== undefined &&
-          item.state
-        ) {
-          // Find the menu across all categories
-          let foundMenu = null;
-          for (const category of categories) {
-            const menus = getMenusByCategory(category.categoryId);
-            const menu = menus.find((m) => m.menuId === item.menu_id);
-            if (menu) {
-              foundMenu = menu;
-              break;
+        console.log('장바구니 수정:', items);
+        items.forEach((item) => {
+          if (
+            item.menu_id !== undefined &&
+            item.quantity !== undefined &&
+            item.state
+          ) {
+            // Find the menu across all categories
+            let foundMenu = null;
+            for (const category of categories) {
+              const menus = getMenusByCategory(category.categoryId);
+              const menu = menus.find((m) => m.menuId === item.menu_id);
+              if (menu) {
+                foundMenu = menu;
+                break;
+              }
             }
-          }
 
-          if (foundMenu) {
-            switch (item.state) {
-              case 'add':
-                addItem(foundMenu, item.quantity || 1);
-                break;
-              case 'remove':
-                updateQuantity(item.menu_id, item.quantity * -1 || -1);
-                break;
-              case 'removeall':
-                //removeItem(item.menu_id);
-                clearCart();
-                break;
+            if (foundMenu) {
+              switch (item.state) {
+                case 'add':
+                  addItem(foundMenu, item.quantity || 1);
+                  break;
+                case 'remove':
+                  updateQuantity(item.menu_id, item.quantity * -1 || -1);
+                  break;
+                case 'removeall':
+                  clearCart();
+                  break;
+              }
             }
           }
-        }
+        });
         break;
 
       case 'place_order':
-        console.log('주문 확정:', item);
+        console.log('주문 확정:', items);
         try {
           const orderItems = cartItems.map((item) => ({
             menuId: item.menu.menuId,
@@ -139,7 +140,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'get_order_history':
-        console.log('주문 내역조회:', item);
+        console.log('주문 내역조회:', items);
         setCurrentView('orderHistory');
         break;
 
