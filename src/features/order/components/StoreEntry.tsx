@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import { useKioskStore } from '../../../store/kioskStore';
 import { toast } from 'sonner';
 
@@ -34,10 +34,10 @@ const StoreEntry = () => {
       }
 
       setKioskData(data);
-      navigate(`/${data.kioskId}/order`);
-    } catch (error) {
+      navigate(`/${data.adminId}/${data.kioskId}/order`);
+    } catch (error: any) {
       console.error('Error activating kiosk:', error);
-      toast.error('Failed to activate kiosk');
+      toast.error(error.message || 'Failed to activate kiosk');
     }
   };
 

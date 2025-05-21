@@ -25,7 +25,7 @@ const AppRouter = () => {
         <Route element={<MainLayout />}>
           {/* These routes will render inside MainLayout's <Outlet /> */}
 
-          <Route path='/:kioskId/order' element={<OrderContent />} />
+          <Route path='/:adminId/:kioskId/order' element={<OrderContent />} />
         </Route>
 
         {/* Admin Routes */}
