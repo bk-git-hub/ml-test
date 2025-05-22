@@ -25,7 +25,7 @@ const ChatHistory = () => {
       try {
         const testMessage =
           language === 'en'
-            ? 'Hello! How may I help you?'
+            ? 'Hi! How may I help you?'
             : '안녕하세요! 어떤 도움이 필요하신가요?';
 
         console.log('Testing TTS with message:', testMessage);
@@ -51,7 +51,7 @@ const ChatHistory = () => {
           <ChatBubble
             message={
               language === 'en'
-                ? 'Hello! How may I help you?'
+                ? 'Hi! How may I help you?'
                 : '안녕하세요! 어떤 도움이 필요하신가요?'
             }
             isUser={false}
