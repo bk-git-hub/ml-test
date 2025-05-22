@@ -62,11 +62,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
 
     switch (intent) {
       case 'get_category':
-        addMessage({
-          text: chat_message,
-          isUser: false,
-          timestamp: Date.now(),
-        });
+        updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
         console.log('카테고리 탐색:', items);
         if (items[0]?.category_id !== null) {
@@ -76,11 +72,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'get_menu':
-        addMessage({
-          text: chat_message,
-          isUser: false,
-          timestamp: Date.now(),
-        });
+        updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
         console.log('메뉴 탐색:', items);
@@ -93,11 +85,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'update_cart':
-        addMessage({
-          text: chat_message,
-          isUser: false,
-          timestamp: Date.now(),
-        });
+        updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
         console.log('장바구니 수정:', items);
@@ -140,11 +128,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'place_order':
-        addMessage({
-          text: chat_message,
-          isUser: false,
-          timestamp: Date.now(),
-        });
+        updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
         console.log('주문 확정:', items);
@@ -208,13 +192,8 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
                 : `주문 내역을 보여드리겠습니다. `;
           }
 
-          addMessage({
-            text: historyMessage,
-            isUser: false,
-            timestamp: Date.now(),
-          });
+          updateLastMessage(historyMessage);
           getSpeech(historyMessage, language === 'en' ? 'en' : 'ko');
-
           setCurrentView('orderHistory');
         });
         break;
@@ -242,13 +221,6 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     setError(null);
 
     try {
-      // Add user message to chat
-      // addMessage({
-      //   text: text,
-      //   isUser: true,
-      //   timestamp: Date.now(),
-      // });
-
       // Call GPT API
       const response = await fetch(`${apiUrl}/gpt`, {
         method: 'POST',
