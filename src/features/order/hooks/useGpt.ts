@@ -201,7 +201,9 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       default:
-        console.log('알 수 없는 intent:', intent);
+        updateLastMessage(chat_message);
+        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
+        break;
     }
   };
 
