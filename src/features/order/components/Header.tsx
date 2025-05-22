@@ -48,19 +48,22 @@ const Header = () => {
     <header className="w-full h-16 bg-[url('/background.png')] shadow-md flex items-center justify-between px-6">
       <div className='flex items-center justify-center gap-2'>
         <div
-          className='w-9 aspect-square bg-indigo-100 text-indigo-800 font-extrabold text-sm rounded-full flex items-center justify-center shadow-sm'
-          style={{
-            fontFamily: "'Pretendard', sans-serif",
-            letterSpacing: '-0.5px',
-          }}
+          className='w-9 aspect-square text-sm rounded-full bg-gradient-to-br from-indigo-200 to-indigo-400
+              text-indigo-900 font-extrabold tracking-tight flex items-center justify-center
+              shadow-[0_10px_30px_rgba(99,102,241,0.4)] border border-indigo-300 relative overflow-hidden'
         >
-          ML
+          <span
+            style={{
+              background: 'linear-gradient(135deg, #5c6ac4 0%, #3b43a9 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.15))',
+            }}
+          >
+            ML
+          </span>
         </div>
-
-        <h1
-          className='text-xl font-extrabold text-indigo-900 tracking-tight whitespace-nowrap'
-          style={{ fontFamily: "'Pretendard', sans-serif" }}
-        >
+        <h1 className='text-xl font-extrabold text-indigo-900 tracking-tight whitespace-nowrap'>
           {language === 'en' ? 'Malang Order' : '말랑 오더'}
         </h1>
 

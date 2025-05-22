@@ -203,10 +203,6 @@ const Voice = () => {
             className='w-[300px] h-[300px] rounded-full bg-gradient-to-br from-indigo-200 to-indigo-400
               text-indigo-900 font-extrabold text-7xl tracking-tight flex items-center justify-center
               shadow-[0_10px_30px_rgba(99,102,241,0.4)] border border-indigo-300 relative overflow-hidden'
-            style={{
-              fontFamily: "'Pretendard', sans-serif",
-              letterSpacing: '-1.5px',
-            }}
           >
             <span
               style={{
