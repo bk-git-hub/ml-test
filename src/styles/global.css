@@ -1,13 +1,13 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-ml-yellow: #FFCA40;
-  --color-ml-yellow-light: #FFD259;
+  --color-ml-yellow: #ffca40;
+  --color-ml-yellow-light: #ffd259;
   --color-ml-gray: #f5f5f5;
-  --color-ml-cart-light-yellow: #F6F3EC;
+  --color-ml-cart-light-yellow: #f6f3ec;
 }
 
 @keyframes custom-blink {
@@ -20,6 +20,32 @@
   100% {
     opacity: 1;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fadeIn {
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-blink {
+  animation: blink 1s infinite;
 }
 
 .blink {
@@ -141,4 +167,3 @@
     @apply bg-background text-foreground;
   }
 }
-
