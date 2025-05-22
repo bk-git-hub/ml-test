@@ -21,7 +21,15 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
   setCurrentCategory: (categoryId) => set({ currentCategoryId: categoryId }),
 
-  setCurrentMenu: (menuId) => set({ currentMenuId: menuId }),
+  setCurrentMenu: (menuId) => {
+    set({ currentMenuId: menuId });
+
+    if (menuId !== null) {
+      const timer = setTimeout(() => {
+        set({ currentMenuId: null });
+      }, 4000);
+    }
+  },
 
   setCurrentView: (view) => set({ currentView: view }),
 
