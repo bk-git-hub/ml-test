@@ -37,17 +37,16 @@ interface TextApiResponse {
 export const useGpt = ({ apiUrl }: UseTextApiProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const addMessage = useChatStore((state) => state.addMessage);
+  const { addMessage, updateLastMessage } = useChatStore();
   const { categories, getMenusByCategory } = useMenuStore();
   const { updateQuantity, removeItem, addItem } = useCartStore();
   const { setCurrentCategory, setCurrentMenu, setCurrentView } =
     useNavigationStore();
   const { setShowOrderModal } = useOrderStore();
-  const { clearCart } = useCartStore();
+  const { clearCart, cartItems } = useCartStore();
   const { language } = useLanguageStore();
-  const { cartItems } = useCartStore();
   const { kioskId } = useParams();
-  const { fetchOrders, orders } = useOrderHistoryStore();
+  const { fetchOrders } = useOrderHistoryStore();
 
   const processIntent = (
     intent: string,
@@ -169,6 +168,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
               if (!response.ok) {
                 throw new Error('Failed to place order');
               }
+
               setShowOrderModal(true);
             })
             .catch((error) => {
@@ -234,6 +234,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     }
 
     setIsProcessing(true);
+    addMessage({
+      text: 'loading',
+      isUser: false,
+      timestamp: Date.now(),
+    });
     setError(null);
 
     try {
@@ -283,6 +288,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
       const errorMessage =
         err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
       setError(errorMessage);
+      const failMessage =
+        language === 'en'
+          ? 'Error has occurred'
+          : '알 수 없는 오류가 발생했습니다.';
+      updateLastMessage(failMessage);
       throw err;
     } finally {
       setIsProcessing(false);
