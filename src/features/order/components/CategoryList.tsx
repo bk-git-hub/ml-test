@@ -24,7 +24,6 @@ const CategoryList = () => {
   }
 
   const handleCategoryClick = (categoryId: number) => {
-    setCurrentMenu(null);
     setCurrentView('menu');
     setCurrentCategory(categoryId === currentCategoryId ? null : categoryId);
   };
