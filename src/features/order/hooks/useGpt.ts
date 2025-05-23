@@ -139,7 +139,17 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
-        console.log('주문 확정:', items);
+        if (cartItems.length === 0) {
+          const failMessage =
+            language === 'en'
+              ? 'Your cart is empty. Please add items to your cart.'
+              : '장바구니가 비어있습니다. 메뉴를 추가해주세요.';
+
+          updateLastMessage(failMessage);
+          getSpeech(failMessage, language === 'en' ? 'en' : 'ko');
+          return;
+        }
+
         try {
           const orderItems = cartItems.map((item) => ({
             menuId: item.menu.menuId,
