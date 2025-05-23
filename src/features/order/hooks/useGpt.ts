@@ -60,6 +60,12 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
     let historyMessage: string;
     let orders: ReturnType<typeof useOrderHistoryStore.getState>['orders'];
 
+    if (!intent) {
+      updateLastMessage(chat_message);
+      getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
+      return;
+    }
+
     switch (intent) {
       case 'get_category':
         updateLastMessage(chat_message);
