@@ -152,10 +152,6 @@ const Voice = () => {
   }, []);
 
   // 🎧 listening 상태, transcript 실시간 로그 (디버깅용)
-  useEffect(() => {
-    console.log('🎧 listening 상태:', listening);
-    console.log('🗣️ transcript:', transcript);
-  }, [listening, transcript]);
 
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
