@@ -27,7 +27,19 @@ const Voice = () => {
   // 여러 키워드 배열
   const KEYWORDS =
     language === 'en'
-      ? ['malang', 'hello', 'Malang'] // 영어 키워드 예시//////////////////////////////////////////추가 가능
+      ? [
+          'malang',
+          'hello',
+          'Malang',
+          'my love',
+          'Milan',
+          'Malone',
+          'malang',
+          'My love',
+          'malone',
+          'millione',
+          'milan',
+        ] // 영어 키워드 예시//////////////////////////////////////////추가 가능
       : [
           '말랑아',
           '빨랑아',
@@ -36,6 +48,8 @@ const Voice = () => {
           '빨리 와',
           '빨리와',
           '빨랑와',
+          '몰라',
+          '몰랑',
         ]; // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
@@ -152,6 +166,10 @@ const Voice = () => {
   }, []);
 
   // 🎧 listening 상태, transcript 실시간 로그 (디버깅용)
+  useEffect(() => {
+    console.log('🎧 listening 상태:', listening);
+    console.log('🗣️ transcript:', transcript);
+  }, [listening, transcript]);
 
   return (
     <div className='p-6 h-fit rounded-xl shadow-lg bg-white text-center'>
