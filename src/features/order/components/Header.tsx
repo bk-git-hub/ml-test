@@ -94,8 +94,8 @@ const Header = () => {
       {/* 중간 문구 */}
       <span className='text-lg text-indigo-900 font-medium ml-4 whitespace-nowrap'>
         {language === 'en'
-          ? 'Hello, thank you for visiting Malang Order.'
-          : '안녕하세요 말랑 오더를 찾아주셔서 감사합니다.'}
+          ? 'Call "Mallang" to start ordering.'
+          : '"말랑아" 라고 불러 주문을 시작해 보세요'}
       </span>
 
       <div className='flex items-center gap-4'>
