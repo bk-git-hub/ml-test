@@ -81,7 +81,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         console.log('메뉴 탐색:', items);
         if (items[0]?.category_id !== null && items[0]?.menu_id !== null) {
           setCurrentCategory(items[0].category_id);
-
+          setCurrentView('menu');
           setCurrentMenu(items[0].menu_id);
         }
         break;
