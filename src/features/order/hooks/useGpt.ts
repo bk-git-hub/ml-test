@@ -285,6 +285,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
           ? 'Error has occurred'
           : '알 수 없는 오류가 발생했습니다.';
       updateLastMessage(failMessage);
+      getSpeech(failMessage, language === 'en' ? 'en' : 'ko');
       throw err;
     } finally {
       setIsProcessing(false);

@@ -32,6 +32,7 @@ export const getSpeech = (text: any, language: 'ko' | 'en' = 'ko') => {
       const lang = language === 'ko' ? 'ko-KR' : 'en-US';
       const utterThis = new SpeechSynthesisUtterance(txt);
       utterThis.lang = lang;
+      utterThis.volume = 0.375;
 
       // Wait for voices to be loaded if they're not available yet
       if (voices.length === 0) {
