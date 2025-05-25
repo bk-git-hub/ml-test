@@ -2,11 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 
 interface VoiceRecorderProps {
   isRecording: boolean;
+  isListening: boolean;
+  language: string;
   onRecordingComplete: (audioBlob: Blob) => void;
 }
 
 const VoiceRecorder = ({
   isRecording,
+  isListening,
+  language,
   onRecordingComplete,
 }: VoiceRecorderProps) => {
   const [isRecordingState, setIsRecordingState] = useState(false);
@@ -123,23 +127,44 @@ const VoiceRecorder = ({
 
   return (
     <div className=' bottom-4 right-4 p-4 bg-white rounded-lg shadow-lg'>
-      <div className='flex items-center space-x-2'>
-        <div
-          className={`w-3 h-3 rounded-full ${
-            isRecordingState ? 'bg-red-500 animate-pulse' : 'bg-gray-500'
-          }`}
-        />
-        <span className='text-sm font-medium'>
-          {isRecordingState ? 'Recording...' : 'Ready'}
-        </span>
-      </div>
+      {isRecordingState ? (
+        <div className='bg-indigo-100 rounded-lg border border-indigo-300 p-2 mt-2 shadow-sm'>
+          <p className='text-sm text-indigo-900 mb-1'>
+            {language === 'en' ? 'Recognizing speech…' : '음성 인식 중…'}
+          </p>
+        </div>
+      ) : (
+        <div className='flex flex-col items-center'>
+          <p className='text-sm text-indigo-600'>
+            {isListening ? (
+              language === 'en' ? (
+                <>
+                  Listening for
+                  <br />
+                  the keyword…
+                </>
+              ) : (
+                <>
+                  키워드 말랑아
+                  <br />
+                  감지중…
+                </>
+              )
+            ) : language === 'en' ? (
+              'Waiting…'
+            ) : (
+              '대기 중…'
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Audio Level Visualization */}
       {isRecordingState && (
         <div className='mt-2 flex items-center space-x-2'>
           <div className='flex-1 h-2 bg-gray-200 rounded-full overflow-hidden'>
             <div
-              className='h-full bg-blue-500 transition-all duration-100'
+              className='h-full bg-indigo-500 transition-all duration-100'
               style={{
                 width: `${audioLevel * 100}%`,
                 transform: `scaleX(${1 + audioLevel})`,
@@ -151,19 +176,6 @@ const VoiceRecorder = ({
       )}
 
       {/* Testing UI - Only visible when there's a recording */}
-      {lastRecording && (
-        <div className='mt-2 flex items-center space-x-2'>
-          <button
-            onClick={playRecording}
-            className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm'
-          >
-            Play Recording
-          </button>
-          <span className='text-xs text-gray-500'>
-            {Math.round(lastRecording.size / 1024)} KB
-          </span>
-        </div>
-      )}
 
       {/* Hidden audio element for playback */}
       {audioUrl && <audio ref={audioRef} src={audioUrl} className='hidden' />}
