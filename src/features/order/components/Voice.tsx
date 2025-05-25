@@ -50,6 +50,10 @@ const Voice = () => {
           '빨랑와',
           '몰라',
           '몰랑',
+          '말랑은',
+          '몰랑',
+          '몰라',
+          '빨랑',
         ]; // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
