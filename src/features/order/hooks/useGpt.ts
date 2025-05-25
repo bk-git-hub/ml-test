@@ -71,7 +71,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         updateLastMessage(chat_message);
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
         console.log('카테고리 탐색:', items);
-        if (items[0]?.category_id !== null) {
+        if (items.length > 0 && items[0]?.category_id !== null) {
           setCurrentView('menu');
           if (items[0]?.menu_id !== null) {
             setCurrentMenu(items[0].menu_id);
@@ -85,7 +85,11 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
         console.log('메뉴 탐색:', items);
-        if (items[0]?.category_id !== null && items[0]?.menu_id !== null) {
+        if (
+          items.length > 0 &&
+          items[0]?.category_id !== null &&
+          items[0]?.menu_id !== null
+        ) {
           setCurrentCategory(items[0].category_id);
           setCurrentView('menu');
           setCurrentMenu(items[0].menu_id);
