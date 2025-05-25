@@ -140,9 +140,6 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         break;
 
       case 'place_order':
-        updateLastMessage(chat_message);
-        getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
-
         if (cartItems.length === 0) {
           const failMessage =
             language === 'en'
@@ -175,6 +172,13 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
                 throw new Error('Failed to place order');
               }
 
+              const completeMessage =
+                language === 'en'
+                  ? `The order has been placed successfully`
+                  : `주문이 완료되었습니다다`;
+
+              updateLastMessage(completeMessage);
+              getSpeech(completeMessage, language === 'en' ? 'en' : 'ko');
               setShowOrderModal(true);
             })
             .catch((error) => {
