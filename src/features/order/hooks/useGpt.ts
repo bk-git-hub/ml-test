@@ -175,7 +175,7 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
               const completeMessage =
                 language === 'en'
                   ? `The order has been placed successfully`
-                  : `주문이 완료되었습니다다`;
+                  : `주문이 완료되었습니다`;
 
               updateLastMessage(completeMessage);
               getSpeech(completeMessage, language === 'en' ? 'en' : 'ko');

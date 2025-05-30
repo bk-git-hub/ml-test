@@ -29,7 +29,7 @@ const MainLayout = () => {
             <div className='flex-1 bg-blue-100 rounded-2xl overflow-y-auto'>
               <ChatHistory />
             </div>
-            <KeywordDetector />
+            <Voice />
           </div>
         </div>
 
