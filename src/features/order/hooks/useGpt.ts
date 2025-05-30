@@ -85,13 +85,12 @@ export const useGpt = ({ apiUrl }: UseTextApiProps) => {
         getSpeech(chat_message, language === 'en' ? 'en' : 'ko');
 
         console.log('메뉴 탐색:', items);
-        if (
-          items.length > 0 &&
-          items[0]?.category_id !== null &&
-          items[0]?.menu_id !== null
-        ) {
+        if (items.length > 0 && items[0]?.category_id !== null) {
           setCurrentCategory(items[0].category_id);
           setCurrentView('menu');
+        }
+
+        if (items.length > 0 && items[0]?.menu_id) {
           setCurrentMenu(items[0].menu_id);
         }
         break;
