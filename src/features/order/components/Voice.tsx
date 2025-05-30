@@ -14,7 +14,7 @@ const Voice = () => {
   const { listening, transcript, resetTranscript } = useSpeechRecognition();
   const { isCovered, setIsCovered } = useVoiceStore();
   const [detectedCount, setDetectedCount] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+
   const [capturedText, setCapturedText] = useState('');
   const lastTextTimeRef = useRef<number>(0);
   const keywordIndexRef = useRef<number>(-1);
@@ -59,7 +59,7 @@ const Voice = () => {
   const updateLastMessage = useChatStore((state) => state.updateLastMessage);
   const setIsCapturing = useChatStore((state) => state.setIsCapturing);
   const isCapturing = useChatStore((state) => state.isCapturing);
-  const { sendTextToApi } = useGpt({ apiUrl });
+  const { sendTextToApi, isProcessing } = useGpt({ apiUrl });
 
   // 🧠 실시간 텍스트 감지
   useEffect(() => {
@@ -88,7 +88,6 @@ const Voice = () => {
       const now = Date.now();
       if (now - lastTextTimeRef.current > 2000) {
         setIsCapturing(false);
-        setIsProcessing(false);
 
         if (capturedText) {
           sendTextToApi(capturedText, adminId, kioskId).catch((err) => {
@@ -123,7 +122,6 @@ const Voice = () => {
     }
 
     if (foundKeyword && keywordIndexRef.current === -1) {
-      setIsProcessing(true);
       setDetectedCount((prev) => prev + 1);
       setIsCapturing(true);
       setCapturedText('');
