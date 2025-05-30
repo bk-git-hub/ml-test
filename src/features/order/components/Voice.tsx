@@ -53,7 +53,7 @@ const Voice = () => {
           '말랑은',
           '몰랑',
           '몰라',
-          '안녕',
+          '저기요',
         ]; // 한국어 키워드 예시
 
   const addMessage = useChatStore((state) => state.addMessage);
