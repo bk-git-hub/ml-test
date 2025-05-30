@@ -86,7 +86,7 @@ const Voice = () => {
 
     const checkInterval = setInterval(() => {
       const now = Date.now();
-      if (now - lastTextTimeRef.current > 2000) {
+      if (now - lastTextTimeRef.current > 3000) {
         setIsCapturing(false);
 
         if (capturedText) {
